@@ -1,14 +1,12 @@
 import express, {Application} from 'express';
-import IndexRoutes from './routes/indexRoutes';
-import GamesRoutes from './routes/gamesRoutes';
+import UserRoute from './routes/user.route';
 import orm from './core/orm.core';
 import morgan from 'morgan';
 import cors from 'cors';
 
 export default class Server {
     public app: Application;
-    public indexRoutes: IndexRoutes = new IndexRoutes();
-    public gamesRoutes: GamesRoutes = new GamesRoutes();
+    public userRoute: UserRoute = new UserRoute();
     constructor() {
         this.app = express();
         this.config();
@@ -24,8 +22,7 @@ export default class Server {
     }
 
     public routes(): void {
-        this.app.use('/', this.indexRoutes.router);
-        this.app.use('/api/games', this.gamesRoutes.router);
+        this.app.use('/users', this.userRoute.router);
     }
 
     public async start(): Promise<boolean> {

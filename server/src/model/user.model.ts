@@ -45,7 +45,7 @@ export default class User {
     @Column()
     public address: string;
 
-    @Column()
+    @Column({ nullable: true })
     public bio: string;
 
     @Column({ default: false })
