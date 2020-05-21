@@ -54,6 +54,9 @@ export default class User {
     @Column({ nullable: true })
     public photo: string;
 
+    @Column({ nullable: true })
+    public lastLogin: Date;
+
     @CreateDateColumn({ name: 'created_at', update: false })
     public createdDate?: Date;
 
@@ -74,7 +77,7 @@ export default class User {
 
     constructor(userName: string, lastName: string, email: string, dni: string, telf: string, age: number, sex: SexType, 
         password: string, postalCode: number, city: string, region: string, address: string, bio: string, offer: boolean, 
-        photo: string ) {
+        photo: string, lastLogin: Date ) {
         this.userName = userName,
         this.lastName = lastName,
         this.email = email,
@@ -89,6 +92,7 @@ export default class User {
         this.address = address,
         this.bio = bio,
         this.offer = offer,
-        this.photo = photo
+        this.photo = photo,
+        this.lastLogin = lastLogin
     }
 }

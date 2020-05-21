@@ -1,6 +1,6 @@
 import { Router, Request, Response } from 'express';
 import UserService from '../services/user.service';
-import { isEmpty, isNull } from "lodash";
+import { isEmpty, isNull, isBoolean } from "lodash";
 import User from '../model/user.model';
 import * as EmailValidator from 'email-validator';
 import { SexType } from '../interface/db.interface';
@@ -16,6 +16,8 @@ export default class UserRoute {
     public config(): void {
         this.router.post('/', this.getUsers);
         this.router.post('/create', this.createUser.bind(this));
+        this.router.post('/login', this.checkLogin);
+        this.router.post('/checkLogin', this.checkLastLogin);
     }
 
     private async getUsers(req: Request, res: Response) {
@@ -63,11 +65,60 @@ export default class UserRoute {
         }
     }
 
+    private async checkLogin(req: Request, res: Response) {
+        try {
+            const email: string = req.body.email;
+            const password: string = req.body.password;
+            if(isEmpty(email) || isEmpty(password)){
+                throw new Error(`Insufficient data...`);
+            }
+            if(!await UserService.checkLogin(email, password)){
+                throw new Error(`Invalid email or password...`);
+            }
+            res.status(200).json({
+                code: 200,
+                data: { login: true },
+                status: true
+            });
+        } catch (error) {
+            const err: Error = error;
+            res.status(400).json({
+                code: 400,
+                data: { error: err.message },
+                status: false
+            });
+        }
+    }
+
+    private async checkLastLogin(req: Request, res: Response) {
+        try {
+            const codUser: number = req.body.codUser;
+            if (isNull(codUser)) {
+                throw new Error(`Insufficient data...`);
+            }
+            const keepLogin = await UserService.checkLastLogin(codUser);
+            res.status(200).json({
+                code: 200,
+                data: { keepLogin },
+                status: true
+            });
+        } catch (error) {
+            const err: Error = error;
+            res.status(400).json({
+                code: 400,
+                data: { error: err.message },
+                status: false
+            });
+        }
+    }
+
+
+
     private validateUser(user: User) {
         if(isEmpty(user) || isEmpty(user.userName) || isEmpty(user.lastName) || isEmpty(user.email) ||
             isEmpty(user.dni) || isEmpty(user.telf || isEmpty(user.age) || isEmpty(user.sex) 
             || isEmpty(user.password) || isEmpty(user.postalCode) || isEmpty(user.city) 
-            || isEmpty(user.region) || isEmpty(user.address) || isEmpty(user.offer))){
+            || isEmpty(user.region) || isEmpty(user.address) || !isBoolean(user.offer))){
             throw new Error(`Insufficient or incorrect data...`);
         }
 

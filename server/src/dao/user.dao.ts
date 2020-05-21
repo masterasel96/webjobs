@@ -1,5 +1,7 @@
 import { getManager, getConnection } from "typeorm";
 import User from '../model/user.model';
+import md5 from "md5";
+import { isNull } from "lodash";
 
 export default class UserDao {
     constructor() {
@@ -33,5 +35,41 @@ export default class UserDao {
             .where("user.email = :email OR user.dni = :nif", { email, nif })
             .getCount();
         return userCount > 0 ? false : true;
+    }
+
+    public static async checkLogin(email: string, pass: string): Promise<boolean> {
+        const userCount = await getConnection().getRepository(User)
+            .createQueryBuilder('user')
+            .where("user.email = :email AND user.password = :pass", { email, pass: md5(pass) })
+            .getCount();
+        if(userCount > 0){
+            await getConnection()
+                .createQueryBuilder()
+                .update(User)
+                .set({ lastLogin: new Date() })
+                .where("email = :email", { email })
+                .execute();
+            return true;
+        }
+        return false;
+    }
+
+    public static async checkLastLogin(codUser: number): Promise<boolean> {
+        const user = await getConnection().getRepository(User).findOne(codUser);
+        if(user === undefined){
+            throw new Error(`This user doesn't exists...`);
+        }
+        let newTime: Date | undefined = new Date();
+        if (process.env.LOGIN_TIME !== undefined 
+                && !isNull(user.lastLogin) && ((user.lastLogin.getTime() + (Number(process.env.LOGIN_TIME) * 1000)) > Date.now())){
+                    newTime = undefined;
+        }
+        await getConnection()
+            .createQueryBuilder()
+            .update(User)
+            .set({ lastLogin: newTime })
+            .where("cod_user = :codUser", { codUser })
+            .execute();
+        return newTime === undefined ? false : true;
     }
 }

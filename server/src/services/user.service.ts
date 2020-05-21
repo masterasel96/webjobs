@@ -22,4 +22,12 @@ export default class UserService {
         user.password = md5(user.password);
         return await UserDao.createUser(user);
     }
+
+    public static async checkLogin(email: string, password: string): Promise<boolean> {
+        return await UserDao.checkLogin(email, password);
+    }
+
+    public static async checkLastLogin(codUser: number): Promise<boolean> {
+        return await UserDao.checkLastLogin(codUser);
+    }
 }
