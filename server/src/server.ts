@@ -1,5 +1,7 @@
 import express, {Application} from 'express';
 import UserRoute from './routes/user.route';
+import ProfExpRoute from './routes/profExp.route';
+import ProfCatRoute from './routes/profCat.route';
 import orm from './core/orm.core';
 import morgan from 'morgan';
 import cors from 'cors';
@@ -7,6 +9,9 @@ import cors from 'cors';
 export default class Server {
     public app: Application;
     public userRoute: UserRoute = new UserRoute();
+    public profExpRoute: ProfExpRoute = new ProfExpRoute();
+    public profCatRoute: ProfCatRoute = new ProfCatRoute();
+    
     constructor() {
         this.app = express();
         this.config();
@@ -23,6 +28,8 @@ export default class Server {
 
     public routes(): void {
         this.app.use('/users', this.userRoute.router);
+        this.app.use('/profExp', this.profExpRoute.router);
+        this.app.use('/profCat', this.profCatRoute.router);
     }
 
     public async start(): Promise<boolean> {

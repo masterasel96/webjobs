@@ -18,6 +18,7 @@ export default class UserRoute {
         this.router.post('/create', this.createUser.bind(this));
         this.router.post('/login', this.checkLogin);
         this.router.post('/checkLogin', this.checkLastLogin);
+        this.router.post('/byCatLoc', this.getUsersByCatLoc)
     }
 
     private async getUsers(req: Request, res: Response) {
@@ -100,6 +101,29 @@ export default class UserRoute {
             res.status(200).json({
                 code: 200,
                 data: { keepLogin },
+                status: true
+            });
+        } catch (error) {
+            const err: Error = error;
+            res.status(400).json({
+                code: 400,
+                data: { error: err.message },
+                status: false
+            });
+        }
+    }
+
+    private async getUsersByCatLoc(req: Request, res: Response) {
+        try {
+            const category: string = req.body.category;
+            const location: string = req.body.location;
+            if(isEmpty(category) || isEmpty(location)){
+                throw new Error(`Insufficient data...`);
+            }
+            const users: User[] = await UserService.getUserByCatLoc(category, location);
+            res.status(200).json({
+                code: 200,
+                data: { users },
                 status: true
             });
         } catch (error) {

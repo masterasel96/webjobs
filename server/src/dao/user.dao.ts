@@ -2,6 +2,7 @@ import { getManager, getConnection } from "typeorm";
 import User from '../model/user.model';
 import md5 from "md5";
 import { isNull } from "lodash";
+import ProfesionalExperience from "../model/prof_exp.model";
 
 export default class UserDao {
     constructor() {
@@ -71,5 +72,15 @@ export default class UserDao {
             .where("cod_user = :codUser", { codUser })
             .execute();
         return newTime === undefined ? false : true;
+    }
+
+    public static async getUsersByCatLoc(catName: string, location: string): Promise<User[] | undefined> {
+        const users = await getConnection().getRepository(User)
+            .createQueryBuilder('user')
+            .innerJoin("user.experience", 'profesional_experience')
+            .innerJoin("profesional_experience.categories", 'profesional_category')
+            .where("profesional_category.name = :catName AND user.region = :location", { catName, location })
+            .getMany();
+        return users;
     }
 }

@@ -30,4 +30,12 @@ export default class UserService {
     public static async checkLastLogin(codUser: number): Promise<boolean> {
         return await UserDao.checkLastLogin(codUser);
     }
+
+    public static async getUserByCatLoc(catName: string, location: string): Promise<User[]> {
+        const users = await UserDao.getUsersByCatLoc(catName, location);
+        if(users === undefined){
+            throw new Error(`Error getting users by category and location...`);
+        }
+        return users;
+    }
 }

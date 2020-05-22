@@ -11,6 +11,10 @@ export default class ProfesionalExperience {
     @JoinColumn({ name: "cod_user" })
     public user: User;
 
+    @ManyToOne(type => ProfesionalCategory, cat => cat.experiences)
+    @JoinColumn({ name: "cod_category" })
+    public category: ProfesionalCategory;
+
     @Column()
     public position: string;
 
@@ -26,12 +30,9 @@ export default class ProfesionalExperience {
     @UpdateDateColumn({ name: 'updated_at' })
     public updateDate?: Date;
 
-    @ManyToMany(type => ProfesionalCategory, cat => cat.experiences)
-    @JoinTable({name: 'tiene_cat'})
-    categories?: ProfesionalCategory[];
-
-    constructor(user: User, position: string, startDate: Date, endDate: Date) {
+    constructor(user: User, category: ProfesionalCategory, position: string, startDate: Date, endDate: Date) {
         this.user = user,
+        this.category = category,
         this.position = position,
         this.startDate = startDate,
         this.endDate = endDate

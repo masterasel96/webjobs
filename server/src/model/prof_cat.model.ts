@@ -1,4 +1,4 @@
-import { Column, Entity, PrimaryGeneratedColumn, CreateDateColumn, UpdateDateColumn, ManyToOne, JoinColumn, JoinTable, ManyToMany } from "typeorm";
+import { Column, Entity, PrimaryGeneratedColumn, CreateDateColumn, UpdateDateColumn, ManyToOne, JoinColumn, JoinTable, ManyToMany, OneToMany } from "typeorm";
 import ProfesionalExperience from "./prof_exp.model";
 
 @Entity()
@@ -18,7 +18,7 @@ export default class ProfesionalCategory {
     @UpdateDateColumn({ name: 'updated_at' })
     public updateDate?: Date;
 
-    @ManyToMany(type => ProfesionalExperience, exp => exp.categories)
+    @OneToMany(type => ProfesionalExperience, exp => exp.category)
     experiences?: ProfesionalExperience[];
 
     constructor(name: string, description: string) {
