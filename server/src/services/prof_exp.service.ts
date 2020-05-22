@@ -19,7 +19,7 @@ export default class ProfExpService {
             throw new Error(`Error getting user or category data...`);
         }
         return await ProfExpDao.createProfExp(new ProfExp(user, profCat, profExp.position, 
-            profExp.startDate, profExp.endDate));
+            new Date(profExp.startDate), new Date(profExp.endDate)));
     }
 
 
