@@ -1,7 +1,7 @@
 import ProfExpDao from '../dao/prof_exp.dao';
 import ProfExp from '../model/prof_exp.model';
 import UserDao from '../dao/user.dao';
-import ProfCatService from '../services/profCat.service';
+import ProfCatService from './prof_cat.service';
 import User from '../model/user.model';
 import ProfCat from '../model/prof_cat.model';
 import { isArray } from 'lodash';

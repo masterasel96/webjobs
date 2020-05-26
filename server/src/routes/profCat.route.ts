@@ -1,6 +1,6 @@
 import { Router, Response, Request } from "express";
 import { isEmpty } from "lodash";
-import ProfCatService from "../services/profCat.service";
+import ProfCatService from "../services/prof_cat.service";
 
 export default class ProfCatRoute{
 
