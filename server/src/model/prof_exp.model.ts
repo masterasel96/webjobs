@@ -1,4 +1,4 @@
-import { Column, Entity, PrimaryGeneratedColumn, CreateDateColumn, UpdateDateColumn, ManyToOne, JoinColumn, ManyToMany, JoinTable } from "typeorm";
+import { Column, Entity, PrimaryGeneratedColumn, CreateDateColumn, UpdateDateColumn, ManyToOne, JoinColumn } from "typeorm";
 import User from './user.model';
 import ProfesionalCategory from "./prof_cat.model";
 
@@ -18,6 +18,9 @@ export default class ProfesionalExperience {
     @Column()
     public position: string;
 
+    @Column()
+    public company: string;
+
     @Column({ name: "start_date" })
     public startDate: Date;
 
@@ -30,11 +33,16 @@ export default class ProfesionalExperience {
     @UpdateDateColumn({ name: 'updated_at' })
     public updateDate?: Date;
 
-    constructor(user: User, category: ProfesionalCategory, position: string, startDate: Date, endDate: Date) {
+    constructor(user: User, category: ProfesionalCategory, position: string, company: string, startDate: Date, endDate: Date) {
         this.user = user,
         this.category = category,
         this.position = position,
+        this.company = company,
         this.startDate = startDate,
         this.endDate = endDate
+    }
+
+    public static describe(){
+        return ['codExperience', 'user', 'category', 'position', 'company', 'startDate', 'endDate'];
     }
 }

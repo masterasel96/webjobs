@@ -4,6 +4,7 @@ import { isEmpty, isNull, isBoolean } from "lodash";
 import User from '../model/user.model';
 import * as EmailValidator from 'email-validator';
 import { SexType } from '../interface/db.interface';
+import ProfExpService from '../services/prof_exp.service';
 
 export default class UserRoute {
 
@@ -18,7 +19,8 @@ export default class UserRoute {
         this.router.post('/create', this.createUser.bind(this));
         this.router.post('/login', this.checkLogin);
         this.router.post('/checkLogin', this.checkLastLogin);
-        this.router.post('/byCatLoc', this.getUsersByCatLoc)
+        this.router.post('/byCatLoc', this.getUsersByCatLoc);
+        this.router.post('/profExp', this.getUserProfExp);
     }
 
     private async getUsers(req: Request, res: Response) {
@@ -124,6 +126,28 @@ export default class UserRoute {
             res.status(200).json({
                 code: 200,
                 data: { users },
+                status: true
+            });
+        } catch (error) {
+            const err: Error = error;
+            res.status(400).json({
+                code: 400,
+                data: { error: err.message },
+                status: false
+            });
+        }
+    }
+
+    private async getUserProfExp(req: Request, res: Response){
+        try {
+            const codUser: number = req.body.codUser;
+            if(codUser === undefined || isNull(codUser)){
+                throw new Error(`Insufficient data...`);
+            }
+            const profExp = await ProfExpService.getProfCatByUser(codUser);
+            res.status(200).json({
+                code: 200,
+                data: { profExp },
                 status: true
             });
         } catch (error) {
