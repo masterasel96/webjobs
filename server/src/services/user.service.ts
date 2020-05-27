@@ -1,7 +1,8 @@
 import User from '../model/user.model';
 import UserDao from '../dao/user.dao';
-import { isEmpty } from 'lodash';
+import { isEmpty, isArray } from 'lodash';
 import md5 from 'md5';
+import { IUserUpdateRequest } from '../interface/request.interface';
 
 export default class UserService {
 
@@ -37,5 +38,27 @@ export default class UserService {
             throw new Error(`Error getting users by category and location...`);
         }
         return users;
+    }
+
+    public static async updateUser(updateData: IUserUpdateRequest): Promise<User> {
+        const oldUser = await UserDao.getUser(updateData.codUser);
+        if (oldUser === undefined || isArray(oldUser)) {
+            throw new Error(`This user doesn´t exists...`);
+        }
+        const userAttr = User.describe();
+        Object.keys(updateData.newValues).forEach(val => {
+            if (!userAttr.includes(val)) {
+                throw new Error(`Error in update values...`);
+            }
+        });
+        const newUser = {
+            ...oldUser,
+            ...updateData.newValues
+        }
+        const updateUser = await UserDao.updateUser(newUser);
+        if (updateUser === undefined) {
+            throw new Error(`Error updating user..`);
+        }
+        return updateUser;
     }
 }

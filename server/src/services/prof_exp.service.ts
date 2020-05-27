@@ -5,7 +5,7 @@ import ProfCatService from './prof_cat.service';
 import User from '../model/user.model';
 import ProfCat from '../model/prof_cat.model';
 import { isArray } from 'lodash';
-import { IProfExpRequest } from '../interface/request.interface';
+import { IProfExpRequest, IProfExpUpdateRequest } from '../interface/request.interface';
 
 export default class ProfExpService {
     constructor() {
@@ -30,25 +30,25 @@ export default class ProfExpService {
         return profExpRemove;
     }
 
-    public static async updateProfExp(codProfExp: number, profExpValues: Object): Promise<ProfExp> {
-        const oldProfExp = await ProfExpDao.getProfExp(codProfExp);
+    public static async updateProfExp(updateDate: IProfExpUpdateRequest): Promise<ProfExp> {
+        const oldProfExp = await ProfExpDao.getProfExp(updateDate.codProfExp);
         if (oldProfExp === undefined) {
             throw new Error(`This profesional experience doesn´t exists...`);
         }
         const profExpAttr = ProfExp.describe();
-        Object.keys(profExpValues).forEach(val => {
+        Object.keys(updateDate.newValues).forEach(val => {
             if(!profExpAttr.includes(val)){
                 throw new Error(`Error in update values...`);
             }
         });
-        if (Object.keys(profExpValues).includes('category')){
-            (profExpValues as { category: number | object }).category = await ProfCatService.getProfCat(
-                (profExpValues as { category: number }).category
+        if (Object.keys(updateDate.newValues).includes('category')){
+            (updateDate.newValues as { category: number | object }).category = await ProfCatService.getProfCat(
+                (updateDate.newValues as { category: number }).category
             );
         }
         const newProfExp = {
             ...oldProfExp,
-            ...profExpValues
+            ...updateDate.newValues
         }
         const updateProfExp = await ProfExpDao.updateProfExp(newProfExp);
         if(updateProfExp === undefined){

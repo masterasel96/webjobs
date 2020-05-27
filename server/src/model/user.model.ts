@@ -95,4 +95,9 @@ export default class User {
         this.photo = photo,
         this.lastLogin = lastLogin
     }
+
+    public static describe(): string[] {
+        return ['codUser', 'userName', 'lastName', 'email', 'dni', 'telf', 'age', 'sex', 'password', 'postalCode', 
+            'city', 'region', 'address', 'bio', 'offer', 'photo', 'lastLogin']
+    }
 }

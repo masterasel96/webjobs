@@ -66,7 +66,7 @@ export default class ProfExpRoute {
             if(isEmpty(data.codProfExp) || isEmpty(data.newValues)){
                 throw new Error(`Insufficient or incorrect data...`);
             }
-            const profExpUpdate = await ProfExpService.updateProfExp(data.codProfExp, data.newValues);
+            const profExpUpdate = await ProfExpService.updateProfExp(data);
             res.status(200).json({
                 code: 200,
                 data: { profExpUpdate },

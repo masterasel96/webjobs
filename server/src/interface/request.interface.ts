@@ -11,3 +11,8 @@ export interface IProfExpUpdateRequest {
     codProfExp: number,
     newValues: Object
 }
+
+export interface IUserUpdateRequest {
+    codUser: number,
+    newValues: Object
+}

@@ -5,6 +5,7 @@ import User from '../model/user.model';
 import * as EmailValidator from 'email-validator';
 import { SexType } from '../interface/db.interface';
 import ProfExpService from '../services/prof_exp.service';
+import { IUserUpdateRequest } from '../interface/request.interface';
 
 export default class UserRoute {
 
@@ -17,6 +18,7 @@ export default class UserRoute {
     public config(): void {
         this.router.post('/', this.getUsers);
         this.router.post('/create', this.createUser.bind(this));
+        this.router.post('/update', this.updateUser);
         this.router.post('/login', this.checkLogin);
         this.router.post('/checkLogin', this.checkLastLogin);
         this.router.post('/byCatLoc', this.getUsersByCatLoc);
@@ -56,6 +58,28 @@ export default class UserRoute {
             res.status(200).json({
                 code: 200,
                 data: { newUser },
+                status: true
+            });
+        } catch (error) {
+            const err: Error = error;
+            res.status(400).json({
+                code: 400,
+                data: { error: err.message },
+                status: false
+            });
+        }
+    }
+
+    private async updateUser(req: Request, res: Response) {
+        try {
+            const updateReq = req.body as IUserUpdateRequest;
+            if(isEmpty(updateReq.codUser) || isEmpty(updateReq.newValues)){
+                throw new Error(`Insufficient data...`);
+            }
+            const updatedUser = await UserService.updateUser(updateReq);
+            res.status(200).json({
+                code: 200,
+                data: { updatedUser },
                 status: true
             });
         } catch (error) {

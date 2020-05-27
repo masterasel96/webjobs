@@ -42,7 +42,7 @@ export default class ProfesionalExperience {
         this.endDate = endDate
     }
 
-    public static describe(){
+    public static describe(): string[] {
         return ['codExperience', 'user', 'category', 'position', 'company', 'startDate', 'endDate'];
     }
 }
