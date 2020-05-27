@@ -9,6 +9,12 @@ export interface IProfExpRequest {
     endDate: string,
 }
 
+export interface INotificationRequest {
+    codUser: number,
+    codIndirectUser: number;
+    message: string;
+}
+
 export interface IProfExpUpdateRequest {
     codProfExp: number,
     newValues: IProfesionalExpUpdate

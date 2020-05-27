@@ -12,6 +12,7 @@ export default class ProfExpRoute {
     }
 
     public config(): void {
+        this.router.post('/', this.getUserProfExp);
         this.router.post('/create', this.setProfExp.bind(this));
         this.router.post('/remove', this.removeProfExp);
         this.router.post('/update', this.updateProfExp.bind(this));
@@ -74,6 +75,28 @@ export default class ProfExpRoute {
             res.status(200).json({
                 code: 200,
                 data: { profExpUpdate },
+                status: true
+            });
+        } catch (error) {
+            const err: Error = error;
+            res.status(400).json({
+                code: 400,
+                data: { error: err.message },
+                status: false
+            });
+        }
+    }
+
+    private async getUserProfExp(req: Request, res: Response) {
+        try {
+            const codUser: number = req.body.codUser;
+            if (codUser === undefined || isNull(codUser)) {
+                throw new Error(`Insufficient data...`);
+            }
+            const profExp = await ProfExpService.getProfCatByUser(codUser);
+            res.status(200).json({
+                code: 200,
+                data: { profExp },
                 status: true
             });
         } catch (error) {

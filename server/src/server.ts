@@ -1,7 +1,8 @@
 import express, {Application} from 'express';
 import UserRoute from './routes/user.route';
-import ProfExpRoute from './routes/profExp.route';
-import ProfCatRoute from './routes/profCat.route';
+import ProfExpRoute from './routes/prof_exp.route';
+import ProfCatRoute from './routes/prof_cat.route';
+import NotificationRoute from './routes/notification.route';
 import orm from './core/orm.core';
 import morgan from 'morgan';
 import cors from 'cors';
@@ -11,6 +12,7 @@ export default class Server {
     public userRoute: UserRoute = new UserRoute();
     public profExpRoute: ProfExpRoute = new ProfExpRoute();
     public profCatRoute: ProfCatRoute = new ProfCatRoute();
+    public notificationsRoute: NotificationRoute = new NotificationRoute();
     
     constructor() {
         this.app = express();
@@ -30,6 +32,7 @@ export default class Server {
         this.app.use('/users', this.userRoute.router);
         this.app.use('/profExp', this.profExpRoute.router);
         this.app.use('/profCat', this.profCatRoute.router);
+        this.app.use('/notifications', this.notificationsRoute.router);
     }
 
     public async start(): Promise<boolean> {
