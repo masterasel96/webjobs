@@ -1,3 +1,5 @@
+import { IProfesionalExpUpdate, IUserUpdate } from "./update.interface";
+
 export interface IProfExpRequest {
     codUser: number,
     codCategory: number,
@@ -9,10 +11,10 @@ export interface IProfExpRequest {
 
 export interface IProfExpUpdateRequest {
     codProfExp: number,
-    newValues: Object
+    newValues: IProfesionalExpUpdate
 }
 
 export interface IUserUpdateRequest {
     codUser: number,
-    newValues: Object
+    newValues: IUserUpdate
 }

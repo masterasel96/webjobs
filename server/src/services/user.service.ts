@@ -51,6 +51,9 @@ export default class UserService {
                 throw new Error(`Error in update values...`);
             }
         });
+        if (Object.keys(updateData.newValues).includes('password')) {
+            (updateData.newValues as { password: string }).password = md5((updateData.newValues as { password: string }).password);
+        }
         const newUser = {
             ...oldUser,
             ...updateData.newValues

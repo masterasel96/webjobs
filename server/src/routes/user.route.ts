@@ -6,6 +6,7 @@ import * as EmailValidator from 'email-validator';
 import { SexType } from '../interface/db.interface';
 import ProfExpService from '../services/prof_exp.service';
 import { IUserUpdateRequest } from '../interface/request.interface';
+import { IUserUpdate } from '../interface/update.interface';
 
 export default class UserRoute {
 
@@ -18,7 +19,7 @@ export default class UserRoute {
     public config(): void {
         this.router.post('/', this.getUsers);
         this.router.post('/create', this.createUser.bind(this));
-        this.router.post('/update', this.updateUser);
+        this.router.post('/update', this.updateUser.bind(this));
         this.router.post('/login', this.checkLogin);
         this.router.post('/checkLogin', this.checkLastLogin);
         this.router.post('/byCatLoc', this.getUsersByCatLoc);
@@ -76,6 +77,7 @@ export default class UserRoute {
             if(isEmpty(updateReq.codUser) || isEmpty(updateReq.newValues)){
                 throw new Error(`Insufficient data...`);
             }
+            this.validateUpdateUser(updateReq.newValues);
             const updatedUser = await UserService.updateUser(updateReq);
             res.status(200).json({
                 code: 200,
@@ -222,6 +224,36 @@ export default class UserRoute {
             throw new Error(`Incorrect postal code...`);
         }
 
+    }
+
+    private validateUpdateUser(user: IUserUpdate) {
+        if (user.email !== undefined && !EmailValidator.validate(user.email)) {
+            throw new Error(`Incorrect email format...`);
+        }
+
+        if (user.dni !== undefined && ( user.dni.length != 9 || !this.validateNif(user.dni))) {
+            throw new Error(`Incorrect NIF format...`);
+        }
+
+        if (user.telf !== undefined && (user.telf.length != 9 || !/^\d+$/.test(user.telf))) {
+            throw new Error(`Incorrect telephone format...`);
+        }
+
+        if (user.age !== undefined && (user.age < 18 || user.age > 100)) {
+            throw new Error(`Incorrect age...`);
+        }
+
+        if (user.sex !== undefined && !Object.values(SexType).includes(user.sex as SexType)) {
+            throw new Error(`Incorrect sex...`);
+        }
+
+        if (user.password !== undefined && user.password.length < 6) {
+            throw new Error(`Incorrect password, min length 6 characters...`);
+        }
+
+        if (user.postalCode !== undefined && user.postalCode.toString().length != 5) {
+            throw new Error(`Incorrect postal code...`);
+        }
     }
 
     private validateNif(nif: string): boolean{

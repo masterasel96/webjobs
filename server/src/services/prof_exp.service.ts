@@ -30,25 +30,25 @@ export default class ProfExpService {
         return profExpRemove;
     }
 
-    public static async updateProfExp(updateDate: IProfExpUpdateRequest): Promise<ProfExp> {
-        const oldProfExp = await ProfExpDao.getProfExp(updateDate.codProfExp);
+    public static async updateProfExp(updateData: IProfExpUpdateRequest): Promise<ProfExp> {
+        const oldProfExp = await ProfExpDao.getProfExp(updateData.codProfExp);
         if (oldProfExp === undefined) {
             throw new Error(`This profesional experience doesn´t exists...`);
         }
         const profExpAttr = ProfExp.describe();
-        Object.keys(updateDate.newValues).forEach(val => {
+        Object.keys(updateData.newValues).forEach(val => {
             if(!profExpAttr.includes(val)){
                 throw new Error(`Error in update values...`);
             }
         });
-        if (Object.keys(updateDate.newValues).includes('category')){
-            (updateDate.newValues as { category: number | object }).category = await ProfCatService.getProfCat(
-                (updateDate.newValues as { category: number }).category
+        if (Object.keys(updateData.newValues).includes('category')){
+            (updateData.newValues as { category: number | object }).category = await ProfCatService.getProfCat(
+                (updateData.newValues as { category: number }).category
             );
         }
         const newProfExp = {
             ...oldProfExp,
-            ...updateDate.newValues
+            ...updateData.newValues
         }
         const updateProfExp = await ProfExpDao.updateProfExp(newProfExp);
         if(updateProfExp === undefined){
