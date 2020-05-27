@@ -42,15 +42,15 @@ export default class ProfExpService {
             }
         });
         if (Object.keys(updateData.newValues).includes('category')){
-            (updateData.newValues as { category: number | object }).category = await ProfCatService.getProfCat(
-                (updateData.newValues as { category: number }).category
+            (updateData.newValues as unknown as { category: number | object }).category = await ProfCatService.getProfCat(
+                (updateData.newValues as unknown as  { category: number }).category
             );
         }
         const newProfExp = {
             ...oldProfExp,
             ...updateData.newValues
         }
-        const updateProfExp = await ProfExpDao.updateProfExp(newProfExp);
+        const updateProfExp = await ProfExpDao.updateProfExp(newProfExp as ProfExp);
         if(updateProfExp === undefined){
             throw new Error(`Error updating profesional experience...`);
         }

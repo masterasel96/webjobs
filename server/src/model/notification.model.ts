@@ -10,6 +10,10 @@ export default class Notification {
     @JoinColumn({ name: "cod_user" })
     public user: User;
 
+    @ManyToOne(type => User, user => user.indirectNotification)
+    @JoinColumn({ name: "cod_user_indirect" })
+    public indirectUser: User;
+
     @Column({ default: false })
     public see?: boolean;
 
@@ -22,8 +26,9 @@ export default class Notification {
     @UpdateDateColumn({ name: 'updated_at' })
     public updateDate?: Date;
 
-    constructor(user: User, message: string){
+    constructor(user: User, indirectUser: User, message: string){
         this.user = user,
+        this.indirectUser = indirectUser,
         this.message = message
     }
 

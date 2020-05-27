@@ -54,7 +54,7 @@ export default class User {
     @Column({ nullable: true })
     public photo: string;
 
-    @Column({ nullable: true })
+    @Column({ name: 'last_login', nullable: true })
     public lastLogin: Date;
 
     @CreateDateColumn({ name: 'created_at', update: false })
@@ -65,6 +65,9 @@ export default class User {
 
     @OneToMany(type => Notification, notification => notification.user) 
     notifications?: Notification[];
+
+    @OneToMany(type => Notification, notification => notification.indirectUser)
+    indirectNotification?: Notification[];
 
     @OneToMany(type => ProfesionalExperience, experience => experience.user)
     experience?: ProfesionalExperience[];

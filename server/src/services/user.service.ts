@@ -58,7 +58,7 @@ export default class UserService {
             ...oldUser,
             ...updateData.newValues
         }
-        const updateUser = await UserDao.updateUser(newUser);
+        const updateUser = await UserDao.updateUser(newUser as User);
         if (updateUser === undefined) {
             throw new Error(`Error updating user..`);
         }
