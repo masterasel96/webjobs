@@ -2,6 +2,7 @@ import { Router, Request, Response } from 'express';
 import { IProfExpRequest, IProfExpUpdateRequest } from "../interface/request.interface";
 import { isNull, isEmpty } from 'lodash';
 import ProfExpService from '../services/prof_exp.service';
+import { IProfesionalExpUpdate } from '../interface/update.interface';
 
 export default class ProfExpRoute {
     public router: Router = Router();
@@ -13,7 +14,7 @@ export default class ProfExpRoute {
     public config(): void {
         this.router.post('/create', this.setProfExp.bind(this));
         this.router.post('/remove', this.removeProfExp);
-        this.router.post('/update', this.updateProfExp);
+        this.router.post('/update', this.updateProfExp.bind(this));
     }
 
     private async setProfExp(req: Request, res: Response){
@@ -66,6 +67,9 @@ export default class ProfExpRoute {
             if(isEmpty(data.codProfExp) || isEmpty(data.newValues)){
                 throw new Error(`Insufficient or incorrect data...`);
             }
+            if (!this.validateUpdateProfExp(data.newValues)) {
+                throw new Error(`Insufficient or incorrect data...`);
+            }
             const profExpUpdate = await ProfExpService.updateProfExp(data);
             res.status(200).json({
                 code: 200,
@@ -85,5 +89,13 @@ export default class ProfExpRoute {
     private validateProfExp(profExp: IProfExpRequest): boolean {
         return !(isNull(profExp.codUser) || isNull(profExp.codCategory) || isNull(profExp.endDate)
             || isNull(profExp.startDate) || isEmpty(profExp.position) || isEmpty(profExp.company));
+    }
+
+    private validateUpdateProfExp(profExp: IProfesionalExpUpdate): boolean {
+        return !((profExp.category !== undefined && isEmpty(profExp.category)) || 
+            (profExp.endDate !== undefined && isNull(profExp.endDate)) ||
+            (profExp.startDate !== undefined && isNull(profExp.startDate)) ||
+            (profExp.position !== undefined && isEmpty(profExp.position)) ||
+            (profExp.company !== undefined && isEmpty(profExp.company)));
     }
 }
