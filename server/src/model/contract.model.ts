@@ -46,4 +46,9 @@ export default class Contract {
         this.worker= worker,
         this.contractor = contractor
     }
+
+    public static describe(): string[] {
+        return ['startDate', 'endDate', 'status', 'contractorAssessment', 'workerAssessment', 
+            'contractorPunctuation', 'workerPunctuation'];
+    }
 }

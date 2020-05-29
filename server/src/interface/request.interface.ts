@@ -1,4 +1,4 @@
-import { IProfesionalExpUpdate, IUserUpdate } from "./update.interface";
+import { IProfesionalExpUpdate, IUserUpdate, IContractUpdate } from "./update.interface";
 
 export interface IProfExpRequest {
     codUser: number,
@@ -15,6 +15,11 @@ export interface INotificationRequest {
     message: string;
 }
 
+export interface IContractRequest {
+    codContractor: number;
+    codWorker: number;
+}
+
 export interface IProfExpUpdateRequest {
     codProfExp: number,
     newValues: IProfesionalExpUpdate
@@ -24,3 +29,9 @@ export interface IUserUpdateRequest {
     codUser: number,
     newValues: IUserUpdate
 }
+
+export interface IContractUpdateRequest {
+    codContract: number;
+    newValues: IContractUpdate;
+}
+

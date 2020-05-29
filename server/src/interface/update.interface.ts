@@ -1,11 +1,11 @@
-import { SexType } from "./db.interface";
+import { SexType, ContractStatus } from "./db.interface";
 
 export interface IProfesionalExpUpdate {
     category?: string;
     position?: string;
     company?: string;
-    startDate?: Date;
-    endDate?: Date;
+    startDate?: string;
+    endDate?: string;
 }
 
 export interface IUserUpdate {
@@ -24,5 +24,15 @@ export interface IUserUpdate {
     bio?: string;
     offer?: string;
     photo?: string;
-    lastLogin?: Date;
+    lastLogin?: string;
+}
+
+export interface IContractUpdate {
+    startDate?: string;
+    endDate?: string;
+    status?: ContractStatus;
+    contractorAssessment?: string;
+    workerAssessment?: string;
+    contractorPunctuation?: number;
+    workerPunctuation?: number;
 }

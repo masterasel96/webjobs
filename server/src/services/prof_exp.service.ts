@@ -46,6 +46,12 @@ export default class ProfExpService {
                 (updateData.newValues as unknown as  { category: number }).category
             );
         }
+        if (Object.keys(updateData.newValues).includes('startDate')) {
+            (updateData.newValues as unknown as { startDate: Date }).startDate = new Date(updateData.newValues.startDate as string );
+        }
+        if (Object.keys(updateData.newValues).includes('endDate')) {
+            (updateData.newValues as unknown as { endDate: Date }).endDate = new Date(updateData.newValues.endDate as string);
+        }
         const newProfExp = {
             ...oldProfExp,
             ...updateData.newValues
