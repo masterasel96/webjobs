@@ -3,6 +3,7 @@ import { IProfExpRequest, IProfExpUpdateRequest } from "../interface/request.int
 import { isNull, isEmpty } from 'lodash';
 import ProfExpService from '../services/prof_exp.service';
 import { IProfesionalExpUpdate } from '../interface/update.interface';
+import Guard from '../core/guard.core';
 
 export default class ProfExpRoute {
     public router: Router = Router();
@@ -18,10 +19,11 @@ export default class ProfExpRoute {
         this.router.post('/update', this.updateProfExp.bind(this));
     }
 
-    private async setProfExp(req: Request, res: Response){
+    private async setProfExp(req: Request, res: Response) {
         try {
+            Guard.bauth(req, res);
             const profExpRequest = req.body as unknown as IProfExpRequest;
-            if (!this.validateProfExp(profExpRequest)){
+            if (!this.validateProfExp(profExpRequest)) {
                 throw new Error(`Insufficient or incorrect data...`);
             }
             const profesionalExperience = await ProfExpService.setProfExp(profExpRequest);
@@ -40,10 +42,11 @@ export default class ProfExpRoute {
         }
     }
 
-    private async removeProfExp(req: Request, res: Response){
+    private async removeProfExp(req: Request, res: Response) {
         try {
+            Guard.bauth(req, res);
             const codProfExp = req.body.codProfExp;
-            if(isEmpty(codProfExp)){
+            if (isEmpty(codProfExp)) {
                 throw new Error(`Insufficient or incorrect data...`);
             }
             const profExpRemove = await ProfExpService.removeProfExp(codProfExp);
@@ -62,10 +65,11 @@ export default class ProfExpRoute {
         }
     }
 
-    private async updateProfExp(req: Request, res: Response){
+    private async updateProfExp(req: Request, res: Response) {
         try {
+            Guard.bauth(req, res);
             const data = req.body as IProfExpUpdateRequest;
-            if(isEmpty(data.codProfExp) || isEmpty(data.newValues)){
+            if (isEmpty(data.codProfExp) || isEmpty(data.newValues)) {
                 throw new Error(`Insufficient or incorrect data...`);
             }
             if (!this.validateUpdateProfExp(data.newValues)) {
@@ -89,6 +93,7 @@ export default class ProfExpRoute {
 
     private async getUserProfExp(req: Request, res: Response) {
         try {
+            Guard.bauth(req, res);
             const codUser: number = req.body.codUser;
             if (codUser === undefined || isNull(codUser)) {
                 throw new Error(`Insufficient data...`);
@@ -115,7 +120,7 @@ export default class ProfExpRoute {
     }
 
     private validateUpdateProfExp(profExp: IProfesionalExpUpdate): boolean {
-        return !((profExp.category !== undefined && isEmpty(profExp.category)) || 
+        return !((profExp.category !== undefined && isEmpty(profExp.category)) ||
             (profExp.endDate !== undefined && isNull(profExp.endDate)) ||
             (profExp.startDate !== undefined && isNull(profExp.startDate)) ||
             (profExp.position !== undefined && isEmpty(profExp.position)) ||

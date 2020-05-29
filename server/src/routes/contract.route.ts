@@ -4,6 +4,7 @@ import ContractService from '../services/contract.service';
 import { IContractRequest, IContractUpdateRequest } from '../interface/request.interface';
 import { IContractUpdate } from '../interface/update.interface';
 import { ContractStatus } from '../interface/db.interface';
+import Guard from '../core/guard.core';
 
 export default class contractRoute {
     public router: Router = Router();
@@ -18,10 +19,11 @@ export default class contractRoute {
         this.router.post('/update', this.updateContract.bind(this));
     }
 
-    private async createContract(req: Request, res: Response){
+    private async createContract(req: Request, res: Response) {
         try {
+            Guard.bauth(req, res);
             const contractData = req.body as IContractRequest;
-            if (isEmpty(contractData.codWorker) || isEmpty(contractData.codContractor)){
+            if (isEmpty(contractData.codWorker) || isEmpty(contractData.codContractor)) {
                 throw new Error(`Insufficient data...`);
             }
             const newContract = await ContractService.createContract(contractData);
@@ -40,10 +42,11 @@ export default class contractRoute {
         }
     }
 
-    private async getContractsByUser(req: Request, res: Response){
+    private async getContractsByUser(req: Request, res: Response) {
         try {
+            Guard.bauth(req, res);
             const codUser = req.body.codUser;
-            if(isEmpty(codUser)){
+            if (isEmpty(codUser)) {
                 throw new Error(`Insufficient data...`);
             }
             const contracts = await ContractService.getContractsByUser(codUser);
@@ -60,12 +63,13 @@ export default class contractRoute {
                 status: false
             });
         }
-    } 
+    }
 
-    private async updateContract(req: Request, res: Response){
+    private async updateContract(req: Request, res: Response) {
         try {
+            Guard.bauth(req, res);
             const newValues = req.body as IContractUpdateRequest;
-            if(isEmpty(newValues.codContract) || isEmpty(newValues.newValues)) {
+            if (isEmpty(newValues.codContract) || isEmpty(newValues.newValues)) {
                 throw new Error(`Insufficient data...`);
             }
             this.validateUpdateContract(newValues.newValues);
@@ -85,16 +89,16 @@ export default class contractRoute {
         }
     }
 
-    private validateUpdateContract(values: IContractUpdate){
-        if (values.status !== undefined && !Object.values(ContractStatus).includes(values.status)){
+    private validateUpdateContract(values: IContractUpdate) {
+        if (values.status !== undefined && !Object.values(ContractStatus).includes(values.status)) {
             throw new Error(`Incorrect status value...`);
         }
-        if((values.contractorAssessment !== undefined && values.contractorAssessment.length < 15) || 
-            (values.workerAssessment !== undefined && values.workerAssessment.length < 15)){
+        if ((values.contractorAssessment !== undefined && values.contractorAssessment.length < 15) ||
+            (values.workerAssessment !== undefined && values.workerAssessment.length < 15)) {
             throw new Error(`Incorrect assessment length, min 15 words...`);
         }
         if ((values.contractorPunctuation !== undefined && (values.contractorPunctuation < 0 || values.contractorPunctuation > 5)) ||
-            (values.workerPunctuation !== undefined && (values.workerPunctuation < 0 || values.workerPunctuation > 5))){
+            (values.workerPunctuation !== undefined && (values.workerPunctuation < 0 || values.workerPunctuation > 5))) {
             throw new Error(`Incorrect punctuaction, max 5 points...`);
         }
     }

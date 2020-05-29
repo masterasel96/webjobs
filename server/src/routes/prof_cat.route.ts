@@ -1,8 +1,9 @@
 import { Router, Response, Request } from "express";
 import { isEmpty } from "lodash";
 import ProfCatService from "../services/prof_cat.service";
+import Guard from "../core/guard.core";
 
-export default class ProfCatRoute{
+export default class ProfCatRoute {
 
     public router: Router = Router();
 
@@ -14,15 +15,16 @@ export default class ProfCatRoute{
         this.router.post('/create', this.setProfCat);
     }
 
-    private async setProfCat(req: Request, res: Response){
+    private async setProfCat(req: Request, res: Response) {
         try {
+            Guard.bauth(req, res);
             const name: string = req.body.name;
             const description: string = req.body.description;
-            if(isEmpty(name) || isEmpty(description)){
+            if (isEmpty(name) || isEmpty(description)) {
                 throw new Error(`Insufficient or incorrect data...`);
             }
             const profesionalCategory = await ProfCatService.setProfCat(name, description);
-            if(isEmpty(profesionalCategory)){
+            if (isEmpty(profesionalCategory)) {
                 throw new Error(`Error creating profesional category...`);
             }
             res.status(200).json({

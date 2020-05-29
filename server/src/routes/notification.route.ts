@@ -3,6 +3,7 @@ import { INotificationRequest } from '../interface/request.interface';
 import { isEmpty } from 'lodash';
 import NotificationService from '../services/notification.service';
 import Notification from '../model/notification.model';
+import Guard from '../core/guard.core';
 
 export default class NotificationRoute {
     public router: Router = Router();
@@ -18,15 +19,16 @@ export default class NotificationRoute {
         this.router.post('/see', this.seeNotification);
     }
 
-    private async createNotification(req: Request, res: Response){
+    private async createNotification(req: Request, res: Response) {
         try {
+            Guard.bauth(req, res);
             const notification = req.body as INotificationRequest;
-            if(isEmpty(notification.codIndirectUser) || isEmpty(notification.codUser) ||
-                isEmpty(notification.message)){
-                    throw new Error(`Insufficient data...`);
-                }
+            if (isEmpty(notification.codIndirectUser) || isEmpty(notification.codUser) ||
+                isEmpty(notification.message)) {
+                throw new Error(`Insufficient data...`);
+            }
             const newNotification: Notification = await NotificationService.createNotification(notification);
-            if(isEmpty(newNotification)){
+            if (isEmpty(newNotification)) {
                 throw new Error(`Error creating new notification...`);
             }
             res.status(200).json({
@@ -44,10 +46,11 @@ export default class NotificationRoute {
         }
     }
 
-    private async getNotificationsByUser(req: Request, res: Response){
+    private async getNotificationsByUser(req: Request, res: Response) {
         try {
+            Guard.bauth(req, res);
             const codUser = req.body.codUser;
-            if(isEmpty(codUser)){
+            if (isEmpty(codUser)) {
                 throw new Error(`Insufficient data...`);
             }
             const notifications: Notification[] = await NotificationService.getNotificationsByUser(codUser);
@@ -68,6 +71,7 @@ export default class NotificationRoute {
 
     private async checkNewNotifications(req: Request, res: Response) {
         try {
+            Guard.bauth(req, res);
             const codUser = req.body.codUser;
             if (isEmpty(codUser)) {
                 throw new Error(`Insufficient data...`);
@@ -90,6 +94,7 @@ export default class NotificationRoute {
 
     private async seeNotification(req: Request, res: Response) {
         try {
+            Guard.bauth(req, res);
             const codNotification = req.body.codNotification;
             if (isEmpty(codNotification)) {
                 throw new Error(`Insufficient data...`);
