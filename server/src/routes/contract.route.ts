@@ -21,7 +21,9 @@ export default class contractRoute {
 
     private async createContract(req: Request, res: Response) {
         try {
-            Guard.bauth(req, res);
+            if(!Guard.bauth(req, res)){
+                return;
+            };
             const contractData = req.body as IContractRequest;
             if (isEmpty(contractData.codWorker) || isEmpty(contractData.codContractor)) {
                 throw new Error(`Insufficient data...`);
@@ -44,7 +46,9 @@ export default class contractRoute {
 
     private async getContractsByUser(req: Request, res: Response) {
         try {
-            Guard.bauth(req, res);
+            if(!Guard.bauth(req, res)){
+                return;
+            };
             const codUser = req.body.codUser;
             if (isEmpty(codUser)) {
                 throw new Error(`Insufficient data...`);
@@ -67,7 +71,9 @@ export default class contractRoute {
 
     private async updateContract(req: Request, res: Response) {
         try {
-            Guard.bauth(req, res);
+            if(!Guard.bauth(req, res)){
+                return;
+            };
             const newValues = req.body as IContractUpdateRequest;
             if (isEmpty(newValues.codContract) || isEmpty(newValues.newValues)) {
                 throw new Error(`Insufficient data...`);

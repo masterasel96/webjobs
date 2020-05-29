@@ -27,7 +27,9 @@ export default class UserRoute {
 
     private async getUsers(req: Request, res: Response) {
         try {
-            Guard.bauth(req, res);
+            if (!Guard.bauth(req, res)) {
+                return;
+            };
             const codUser = req.body.codUser;
             const users = await UserService.getUser(isEmpty(codUser) || isNull(codUser) ? 0 : codUser);
             res.status(200).json({
@@ -47,7 +49,9 @@ export default class UserRoute {
 
     private async createUser(req: Request, res: Response) {
         try {
-            Guard.bauth(req, res);
+            if(!Guard.bauth(req, res)){
+                return;
+            };
             const user = req.body as User;
             if (isEmpty(user)) {
                 throw new Error(`Insufficient data...`);
@@ -74,7 +78,9 @@ export default class UserRoute {
 
     private async updateUser(req: Request, res: Response) {
         try {
-            Guard.bauth(req, res);
+            if(!Guard.bauth(req, res)){
+                return;
+            };
             const updateReq = req.body as IUserUpdateRequest;
             if (isEmpty(updateReq.codUser) || isEmpty(updateReq.newValues)) {
                 throw new Error(`Insufficient data...`);
@@ -98,7 +104,9 @@ export default class UserRoute {
 
     private async checkLogin(req: Request, res: Response) {
         try {
-            Guard.bauth(req, res);
+            if(!Guard.bauth(req, res)){
+                return;
+            };
             const email: string = req.body.email;
             const password: string = req.body.password;
             if (isEmpty(email) || isEmpty(password)) {
@@ -124,7 +132,9 @@ export default class UserRoute {
 
     private async checkLastLogin(req: Request, res: Response) {
         try {
-            Guard.bauth(req, res);
+            if(!Guard.bauth(req, res)){
+                return;
+            };
             const codUser: number = req.body.codUser;
             if (isNull(codUser)) {
                 throw new Error(`Insufficient data...`);
@@ -147,7 +157,9 @@ export default class UserRoute {
 
     private async getUsersByCatLoc(req: Request, res: Response) {
         try {
-            Guard.bauth(req, res);
+            if(!Guard.bauth(req, res)){
+                return;
+            };
             const category: string = req.body.category;
             const location: string = req.body.location;
             if (isEmpty(category) || isEmpty(location)) {

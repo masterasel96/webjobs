@@ -17,7 +17,9 @@ export default class ProfCatRoute {
 
     private async setProfCat(req: Request, res: Response) {
         try {
-            Guard.bauth(req, res);
+            if(!Guard.bauth(req, res)){
+                return;
+            };
             const name: string = req.body.name;
             const description: string = req.body.description;
             if (isEmpty(name) || isEmpty(description)) {

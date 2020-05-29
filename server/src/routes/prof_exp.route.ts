@@ -21,7 +21,9 @@ export default class ProfExpRoute {
 
     private async setProfExp(req: Request, res: Response) {
         try {
-            Guard.bauth(req, res);
+            if(!Guard.bauth(req, res)){
+                return;
+            };
             const profExpRequest = req.body as unknown as IProfExpRequest;
             if (!this.validateProfExp(profExpRequest)) {
                 throw new Error(`Insufficient or incorrect data...`);
@@ -44,7 +46,9 @@ export default class ProfExpRoute {
 
     private async removeProfExp(req: Request, res: Response) {
         try {
-            Guard.bauth(req, res);
+            if(!Guard.bauth(req, res)){
+                return;
+            };
             const codProfExp = req.body.codProfExp;
             if (isEmpty(codProfExp)) {
                 throw new Error(`Insufficient or incorrect data...`);
@@ -67,7 +71,9 @@ export default class ProfExpRoute {
 
     private async updateProfExp(req: Request, res: Response) {
         try {
-            Guard.bauth(req, res);
+            if(!Guard.bauth(req, res)){
+                return;
+            };
             const data = req.body as IProfExpUpdateRequest;
             if (isEmpty(data.codProfExp) || isEmpty(data.newValues)) {
                 throw new Error(`Insufficient or incorrect data...`);
@@ -93,7 +99,9 @@ export default class ProfExpRoute {
 
     private async getUserProfExp(req: Request, res: Response) {
         try {
-            Guard.bauth(req, res);
+            if(!Guard.bauth(req, res)){
+                return;
+            };
             const codUser: number = req.body.codUser;
             if (codUser === undefined || isNull(codUser)) {
                 throw new Error(`Insufficient data...`);

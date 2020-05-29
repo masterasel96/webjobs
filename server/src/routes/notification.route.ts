@@ -21,7 +21,9 @@ export default class NotificationRoute {
 
     private async createNotification(req: Request, res: Response) {
         try {
-            Guard.bauth(req, res);
+            if(!Guard.bauth(req, res)){
+                return;
+            };
             const notification = req.body as INotificationRequest;
             if (isEmpty(notification.codIndirectUser) || isEmpty(notification.codUser) ||
                 isEmpty(notification.message)) {
@@ -48,7 +50,9 @@ export default class NotificationRoute {
 
     private async getNotificationsByUser(req: Request, res: Response) {
         try {
-            Guard.bauth(req, res);
+            if(!Guard.bauth(req, res)){
+                return;
+            };
             const codUser = req.body.codUser;
             if (isEmpty(codUser)) {
                 throw new Error(`Insufficient data...`);
@@ -71,7 +75,9 @@ export default class NotificationRoute {
 
     private async checkNewNotifications(req: Request, res: Response) {
         try {
-            Guard.bauth(req, res);
+            if(!Guard.bauth(req, res)){
+                return;
+            };
             const codUser = req.body.codUser;
             if (isEmpty(codUser)) {
                 throw new Error(`Insufficient data...`);
@@ -94,7 +100,9 @@ export default class NotificationRoute {
 
     private async seeNotification(req: Request, res: Response) {
         try {
-            Guard.bauth(req, res);
+            if(!Guard.bauth(req, res)){
+                return;
+            };
             const codNotification = req.body.codNotification;
             if (isEmpty(codNotification)) {
                 throw new Error(`Insufficient data...`);

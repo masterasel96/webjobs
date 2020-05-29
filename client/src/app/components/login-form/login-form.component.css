@@ -1,0 +1,65 @@
+html,
+body,
+#container {
+  height: 100%;
+}
+
+#container {
+
+}
+
+#login_container,
+#register_container {
+  max-width: 1200px;
+  margin: 0px auto;
+  padding-top: 30px;
+}
+
+#login_container .card-header,
+#register_container .card-header {
+  background: #31343A;
+  color: #F1F1F1;
+}
+
+#login_container .card-header img,
+#register_container .card-header img {
+  height: 60px;
+}
+
+#login_container .card-body,
+#register_container .card-body {
+  background: #F1F1F1;
+}
+
+#login_container .card-body p,
+#register_container .card-body p {
+  font-size: 14px;
+  font-style: italic;
+}
+
+#login_container input[type=submit],
+#register_container input[type=submit] {
+  background: #507DBC;
+  color: #F1F1F1;
+}
+
+#login_container a,
+#register_container a {
+  color: #507DBC;
+}
+
+#register_container a {
+  float: right;
+  margin-top: -30px;
+}
+
+#register_container .card-body p {
+  font-size: 14px;
+  font-style: italic;
+}
+
+.info {
+  font-style: italic;
+  font-size: 12px;
+  margin-left: 10px;
+}
