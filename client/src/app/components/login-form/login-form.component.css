@@ -1,11 +1,6 @@
-html,
-body,
 #container {
   height: 100%;
-}
-
-#container {
-
+  background-image: url('../../../assets/img/cover.jpg');
 }
 
 #login_container,

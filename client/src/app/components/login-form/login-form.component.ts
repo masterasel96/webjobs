@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { UserService } from '../../services/user.service';
+import { Title } from '@angular/platform-browser';
 
 @Component({
   selector: 'app-login-form',
@@ -9,10 +10,12 @@ import { UserService } from '../../services/user.service';
 export class LoginFormComponent implements OnInit {
 
   constructor(
-    private userService: UserService
+    private userService: UserService,
+    private titleService: Title
   ) { }
 
   ngOnInit() {
+    this.titleService.setTitle('WebJobs | Login');
     this.userService.getUsers().subscribe(
       res => console.log(res),
       err => console.log(err)
