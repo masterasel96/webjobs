@@ -1,6 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { UserService } from '../../services/user.service';
 import { Title } from '@angular/platform-browser';
+import * as $ from 'jquery';
+import { IResponse } from 'src/app/interfaces/core.interface';
 
 @Component({
   selector: 'app-login-form',
@@ -16,9 +18,30 @@ export class LoginFormComponent implements OnInit {
 
   ngOnInit() {
     this.titleService.setTitle('WebJobs | Login');
-    this.userService.getUsers().subscribe(
-      res => console.log(res),
-      err => console.log(err)
+  }
+
+  public checkLogin(): void {
+    this.userService.checkLogin({
+      email: $('#usuario').val(),
+      password: $('#password').val()
+    }).subscribe(
+      (res) => {
+        const returnData = res as IResponse;
+        if (returnData.data.login) {
+          console.log('Login correcto...');
+        }
+      },
+      (err) => {
+        const errorData = err.error as IResponse;
+        console.log(errorData.data.error);
+        $.notify({
+          // options
+          message: 'Hello World'
+        }, {
+          // settings
+          type: 'danger'
+        });
+      }
     );
   }
 
