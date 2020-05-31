@@ -3,6 +3,7 @@ import { UserService } from '../../services/user.service';
 import { Title } from '@angular/platform-browser';
 import * as $ from 'jquery';
 import { IResponse } from 'src/app/interfaces/core.interface';
+import { ToastrService } from 'ngx-toastr';
 
 @Component({
   selector: 'app-login-form',
@@ -13,11 +14,13 @@ export class LoginFormComponent implements OnInit {
 
   constructor(
     private userService: UserService,
-    private titleService: Title
+    private titleService: Title,
+    private toastr: ToastrService
   ) { }
 
   ngOnInit() {
     this.titleService.setTitle('WebJobs | Login');
+    this.toastr.success('asdasdasd', 'asdasd');
   }
 
   public checkLogin(): void {
@@ -34,13 +37,6 @@ export class LoginFormComponent implements OnInit {
       (err) => {
         const errorData = err.error as IResponse;
         console.log(errorData.data.error);
-        $.notify({
-          // options
-          message: 'Hello World'
-        }, {
-          // settings
-          type: 'danger'
-        });
       }
     );
   }
