@@ -13,15 +13,15 @@
         </button>
         <div class="collapse navbar-collapse" id="navbarContent">
           <ul class="navbar-nav ml-auto">
-            <li [className]="location === index || location === null ? 'nav-item active' : 'nav-item'">
+            <li [class]="indexClass">
               <img src="assets/icons/home.svg" alt="Home icon">
               <a class="nav-link" href="#">Inicio </a>
             </li>
-            <li [className]="location === control_panel ? 'nav-item active' : 'nav-item'">
+            <li [class]="controlPanelClass">
               <img src="assets/icons/control_panel.svg" alt="Control panel icon">
               <a class="nav-link" href="./control_panel.html"> Panel de control </a>
             </li>
-            <li [className]="location === notifys ? 'nav-item active' : 'nav-item'">
+            <li [class]="notifyClass">
               <img src="assets/icons/notify.svg" alt="Notify icon">
               <img src="assets/icons/signs.svg" id="new_notify_icon" alt="New notify icon">
               <a class="nav-link" href="./notifys.html"> Notificaciones </a>

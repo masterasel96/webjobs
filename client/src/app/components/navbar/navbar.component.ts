@@ -6,10 +6,25 @@ import { Component, OnInit } from '@angular/core';
   styleUrls: ['./navbar.component.css']
 })
 export class NavbarComponent {
-  private location: string = null;
+  private indexClass = 'nav-item';
+  private controlPanelClass = 'nav-item';
+  private notifyClass = 'nav-item';
+
   constructor() { }
 
   public setLocation(location: string) {
-    this.location = location;
+    switch (location) {
+      case 'index':
+        this.indexClass = 'nav-item active';
+        break;
+      case 'controlPanel':
+        this.indexClass = 'nav-item active';
+        break;
+      case 'notify':
+        this.notifyClass = 'nav-item active';
+        break;
+      default:
+        this.indexClass = 'nav-item active';
+    }
   }
 }

@@ -71,7 +71,7 @@ export class RegisterFormComponent implements OnInit {
           this.toastr.success('Registro correcto...');
         }
         this.loadScreem.load(false);
-        this.router.navigate(['/login', 'Registro correcto...'], { skipLocationChange: true });
+        this.router.navigate(['/login', 'Registro correcto...']);
       },
       (err) => {
         const errorData = err.error as IResponse;
