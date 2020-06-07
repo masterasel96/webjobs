@@ -12,31 +12,31 @@
               <div class="row">
                 <div class="form-group col-md-6">
                   <label for="name">Nombre</label>
-                  <input type="text" id="name" class="form-control" required>
+                  <input type="text" id="name" [(ngModel)]="userName" name="user_name" class="form-control" required>
                 </div>
                 <div class="form-group col-md-6">
                   <label for="last_name">Apellidos</label>
-                  <input type="text" id="last_name" class="form-control" required>
+                  <input type="text" id="last_name" [(ngModel)]="lastName" name="last_name" class="form-control" required>
                 </div>
               </div>
               <div class="row">
                 <div class="form-group col-md-6">
                   <label for="email">Email</label>
-                  <input type="email" id="email" class="form-control" required>
+                  <input type="email" id="email" [(ngModel)]="email" name="email" class="form-control" required>
                 </div>
                 <div class="form-group col-md-6">
                   <label for="dni">DNI</label>
-                  <input type="text" id="dni" class="form-control" required>
+                  <input type="text" id="dni" [(ngModel)]="dni" name="dni" class="form-control" required>
                 </div>
               </div>
               <div class="row">
                 <div class="form-group col-md-6">
                   <label for="telf">Telefono de contacto</label>
-                  <input type="text" id="telf" class="form-control" required>
+                  <input type="text" id="telf" [(ngModel)]="telf" name="telf" class="form-control" required>
                 </div>
                 <div class="form-group col-md-6">
                   <label for="sex">Sexo</label>
-                  <select id="sex" class="form-control">
+                  <select id="sex" [(ngModel)]="sex" name="sex" class="form-control">
                     <option value="MALE">Hombre</option>
                     <option value="FEMALE">Mujer</option>
                   </select>
@@ -45,7 +45,7 @@
               <div class="row">
                 <div class="form-group col-md-6">
                   <label for="region">Provincia</label>
-                  <select id="region" class="form-control">
+                  <select id="region" [(ngModel)]="region" name="region" class="form-control">
                     <option value='alava'>Álava</option>
                     <option value='albacete'>Albacete</option>
                     <option value='alicante'>Alicante/Alacant</option>
@@ -102,28 +102,28 @@
                 </div>
                 <div class="form-group col-md-6">
                   <label for="city">Ciudad</label>
-                  <input type="text" id="city" class="form-control" required>
+                  <input type="text" id="city" [(ngModel)]="city" name="city" class="form-control" required>
                 </div>
               </div>
               <div class="row">
                 <div class="form-group col-md-6">
                   <label for="postal_code">Codigo Postal</label>
-                  <input type="number" id="postal_code" class="form-control" required>
+                  <input type="number" id="postal_code" [(ngModel)]="postalCode" name="postal_code" class="form-control" required>
                 </div>
                 <div class="form-group col-md-6">
                   <label for="age">Edad</label>
-                  <input type="number" id="age" class="form-control" required>
+                  <input type="number" id="age" [(ngModel)]="age" name="age" class="form-control" required>
                 </div>
               </div>
               <div class="row">
                 <div class="form-group col-md-6">
                   <label for="address">Direccion</label>
-                  <input type="text" id="address" class="form-control" required>
+                  <input type="text" id="address" [(ngModel)]="address" name="address" class="form-control" required>
                 </div>
                 <div class="form-group col-md-6">
                   <label for="offer">Tipo de usuario</label>
                   <span class="info">* Mas tarde podrá cambiar *</span>
-                  <select id="offer" class="form-control">
+                  <select id="offer" [(ngModel)]="offer" name="offer" class="form-control">
                     <option value="true">Trabajador</option>
                     <option value="false">Contratante</option>
                     <option value="true">Ambos</option>
@@ -133,17 +133,19 @@
               <div class="row">
                 <div class="form-group col-md-6">
                   <label for="password">Contraseña</label>
-                  <input type="password" id="password" class="form-control" required>
+                  <input type="password" id="password" [(ngModel)]="password" name="password"
+                    autocomplete="new-password" class="form-control" required>
                 </div>
                 <div class="form-group col-md-6">
                   <label for="password2">Confirme la contraseña</label>
-                  <input type="password" id="password2" class="form-control" required>
+                  <input type="password" id="password2" [(ngModel)]="password2" name="password2"
+                    autocomplete="new-password" class="form-control" required>
                 </div>
               </div>
               <div class="row">
                 <div class="form-group col-12">
-                  <label for="privacy">Acepto la política de privacidad de webjobs.com</label>
-                  <input type="checkbox" id="privacy" class="ml-1" required>
+                  <label for="privacity">Acepto la política de privacidad de webjobs.com</label>
+                  <input type="checkbox" id="privacity" [(ngModel)]="privacity" name="privacity" class="ml-1" required>
                 </div>
               </div>
               <input type="submit" value="Registrarme" class="btn btn-block" (click)="register()">

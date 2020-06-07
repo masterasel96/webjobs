@@ -1,7 +1,6 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { UserService } from '../../services/user.service';
 import { Title } from '@angular/platform-browser';
-import * as $ from 'jquery';
 import { IResponse } from 'src/app/interfaces/core.interface';
 import { ToastrService } from 'ngx-toastr';
 import { LoadScreemComponent } from '../load-screem/load-screem.component';
@@ -15,6 +14,8 @@ import { ActivatedRoute } from '@angular/router';
 export class LoginFormComponent implements OnInit {
   @ViewChild(LoadScreemComponent, { static: true }) loadScreem: LoadScreemComponent;
   private msg: string = null;
+  private email: string;
+  private password: string;
   constructor(
     private userService: UserService,
     private titleService: Title,
@@ -34,8 +35,8 @@ export class LoginFormComponent implements OnInit {
   public checkLogin(): void {
     this.loadScreem.load(true);
     this.userService.checkLogin({
-      email: $('#usuario').val(),
-      password: $('#password').val()
+      email: this.email,
+      password: this.password
     }).subscribe(
       (res) => {
         const returnData = res as IResponse;

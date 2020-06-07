@@ -1,0 +1,38 @@
+<nav class="navbar navbar-expand-md row" id="main_navbar">
+  <div class="col">
+    <div class="row">
+      <div class="col col-4">
+        <a class="navbar-brand" id="logo" href="#">
+          <img src="assets/icons/logo.svg" class="logo" alt="Logo icon">
+        </a>
+      </div>
+      <div class="col col-8 text-right">
+        <button class="navbar-toggler navbar-button" type="button" data-toggle="collapse" data-target="#navbarContent"
+          aria-controls="navbarContent" aria-expanded="false" aria-label="Toggle navigation" id="menu_hamburguer">
+          <div class="animated-icon"><span></span><span></span><span></span></div>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarContent">
+          <ul class="navbar-nav ml-auto">
+            <li [className]="location === index || location === null ? 'nav-item active' : 'nav-item'">
+              <img src="assets/icons/home.svg" alt="Home icon">
+              <a class="nav-link" href="#">Inicio </a>
+            </li>
+            <li [className]="location === control_panel ? 'nav-item active' : 'nav-item'">
+              <img src="assets/icons/control_panel.svg" alt="Control panel icon">
+              <a class="nav-link" href="./control_panel.html"> Panel de control </a>
+            </li>
+            <li [className]="location === notifys ? 'nav-item active' : 'nav-item'">
+              <img src="assets/icons/notify.svg" alt="Notify icon">
+              <img src="assets/icons/signs.svg" id="new_notify_icon" alt="New notify icon">
+              <a class="nav-link" href="./notifys.html"> Notificaciones </a>
+            </li>
+            <li class="nav-item">
+              <img src="assets/icons/logout.svg" alt="Logout icon">
+              <a class="nav-link" href="./login.html"> Salir</a>
+            </li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </div>
+</nav>
