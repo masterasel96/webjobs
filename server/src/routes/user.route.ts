@@ -182,10 +182,10 @@ export default class UserRoute {
     }
 
     private validateUser(user: User) {
-        if (isEmpty(user) || isEmpty(user.userName) || isEmpty(user.lastName) || isEmpty(user.email) ||
-            isEmpty(user.dni) || isEmpty(user.telf || isEmpty(user.age) || isEmpty(user.sex)
-                || isEmpty(user.password) || isEmpty(user.postalCode) || isEmpty(user.city)
-                || isEmpty(user.region) || isEmpty(user.address) || !isBoolean(user.offer))) {
+        if ( isEmpty(user) || isEmpty(user.userName) || isEmpty(user.lastName) || isEmpty(user.email) ||
+                isEmpty(user.dni) || isNull(user.telf) || isNull(user.age) || isEmpty(user.sex)
+                || isEmpty(user.password) || isNull(user.postalCode) || isEmpty(user.city)
+                || isEmpty(user.region) || isEmpty(user.address) || !isBoolean(user.offer)) {
             throw new Error(`Datos incorrectos o insuficientes...`);
         }
 

@@ -6,9 +6,8 @@ import { IndexComponent } from './components/index/index.component';
 
 
 const routes: Routes = [
-  { path: '', redirectTo: '/login/', pathMatch: 'full' },
-  { path: 'login', redirectTo: '/login/', pathMatch: 'full' },
-  { path: 'login/:msg?', component: LoginFormComponent },
+  { path: '', redirectTo: '/login', pathMatch: 'full' },
+  { path: 'login', component: LoginFormComponent },
   { path: 'register', component: RegisterFormComponent },
   { path: 'index', component: IndexComponent }
 ];

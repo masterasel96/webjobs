@@ -4,7 +4,6 @@ import { Title } from '@angular/platform-browser';
 import { IResponse } from 'src/app/interfaces/core.interface';
 import { ToastrService } from 'ngx-toastr';
 import { LoadScreemComponent } from '../load-screem/load-screem.component';
-import { Router } from '@angular/router';
 import { SexType } from 'src/app/interfaces/user.interface';
 
 @Component({
@@ -27,13 +26,12 @@ export class RegisterFormComponent implements OnInit {
   private city: string;
   private region: string;
   private address: string;
-  private offer: boolean;
+  private offer: string;
   private privacity: boolean;
   constructor(
     private userService: UserService,
     private titleService: Title,
-    private toastr: ToastrService,
-    private router: Router
+    private toastr: ToastrService
   ) { }
 
   ngOnInit() {
@@ -63,7 +61,7 @@ export class RegisterFormComponent implements OnInit {
       city: this.city,
       region: this.region,
       address: this.address,
-      offer: this.offer
+      offer: this.offer === 'true' ? true : false
     }).subscribe(
       (res) => {
         const returnData = res as IResponse;
@@ -71,7 +69,7 @@ export class RegisterFormComponent implements OnInit {
           this.toastr.success('Registro correcto...');
         }
         this.loadScreem.load(false);
-        this.router.navigate(['/login', 'Registro correcto...']);
+        this.resetForm();
       },
       (err) => {
         const errorData = err.error as IResponse;
@@ -79,5 +77,23 @@ export class RegisterFormComponent implements OnInit {
         this.loadScreem.load(false);
       }
     );
+  }
+
+  private resetForm(): void {
+    this.userName = null;
+    this.lastName = null;
+    this.email = null;
+    this.dni = null;
+    this.telf = null;
+    this.age = null;
+    this.sex = null;
+    this.password = null;
+    this.password2 = null;
+    this.postalCode = null;
+    this.city = null;
+    this.region = null;
+    this.address = null;
+    this.offer = null;
+    this.privacity = false;
   }
 }
