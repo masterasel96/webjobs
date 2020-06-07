@@ -16,7 +16,7 @@ export default class ProfExpService {
         const user: User | undefined | User[] = await UserDao.getUser(profExp.codUser);
         const profCat: ProfCat = await ProfCatService.getProfCat(profExp.codCategory);
         if(user === undefined || isArray(user)){
-            throw new Error(`Error getting user or category data...`);
+            throw new Error(`Error obteniendo los datos del usuario o la categoria...`);
         }
         return await ProfExpDao.createProfExp(new ProfExp(user, profCat, profExp.position, profExp.company, 
             new Date(profExp.startDate), new Date(profExp.endDate)));
@@ -25,7 +25,7 @@ export default class ProfExpService {
     public static async removeProfExp(codProfExp: number): Promise<ProfExp> {
         const profExpRemove: ProfExp | undefined = await ProfExpDao.removeProfExp(codProfExp)
         if(profExpRemove === undefined){
-            throw new Error(`Error deleting profesional experience...`);
+            throw new Error(`Error borrando las experiencia profesional...`);
         }
         return profExpRemove;
     }
@@ -33,12 +33,12 @@ export default class ProfExpService {
     public static async updateProfExp(updateData: IProfExpUpdateRequest): Promise<ProfExp> {
         const oldProfExp = await ProfExpDao.getProfExp(updateData.codProfExp);
         if (oldProfExp === undefined) {
-            throw new Error(`This profesional experience doesn´t exists...`);
+            throw new Error(`Esta experiencia profesional no existe...`);
         }
         const profExpAttr = ProfExp.describe();
         Object.keys(updateData.newValues).forEach(val => {
             if(!profExpAttr.includes(val)){
-                throw new Error(`Error in update values...`);
+                throw new Error(`Error en los valores de modificacion...`);
             }
         });
         if (Object.keys(updateData.newValues).includes('category')){
@@ -58,15 +58,15 @@ export default class ProfExpService {
         }
         const updateProfExp = await ProfExpDao.updateProfExp(newProfExp as ProfExp);
         if(updateProfExp === undefined){
-            throw new Error(`Error updating profesional experience...`);
+            throw new Error(`Error modificando la experiencia profesional...`);
         }
         return updateProfExp;
     }
 
-    public static async getProfCatByUser(codUser: number): Promise<ProfExp[]> {
+    public static async getProfExpByUser(codUser: number): Promise<ProfExp[]> {
         const profExp = await ProfExpDao.getProfExpByUser(codUser);
         if(profExp === undefined){
-            throw new Error(`Error getting profesional experiences...`);
+            throw new Error(`Error obteniendo las experiencias profesionales..`);
         }
         return profExp;
     }

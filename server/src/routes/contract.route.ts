@@ -26,7 +26,7 @@ export default class contractRoute {
             };
             const contractData = req.body as IContractRequest;
             if (isEmpty(contractData.codWorker) || isEmpty(contractData.codContractor)) {
-                throw new Error(`Insufficient data...`);
+                throw new Error(`Datos insuficientes...`);
             }
             const newContract = await ContractService.createContract(contractData);
             res.status(200).json({
@@ -51,7 +51,7 @@ export default class contractRoute {
             };
             const codUser = req.body.codUser;
             if (isEmpty(codUser)) {
-                throw new Error(`Insufficient data...`);
+                throw new Error(`Datos insuficientes...`);
             }
             const contracts = await ContractService.getContractsByUser(codUser);
             res.status(200).json({
@@ -76,7 +76,7 @@ export default class contractRoute {
             };
             const newValues = req.body as IContractUpdateRequest;
             if (isEmpty(newValues.codContract) || isEmpty(newValues.newValues)) {
-                throw new Error(`Insufficient data...`);
+                throw new Error(`Datos insuficientes...`);
             }
             this.validateUpdateContract(newValues.newValues);
             const updateContract = await ContractService.updateContract(newValues);
@@ -97,15 +97,15 @@ export default class contractRoute {
 
     private validateUpdateContract(values: IContractUpdate) {
         if (values.status !== undefined && !Object.values(ContractStatus).includes(values.status)) {
-            throw new Error(`Incorrect status value...`);
+            throw new Error(`Valor del status incorrecto...`);
         }
         if ((values.contractorAssessment !== undefined && values.contractorAssessment.length < 15) ||
             (values.workerAssessment !== undefined && values.workerAssessment.length < 15)) {
-            throw new Error(`Incorrect assessment length, min 15 words...`);
+            throw new Error(`Valoracion incorrecta, minimo 15 caracteres...`);
         }
         if ((values.contractorPunctuation !== undefined && (values.contractorPunctuation < 0 || values.contractorPunctuation > 5)) ||
             (values.workerPunctuation !== undefined && (values.workerPunctuation < 0 || values.workerPunctuation > 5))) {
-            throw new Error(`Incorrect punctuaction, max 5 points...`);
+            throw new Error(`Puntuacion incorrecta, maximo 5 puntos...`);
         }
     }
 }

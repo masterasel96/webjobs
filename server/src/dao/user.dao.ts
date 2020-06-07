@@ -58,7 +58,7 @@ export default class UserDao {
     public static async checkLastLogin(codUser: number): Promise<boolean> {
         const user = await getConnection().getRepository(User).findOne(codUser);
         if(user === undefined){
-            throw new Error(`This user doesn't exists...`);
+            throw new Error(`Este usuario no existe...`);
         }
         let newTime: Date | undefined = new Date();
         if (process.env.LOGIN_TIME !== undefined 

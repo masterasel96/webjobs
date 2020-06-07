@@ -54,12 +54,12 @@ export default class UserRoute {
             };
             const user = req.body as User;
             if (isEmpty(user)) {
-                throw new Error(`Insufficient data...`);
+                throw new Error(`Datos insuficientes...`);
             }
             this.validateUser(user);
             const newUser = await UserService.createUser(user);
             if (isEmpty(newUser)) {
-                throw new Error(`Error creating user...`);
+                throw new Error(`Error creando usuario...`);
             }
             res.status(200).json({
                 code: 200,
@@ -83,7 +83,7 @@ export default class UserRoute {
             };
             const updateReq = req.body as IUserUpdateRequest;
             if (isEmpty(updateReq.codUser) || isEmpty(updateReq.newValues)) {
-                throw new Error(`Insufficient data...`);
+                throw new Error(`Datos insuficientes...`);
             }
             this.validateUpdateUser(updateReq.newValues);
             const updatedUser = await UserService.updateUser(updateReq);
@@ -110,10 +110,10 @@ export default class UserRoute {
             const email: string = req.body.email;
             const password: string = req.body.password;
             if (isEmpty(email) || isEmpty(password)) {
-                throw new Error(`Insufficient data...`);
+                throw new Error(`Datos insuficientes...`);
             }
             if (!await UserService.checkLogin(email, password)) {
-                throw new Error(`Invalid email or password...`);
+                throw new Error(`Email o contraseña invalidos...`);
             }
             res.status(200).json({
                 code: 200,
@@ -137,7 +137,7 @@ export default class UserRoute {
             };
             const codUser: number = req.body.codUser;
             if (isNull(codUser)) {
-                throw new Error(`Insufficient data...`);
+                throw new Error(`Datos insuficientes...`);
             }
             const keepLogin = await UserService.checkLastLogin(codUser);
             res.status(200).json({
@@ -163,7 +163,7 @@ export default class UserRoute {
             const category: string = req.body.category;
             const location: string = req.body.location;
             if (isEmpty(category) || isEmpty(location)) {
-                throw new Error(`Insufficient data...`);
+                throw new Error(`Datos insuficientes...`);
             }
             const users: User[] = await UserService.getUserByCatLoc(category, location);
             res.status(200).json({
@@ -186,66 +186,66 @@ export default class UserRoute {
             isEmpty(user.dni) || isEmpty(user.telf || isEmpty(user.age) || isEmpty(user.sex)
                 || isEmpty(user.password) || isEmpty(user.postalCode) || isEmpty(user.city)
                 || isEmpty(user.region) || isEmpty(user.address) || !isBoolean(user.offer))) {
-            throw new Error(`Insufficient or incorrect data...`);
+            throw new Error(`Datos incorrectos o insuficientes...`);
         }
 
         if (!EmailValidator.validate(user.email)) {
-            throw new Error(`Incorrect email format...`);
+            throw new Error(`Formato de email incorrecto...`);
         }
 
         if (user.dni.length != 9 || !this.validateNif(user.dni)) {
-            throw new Error(`Incorrect NIF format...`);
+            throw new Error(`Formato de NIF incorrecto...`);
         }
 
         if (user.telf.length != 9 || !/^\d+$/.test(user.telf)) {
-            throw new Error(`Incorrect telephone format...`);
+            throw new Error(`Formato del telefono incorrecto...`);
         }
 
         if (user.age < 18 || user.age > 100) {
-            throw new Error(`Incorrect age...`);
+            throw new Error(`Edad incorrrecta...`);
         }
 
         if (!Object.values(SexType).includes(user.sex as SexType)) {
-            throw new Error(`Incorrect sex...`);
+            throw new Error(`Sexo incorrecto...`);
         }
 
-        if (user.password.length < 6) {
-            throw new Error(`Incorrect password, min length 6 characters...`);
+        if (user.password.length < 6 || user.password.length > 12) {
+            throw new Error(`Contraseña incorrecta, minimo 6 caracteres y maximo 12...`);
         }
 
         if (user.postalCode.toString().length != 5) {
-            throw new Error(`Incorrect postal code...`);
+            throw new Error(`Codigo postal incorrecto...`);
         }
 
     }
 
     private validateUpdateUser(user: IUserUpdate) {
         if (user.email !== undefined && !EmailValidator.validate(user.email)) {
-            throw new Error(`Incorrect email format...`);
+            throw new Error(`Formato de email incorrecto...`);
         }
 
         if (user.dni !== undefined && (user.dni.length != 9 || !this.validateNif(user.dni))) {
-            throw new Error(`Incorrect NIF format...`);
+            throw new Error(`Formato de NIF incorrecto...`);
         }
 
         if (user.telf !== undefined && (user.telf.length != 9 || !/^\d+$/.test(user.telf))) {
-            throw new Error(`Incorrect telephone format...`);
+            throw new Error(`Formato de telefono incorrecto...`);
         }
 
         if (user.age !== undefined && (user.age < 18 || user.age > 100)) {
-            throw new Error(`Incorrect age...`);
+            throw new Error(`Edad incorrecta...`);
         }
 
         if (user.sex !== undefined && !Object.values(SexType).includes(user.sex as SexType)) {
-            throw new Error(`Incorrect sex...`);
+            throw new Error(`Sexo incorrecto...`);
         }
 
-        if (user.password !== undefined && user.password.length < 6) {
-            throw new Error(`Incorrect password, min length 6 characters...`);
+        if (user.password !== undefined && (user.password.length < 6 || user.password.length > 12)) {
+            throw new Error(`Contraseña incorrecta, minimo 6 caracteres y maximo 12 caracteres...`);
         }
 
         if (user.postalCode !== undefined && user.postalCode.toString().length != 5) {
-            throw new Error(`Incorrect postal code...`);
+            throw new Error(`Codigo postal incorrecto...`);
         }
     }
 

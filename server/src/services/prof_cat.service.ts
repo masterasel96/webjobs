@@ -13,7 +13,7 @@ export default class ProfCatService {
     public static async getProfCat(codCat: number): Promise<ProfCat> {
         const profCat = await ProfCatDao.getProfCat(codCat);
         if(profCat === undefined){
-            throw new Error(`Error getting profesional category...`);
+            throw new Error(`Error obteniendo las categorias profesionales...`);
         }
         return profCat;
     }

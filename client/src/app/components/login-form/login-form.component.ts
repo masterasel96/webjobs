@@ -20,7 +20,6 @@ export class LoginFormComponent implements OnInit {
 
   ngOnInit() {
     this.titleService.setTitle('WebJobs | Login');
-    this.toastr.success('asdasdasd', 'asdasd');
   }
 
   public checkLogin(): void {
@@ -31,12 +30,12 @@ export class LoginFormComponent implements OnInit {
       (res) => {
         const returnData = res as IResponse;
         if (returnData.data.login) {
-          console.log('Login correcto...');
+          this.toastr.success('Login Correcto');
         }
       },
       (err) => {
         const errorData = err.error as IResponse;
-        console.log(errorData.data.error);
+        this.toastr.error(errorData.data.error);
       }
     );
   }

@@ -23,11 +23,11 @@ export default class ProfCatRoute {
             const name: string = req.body.name;
             const description: string = req.body.description;
             if (isEmpty(name) || isEmpty(description)) {
-                throw new Error(`Insufficient or incorrect data...`);
+                throw new Error(`Datos incorrectos o insuficientes...`);
             }
             const profesionalCategory = await ProfCatService.setProfCat(name, description);
             if (isEmpty(profesionalCategory)) {
-                throw new Error(`Error creating profesional category...`);
+                throw new Error(`Error creando categoria profesional...`);
             }
             res.status(200).json({
                 code: 200,

@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { environment } from '../../environments/environment';
-import { ICheckLoginRequest } from '../interfaces/user.interface';
+import { ICheckLoginRequest, IRegisterRequest } from '../interfaces/user.interface';
 
 @Injectable({
   providedIn: 'root'
@@ -25,5 +25,9 @@ export class UserService {
 
   public checkLogin(data: ICheckLoginRequest) {
     return this.http.post(`${this.API_URL}/login`, data, this.httpOptions);
+  }
+
+  public register(data: IRegisterRequest ) {
+    return this.http.post(`${this.API_URL}/create`, data, this.httpOptions);
   }
 }

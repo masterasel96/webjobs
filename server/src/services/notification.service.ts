@@ -14,7 +14,7 @@ export default class NotificationService {
         const user: User | undefined | User[] = await UserDao.getUser(notificationRequest.codUser); 
         const indirectUser: User | undefined | User[] = await UserDao.getUser(notificationRequest.codIndirectUser); 
         if (user === undefined || isArray(user) || indirectUser === undefined || isArray(indirectUser)) {
-            throw new Error(`Error getting user...`);
+            throw new Error(`Error obteniendo el usuario...`);
         }
         return await NotificationDao.createNotification(new Notification(user, indirectUser, notificationRequest.message));
     }
@@ -22,7 +22,7 @@ export default class NotificationService {
     public static async getNotificationsByUser(codUser: number): Promise<Notification[]>{
         const notifications = await NotificationDao.getNotificationsByUser(codUser);
         if(notifications === undefined){
-            throw new Error(`Error getting notifications...`);
+            throw new Error(`Error obteniendo las notificaciones...`);
         }
         return notifications;
     }

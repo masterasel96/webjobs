@@ -27,11 +27,11 @@ export default class NotificationRoute {
             const notification = req.body as INotificationRequest;
             if (isEmpty(notification.codIndirectUser) || isEmpty(notification.codUser) ||
                 isEmpty(notification.message)) {
-                throw new Error(`Insufficient data...`);
+                throw new Error(`Datos insuficientes...`);
             }
             const newNotification: Notification = await NotificationService.createNotification(notification);
             if (isEmpty(newNotification)) {
-                throw new Error(`Error creating new notification...`);
+                throw new Error(`Error creando nueva notificacion...`);
             }
             res.status(200).json({
                 code: 200,
@@ -55,7 +55,7 @@ export default class NotificationRoute {
             };
             const codUser = req.body.codUser;
             if (isEmpty(codUser)) {
-                throw new Error(`Insufficient data...`);
+                throw new Error(`Datos insuficientes...`);
             }
             const notifications: Notification[] = await NotificationService.getNotificationsByUser(codUser);
             res.status(200).json({
@@ -80,7 +80,7 @@ export default class NotificationRoute {
             };
             const codUser = req.body.codUser;
             if (isEmpty(codUser)) {
-                throw new Error(`Insufficient data...`);
+                throw new Error(`Datos insuficientes...`);
             }
             const newNotifications: boolean = await NotificationService.checkNewNotifications(codUser);
             res.status(200).json({
@@ -105,7 +105,7 @@ export default class NotificationRoute {
             };
             const codNotification = req.body.codNotification;
             if (isEmpty(codNotification)) {
-                throw new Error(`Insufficient data...`);
+                throw new Error(`Datos insuficientes...`);
             }
             const see: boolean = await NotificationService.seeNotification(codNotification);
             res.status(200).json({

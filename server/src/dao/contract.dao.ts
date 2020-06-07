@@ -33,7 +33,7 @@ export default class ContractDao {
     public static async getContractsByUser(codUser: number): Promise<Contract[]> {
         const user = await UserDao.getUser(codUser);
         if(user === undefined || isArray(user)){
-            throw new Error(`Error getting user...`);
+            throw new Error(`Error obteniendo el usuario...`);
         }
         const contractRepo = getConnection().getRepository(Contract);
         return await contractRepo.find({ where: [

@@ -14,7 +14,7 @@ export default class ContractService {
         const contractor: User | undefined | User[] = await UserDao.getUser(contractData.codContractor);
         const worker: User | undefined | User[] = await UserDao.getUser(contractData.codWorker);
         if (contractor === undefined || isArray(contractor) || worker === undefined || isArray(worker)) {
-            throw new Error(`Error getting user...`);
+            throw new Error(`Error obteniendo el usuario...`);
         }
         return await ContractDao.createContract(new Contract(worker, contractor));
     }
@@ -22,12 +22,12 @@ export default class ContractService {
     public static async updateContract(contractData: IContractUpdateRequest ): Promise<Contract> {
         const oldContract: Contract | undefined = await ContractDao.getContract(contractData.codContract);
         if(oldContract === undefined){
-            throw new Error(`This contract doesn´t exists...`);
+            throw new Error(`El contrato no existe...`);
         }
         const contractAttr = Contract.describe();
         Object.keys(contractData.newValues).forEach(val => {
             if (!contractAttr.includes(val)) {
-                throw new Error(`Error in update values...`);
+                throw new Error(`Error en valores de modificacion...`);
             }
         });
 
@@ -43,7 +43,7 @@ export default class ContractService {
         }
         const updateContract = await ContractDao.updateContract(newContract as Contract);
         if(updateContract === undefined){
-            throw new Error(`Error updating contract..`);
+            throw new Error(`Error modificando el contrato..`);
         }
         return updateContract;
     }

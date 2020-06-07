@@ -34,7 +34,7 @@ export default class NotificationDao {
         const notificationRepo = getConnection().getRepository(Notification);
         const user = await UserService.getUser(codUser);
         if (user === undefined || isArray(user)) {
-            throw new Error(`This user doesn´t exists...`);
+            throw new Error(`Este usuario no existe...`);
         }
         return await notificationRepo.find({ where: [{ user }], relations: ['user', 'indirectUser'] });
     }

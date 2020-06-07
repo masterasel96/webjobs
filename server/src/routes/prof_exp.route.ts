@@ -26,7 +26,7 @@ export default class ProfExpRoute {
             };
             const profExpRequest = req.body as unknown as IProfExpRequest;
             if (!this.validateProfExp(profExpRequest)) {
-                throw new Error(`Insufficient or incorrect data...`);
+                throw new Error(`Datos incorrectos o insuficientes...`);
             }
             const profesionalExperience = await ProfExpService.setProfExp(profExpRequest);
             res.status(200).json({
@@ -51,7 +51,7 @@ export default class ProfExpRoute {
             };
             const codProfExp = req.body.codProfExp;
             if (isEmpty(codProfExp)) {
-                throw new Error(`Insufficient or incorrect data...`);
+                throw new Error(`Datos incorrectos o insuficientes...`);
             }
             const profExpRemove = await ProfExpService.removeProfExp(codProfExp);
             res.status(200).json({
@@ -76,10 +76,10 @@ export default class ProfExpRoute {
             };
             const data = req.body as IProfExpUpdateRequest;
             if (isEmpty(data.codProfExp) || isEmpty(data.newValues)) {
-                throw new Error(`Insufficient or incorrect data...`);
+                throw new Error(`Datos incorrectos o insuficientes...`);
             }
             if (!this.validateUpdateProfExp(data.newValues)) {
-                throw new Error(`Insufficient or incorrect data...`);
+                throw new Error(`Datos incorrectos o insuficientes...`);
             }
             const profExpUpdate = await ProfExpService.updateProfExp(data);
             res.status(200).json({
@@ -104,9 +104,9 @@ export default class ProfExpRoute {
             };
             const codUser: number = req.body.codUser;
             if (codUser === undefined || isNull(codUser)) {
-                throw new Error(`Insufficient data...`);
+                throw new Error(`Datos insuficientes...`);
             }
-            const profExp = await ProfExpService.getProfCatByUser(codUser);
+            const profExp = await ProfExpService.getProfExpByUser(codUser);
             res.status(200).json({
                 code: 200,
                 data: { profExp },

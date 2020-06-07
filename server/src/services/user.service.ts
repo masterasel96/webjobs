@@ -11,14 +11,14 @@ export default class UserService {
     public static async getUser(codUser: number = 0): Promise<User | User[] | undefined> {
         const user = await UserDao.getUser(codUser);
         if (isEmpty(user)){
-            throw new Error(`Not data from selected user`);
+            throw new Error(`No existen datos para el usuario seleccionado...`);
         }
         return user;
     }
 
     public static async createUser(user: User): Promise<User> {
         if(!await UserDao.checkRegisterUser(user.email, user.dni)){
-            throw new Error(`This email or nif is alredy register...`);
+            throw new Error(`Este email o NIF ya esta registrado...`);
         }
         user.password = md5(user.password);
         return await UserDao.createUser(user);
@@ -35,7 +35,7 @@ export default class UserService {
     public static async getUserByCatLoc(catName: string, location: string): Promise<User[]> {
         const users = await UserDao.getUsersByCatLoc(catName, location);
         if(users === undefined){
-            throw new Error(`Error getting users by category and location...`);
+            throw new Error(`Error obteniendo usuarios por categoria y localizacion...`);
         }
         return users;
     }
@@ -43,12 +43,12 @@ export default class UserService {
     public static async updateUser(updateData: IUserUpdateRequest): Promise<User> {
         const oldUser = await UserDao.getUser(updateData.codUser);
         if (oldUser === undefined || isArray(oldUser)) {
-            throw new Error(`This user doesn´t exists...`);
+            throw new Error(`Este usuario no existe...`);
         }
         const userAttr = User.describe();
         Object.keys(updateData.newValues).forEach(val => {
             if (!userAttr.includes(val)) {
-                throw new Error(`Error in update values...`);
+                throw new Error(`Error en valores de modificacion...`);
             }
         });
         if (Object.keys(updateData.newValues).includes('password')) {
@@ -60,7 +60,7 @@ export default class UserService {
         }
         const updateUser = await UserDao.updateUser(newUser as User);
         if (updateUser === undefined) {
-            throw new Error(`Error updating user..`);
+            throw new Error(`Error modificando el usuario...`);
         }
         return updateUser;
     }
