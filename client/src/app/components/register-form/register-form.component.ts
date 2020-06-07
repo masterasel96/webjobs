@@ -1,9 +1,11 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewChild } from '@angular/core';
 import { UserService } from '../../services/user.service';
 import { Title } from '@angular/platform-browser';
 import * as $ from 'jquery';
 import { IResponse } from 'src/app/interfaces/core.interface';
 import { ToastrService } from 'ngx-toastr';
+import { LoadScreemComponent } from '../load-screem/load-screem.component';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-register-form',
@@ -11,11 +13,12 @@ import { ToastrService } from 'ngx-toastr';
   styleUrls: ['../login-form/login-form.component.css']
 })
 export class RegisterFormComponent implements OnInit {
-
+  @ViewChild(LoadScreemComponent, { static: true }) loadScreem: LoadScreemComponent;
   constructor(
     private userService: UserService,
     private titleService: Title,
-    private toastr: ToastrService
+    private toastr: ToastrService,
+    private router: Router
   ) { }
 
   ngOnInit() {
@@ -27,10 +30,11 @@ export class RegisterFormComponent implements OnInit {
       this.toastr.error('Las contraseñas no coinciden...');
       return;
     }
-    if (!$('#privacity').is(':checked')) {
+    if (!$('#privacy').is(':checked')) {
       this.toastr.error('Debe aceptar las condiciones de privacidad...');
       return;
     }
+    this.loadScreem.load(true);
     this.userService.register({
       userName: $('#name').val(),
       lastName: $('#last_name').val(),
@@ -49,12 +53,15 @@ export class RegisterFormComponent implements OnInit {
       (res) => {
         const returnData = res as IResponse;
         if (returnData.data.newUser) {
-          this.toastr.success('Registro Correcto...');
+          this.toastr.success('Registro correcto...');
         }
+        this.loadScreem.load(false);
+        this.router.navigate(['/login', 'Registro correcto...'], { skipLocationChange: true });
       },
       (err) => {
         const errorData = err.error as IResponse;
         this.toastr.error(errorData.data.error);
+        this.loadScreem.load(false);
       }
     );
   }

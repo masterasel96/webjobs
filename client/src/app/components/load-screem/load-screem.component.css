@@ -1,0 +1,22 @@
+#mask div {
+    position: fixed;
+    top: 0px;
+    bottom: 0px;
+    right: 0px;
+    left: 0px;
+    background: black;
+    opacity: .3;
+    height: 100%;
+}
+
+#mask i {
+    position: fixed;
+    color: #ffffff;
+    font-size: 80px;
+    top: 50%;
+    font-weight: bold;
+    left: 50%;
+    margin-left: -40px;
+    margin-top: -75px;
+    padding: 0px;
+}

@@ -5,8 +5,9 @@ import { RegisterFormComponent } from './components/register-form/register-form.
 
 
 const routes: Routes = [
-  { path: '', redirectTo: '/login', pathMatch: 'full' },
-  { path: 'login', component: LoginFormComponent },
+  { path: '', redirectTo: '/login/', pathMatch: 'full' },
+  { path: 'login', redirectTo: '/login/', pathMatch: 'full' },
+  { path: 'login/:msg?', component: LoginFormComponent },
   { path: 'register', component: RegisterFormComponent }
 ];
 

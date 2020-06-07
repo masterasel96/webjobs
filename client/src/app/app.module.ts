@@ -8,12 +8,14 @@ import { UserService } from './services/user.service';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { ToastrModule } from 'ngx-toastr';
 import { RegisterFormComponent } from './components/register-form/register-form.component';
+import { LoadScreemComponent } from './components/load-screem/load-screem.component';
 
 @NgModule({
   declarations: [
     AppComponent,
     LoginFormComponent,
-    RegisterFormComponent
+    RegisterFormComponent,
+    LoadScreemComponent
   ],
   imports: [
     BrowserModule,
