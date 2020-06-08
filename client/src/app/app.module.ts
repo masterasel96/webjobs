@@ -13,6 +13,7 @@ import { NavbarComponent } from './components/navbar/navbar.component';
 import { IndexComponent } from './components/index/index.component';
 import { FormsModule } from '@angular/forms';
 import { TimeAgoPipe } from 'time-ago-pipe';
+import { WorkerComponent } from './components/worker/worker.component';
 
 @NgModule({
   declarations: [
@@ -22,7 +23,8 @@ import { TimeAgoPipe } from 'time-ago-pipe';
     LoadScreemComponent,
     NavbarComponent,
     IndexComponent,
-    TimeAgoPipe
+    TimeAgoPipe,
+    WorkerComponent
   ],
   imports: [
     BrowserModule,

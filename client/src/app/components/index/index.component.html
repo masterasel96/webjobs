@@ -10,24 +10,24 @@
         <div class="form-row d-flex justify-content-around mb-5">
           <div class="col-md-5 text-left mb-3">
             <label class="" for="city">¿Donde lo buscas?</label>
-            <input type="text" id="city" name="city" class="form-control" placeholder="Ciudad...">
+            <input type="text" id="city" name="city" class="form-control" placeholder="Ciudad..." #city>
           </div>
           <div class="col-md-5 text-left">
             <label for="profesion">¿Que tipo de profesional?</label>
-            <select id="profesion" name="profesion" class="form-control" >
+            <select id="profesion" name="profesion" class="form-control" #profesion>
               <option selected="true" disabled="disabled">Profesion...</option>
               <option *ngFor="let cat of profCat" value="{{cat}}">{{cat}}</option>
             </select>
           </div>
         </div>
         <div class="form-row d-flex justify-content-center">
-          <button class="btn btn-secondary btn-block col-md-3 align-self-center" type="submit">Buscar</button>
+          <button class="btn btn-secondary btn-block col-md-3 align-self-center" type="submit" (click)="searchWorkers(city.value, profesion.value)">Buscar</button>
         </div>
       </form>
     </div>
     <!-- Lista de los ultimos trabajadores -->
     <div id="workers" class="mt-5">
-      <h3 class="text-center mb-5">Te dejamos por aquí empleados cerca de tí</h3>
+      <h3 class="text-center mb-5">{{ workers.length === 0 ? 'Vaya, parece que no hemos encontrado nada :(' : searchMsg }}</h3>
       <div class="row">
         <div class="col-md-4 col-lg-3 mb-4" *ngFor="let worker of workers">
           <div class="card worker-preview">
@@ -64,10 +64,6 @@
           </div>
         </div>
       </div>
-    </div>
-    <div id="more_workers" class="mt-3 d-flex justify-content-around">
-      <button class="btn"><img src="assets/icons/more.svg" alt="More workers icon"
-          title="Mostrar mas trabajadores..."></button>
     </div>
   </div>
 </div>

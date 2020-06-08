@@ -5,6 +5,8 @@ import { CategoryService } from 'src/app/services/category.service';
 import { UserService } from 'src/app/services/user.service';
 import { ContractService } from 'src/app/services/contract.service';
 import { ExperienceService } from 'src/app/services/experience.service';
+import { ToastrService } from 'ngx-toastr';
+import { TranslationWidth } from '@angular/common';
 
 @Component({
   selector: 'app-index',
@@ -16,11 +18,13 @@ export class IndexComponent implements OnInit {
   @ViewChild(LoadScreemComponent, { static: true }) loadScreem: LoadScreemComponent;
   private profCat: string[] = [];
   private workers: any[] = [];
+  private searchMsg = 'Te dejamos por aquí algunos empleados cerca de tí';
   constructor(
     private profCatService: CategoryService,
     private userService: UserService,
     private contractService: ContractService,
-    private experienceService: ExperienceService
+    private experienceService: ExperienceService,
+    private toastr: ToastrService
   ) { }
 
   async ngOnInit() {
@@ -50,41 +54,65 @@ export class IndexComponent implements OnInit {
     }).subscribe(
       (res) => {
         const response = res as any;
-        response.data.users.forEach(user => {
-          let s = 0;
-          this.contractService.getContractsByUser(user.codUser.toString()).subscribe(
-            (res1) => {
-              const response1 = res1 as any;
-              response1.data.contracts.forEach(contract => {
-                s += contract.worker.codUser === user.codUser ? Number(contract.contractorPunctuation) : Number(contract.workerPunctuation);
-              });
-              user.punctuation = s / response1.data.contracts.length;
-              this.experienceService.getExperiences(user.codUser.toString()).subscribe(
-                (res2) => {
-                  const response2 = res2 as any;
-                  if (response2.data.profExp.length > 0 ) {
-                    response2.data.profExp.sort((a: { startDate: number; }, b: { startDate: number; }) => {
-                      if (a.startDate > b.startDate) { return 1; }
-                      if (b.startDate > a.startDate) { return -1; }
-                    });
-                    user.profesion = response2.data.profExp[0].category.name;
-                  }
-                  this.workers.push(user);
-                },
-                (err2) => {
-                  console.log(err2);
-                }
-              );
-            },
-            (err1) => {
-              console.log(err1);
-            }
-          );
-        });
+        this.processUsersInfo(response);
       },
       (err) => {
         console.log(err);
       });
+  }
+
+  private searchWorkers(city: string, profesion: string): void {
+    if (city === '' || profesion === 'Profesion...') {
+      this.toastr.error('Completa los campos de busqueda');
+      return;
+    }
+    this.searchMsg = 'Te dejamos por aquí los resultados de tu busqueda';
+    this.workers = [];
+    this.userService.getUsersByCatLoc({
+      category: profesion,
+      location: city
+    }).subscribe(
+      (res) => {
+        const response = res as any;
+        this.processUsersInfo(response);
+      },
+      (err) => {
+        console.log(err);
+      });
+  }
+
+  private processUsersInfo(response: any): void {
+    response.data.users.forEach(user => {
+      let s = 0;
+      this.contractService.getContractsByUser(user.codUser.toString()).subscribe(
+        (res1) => {
+          const response1 = res1 as any;
+          response1.data.contracts.forEach(contract => {
+            s += contract.worker.codUser === user.codUser ? Number(contract.contractorPunctuation) : Number(contract.workerPunctuation);
+          });
+          user.punctuation = s / response1.data.contracts.length;
+          this.experienceService.getExperiences(user.codUser.toString()).subscribe(
+            (res2) => {
+              const response2 = res2 as any;
+              if (response2.data.profExp.length > 0) {
+                response2.data.profExp.sort((a: { startDate: number; }, b: { startDate: number; }) => {
+                  if (a.startDate > b.startDate) { return 1; }
+                  if (b.startDate > a.startDate) { return -1; }
+                });
+                user.profesion = response2.data.profExp[0].category.name;
+              }
+              this.workers.push(user);
+            },
+            (err2) => {
+              console.log(err2);
+            }
+          );
+        },
+        (err1) => {
+          console.log(err1);
+        }
+      );
+    });
   }
 
 }

@@ -2,7 +2,6 @@ import { getManager, getConnection } from "typeorm";
 import User from '../model/user.model';
 import md5 from "md5";
 import { isNull } from "lodash";
-import ProfesionalExperience from "../model/prof_exp.model";
 
 export default class UserDao {
     constructor() {
@@ -79,10 +78,12 @@ export default class UserDao {
             .createQueryBuilder('user');
         if(catName){
             users.innerJoin("user.experience", 'profesional_experience')
-                .innerJoin("profesional_experience.categories", 'profesional_category')
-                .where("profesional_category.name = :catName AND user.region = :location", { catName, location })
+                .innerJoin("profesional_experience.category", 'profesional_category')
+                .where("profesional_category.name = :catName AND user.city = :location", { catName, location })
         }else{
             users.where("user.region = :location", { location })
+                .limit(4)
+                .orderBy("user.updateDate", "DESC")
         }
         return await users.getMany();
     }
