@@ -7,6 +7,7 @@ import { ContractService } from 'src/app/services/contract.service';
 import { ExperienceService } from 'src/app/services/experience.service';
 import { ToastrService } from 'ngx-toastr';
 import { TranslationWidth } from '@angular/common';
+import { Title } from '@angular/platform-browser';
 
 @Component({
   selector: 'app-index',
@@ -24,10 +25,12 @@ export class IndexComponent implements OnInit {
     private userService: UserService,
     private contractService: ContractService,
     private experienceService: ExperienceService,
-    private toastr: ToastrService
+    private toastr: ToastrService,
+    private titleService: Title
   ) { }
 
   async ngOnInit() {
+    this.titleService.setTitle('WebJobs | Inicio');
     this.navBar.setLocation('index');
     this.setCategorys();
     this.getInitialWorkers();
