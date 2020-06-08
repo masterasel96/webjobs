@@ -13,6 +13,7 @@ export default class ProfCatRoute {
 
     public config(): void {
         this.router.post('/create', this.setProfCat);
+        this.router.post('/', this.getAllProfCat);
     }
 
     private async setProfCat(req: Request, res: Response) {
@@ -29,6 +30,27 @@ export default class ProfCatRoute {
             if (isEmpty(profesionalCategory)) {
                 throw new Error(`Error creando categoria profesional...`);
             }
+            res.status(200).json({
+                code: 200,
+                data: { profesionalCategory },
+                status: true
+            });
+        } catch (error) {
+            const err: Error = error;
+            res.status(400).json({
+                code: 400,
+                data: { error: err.message },
+                status: false
+            });
+        }
+    }
+
+    private async getAllProfCat(req: Request, res: Response) {
+        try {
+            if (!Guard.bauth(req, res)) {
+                return;
+            };
+            const profesionalCategory = await ProfCatService.getAllProfCat();
             res.status(200).json({
                 code: 200,
                 data: { profesionalCategory },

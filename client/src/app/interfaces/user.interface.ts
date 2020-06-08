@@ -23,3 +23,8 @@ export interface IRegisterRequest {
     address: string;
     offer?: boolean;
 }
+
+export interface ICatLocRequest {
+    category: string | null;
+    location: string;
+}

@@ -12,6 +12,7 @@ import { LoadScreemComponent } from './components/load-screem/load-screem.compon
 import { NavbarComponent } from './components/navbar/navbar.component';
 import { IndexComponent } from './components/index/index.component';
 import { FormsModule } from '@angular/forms';
+import { TimeAgoPipe } from 'time-ago-pipe';
 
 @NgModule({
   declarations: [
@@ -20,7 +21,8 @@ import { FormsModule } from '@angular/forms';
     RegisterFormComponent,
     LoadScreemComponent,
     NavbarComponent,
-    IndexComponent
+    IndexComponent,
+    TimeAgoPipe
   ],
   imports: [
     BrowserModule,

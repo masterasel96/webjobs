@@ -162,7 +162,7 @@ export default class UserRoute {
             };
             const category: string = req.body.category;
             const location: string = req.body.location;
-            if (isEmpty(category) || isEmpty(location)) {
+            if (isEmpty(location)) {
                 throw new Error(`Datos insuficientes...`);
             }
             const users: User[] = await UserService.getUserByCatLoc(category, location);

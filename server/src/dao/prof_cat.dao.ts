@@ -18,6 +18,12 @@ export default class ProfesionalCategoryDao {
         return profCat;
     }
 
+    public static async getAllProfCat(): Promise<ProfesionalCategory[]> {
+        const profCatRepo = getConnection().getRepository(ProfesionalCategory);
+        const profCat = await profCatRepo.find();
+        return profCat;
+    }
+
     public static async removeProfCat(profCatToRemove: ProfesionalCategory): Promise<ProfesionalCategory | undefined> {
         const profCatRepo = getConnection().getRepository(ProfesionalCategory);
         return await profCatRepo.remove(profCatToRemove);

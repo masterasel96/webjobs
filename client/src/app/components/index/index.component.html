@@ -1,2 +1,74 @@
 <app-navbar></app-navbar>
+<div id="container" class="w-100">
+  <div id="main_container">
+    <!-- Formulario de busqueda de trabajadores -->
+    <div id="search_form">
+      <h2 class="text-center mb-5">
+        ¿Buscas la ayuda de un profesional?
+      </h2>
+      <form onsubmit="return false">
+        <div class="form-row d-flex justify-content-around mb-5">
+          <div class="col-md-5 text-left mb-3">
+            <label class="" for="city">¿Donde lo buscas?</label>
+            <input type="text" id="city" name="city" class="form-control" placeholder="Ciudad...">
+          </div>
+          <div class="col-md-5 text-left">
+            <label for="profesion">¿Que tipo de profesional?</label>
+            <select id="profesion" name="profesion" class="form-control" >
+              <option selected="true" disabled="disabled">Profesion...</option>
+              <option *ngFor="let cat of profCat" value="{{cat}}">{{cat}}</option>
+            </select>
+          </div>
+        </div>
+        <div class="form-row d-flex justify-content-center">
+          <button class="btn btn-secondary btn-block col-md-3 align-self-center" type="submit">Buscar</button>
+        </div>
+      </form>
+    </div>
+    <!-- Lista de los ultimos trabajadores -->
+    <div id="workers" class="mt-5">
+      <h3 class="text-center mb-5">Te dejamos por aquí empleados cerca de tí</h3>
+      <div class="row">
+        <div class="col-md-4 col-lg-3 mb-4" *ngFor="let worker of workers">
+          <div class="card worker-preview">
+            <img class="card-img-top" src="{{worker.photo}}" alt="Worker image" *ngIf="worker.photo; else notPhoto">
+            <ng-template #notPhoto>
+              <img class="card-img-top" src="assets/img/no-photo.png" alt="Worker image">
+            </ng-template>
+            <div class="card-img-overlay">
+              <h2>
+                <span class="badge">{{ worker.profesion ? worker.profesion : 'Sin experiencia' }}</span>
+              </h2>
+            </div>
+            <div class="card-body">
+              <div class="worker-heading text-center">
+                <h4>{{worker.userName}} {{worker.lastName}}</h4>
+                <hr>
+                <p><img src="assets/icons/location.svg" alt="Location icon"> {{worker.city}}, {{worker.region}}</p>
+                <hr>
+                <p *ngIf="worker.punctuation; else notPunctuation"><img src="assets/icons/points.svg" alt="Stars icon">
+                  {{worker.punctuation}} estrellas
+                </p>
+                <ng-template #notPunctuation>
+                  <p><img src="assets/icons/points.svg" alt="Stars icon">
+                    Aun sin puntuación
+                  </p>
+                </ng-template>
+                <hr>
+                <p><img src="assets/icons/clock.svg" alt="Clock icon"> {{(worker.lastLogin ? worker.lastLogin : worker.updateDate) | timeAgo}}</p>
+                <hr>
+              </div>
+              <a class="btn btn-primary btn-block" [routerLink]="['/worker']" [queryParams]="{worker: worker.codUser}">Mas
+                información</a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div id="more_workers" class="mt-3 d-flex justify-content-around">
+      <button class="btn"><img src="assets/icons/more.svg" alt="More workers icon"
+          title="Mostrar mas trabajadores..."></button>
+    </div>
+  </div>
+</div>
 <app-load-screem></app-load-screem>

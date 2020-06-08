@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { environment } from '../../environments/environment';
-import { ICheckLoginRequest, IRegisterRequest } from '../interfaces/user.interface';
+import { ICheckLoginRequest, IRegisterRequest, ICatLocRequest } from '../interfaces/user.interface';
 
 @Injectable({
   providedIn: 'root'
@@ -29,5 +29,9 @@ export class UserService {
 
   public register(data: IRegisterRequest ) {
     return this.http.post(`${this.API_URL}/create`, data, this.httpOptions);
+  }
+
+  public getUsersByCatLoc(data: ICatLocRequest) {
+    return this.http.post(`${this.API_URL}/byCatLoc`, data, this.httpOptions);
   }
 }

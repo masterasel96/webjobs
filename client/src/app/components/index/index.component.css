@@ -1,0 +1,41 @@
+#main_container {
+  max-width: 1200px;
+  margin: 0px auto;
+  padding: 30px;
+}
+
+#search_form {
+  background: #F1F1F1;
+  border-radius: 10px;
+  padding: 25px;
+}
+
+.badge {
+  background: #507DBC;
+  color: #F1F1F1;
+  top: -18px;
+  left: -10px;
+  position: relative;
+}
+
+div.worker-heading h4 {
+  color: #507DBC;
+}
+
+div.worker-heading img {
+  width: 20px;
+  margin-top: -7px;
+  margin-right: 4px;
+}
+
+.worker-preview a {
+  position: relative;
+}
+
+#more_workers button {
+  background: transparent !important;
+}
+
+#more_workers button img {
+  width: 50px;
+}

@@ -74,13 +74,16 @@ export default class UserDao {
         return newTime === undefined ? false : true;
     }
 
-    public static async getUsersByCatLoc(catName: string, location: string): Promise<User[] | undefined> {
-        const users = await getConnection().getRepository(User)
-            .createQueryBuilder('user')
-            .innerJoin("user.experience", 'profesional_experience')
-            .innerJoin("profesional_experience.categories", 'profesional_category')
-            .where("profesional_category.name = :catName AND user.region = :location", { catName, location })
-            .getMany();
-        return users;
+    public static async getUsersByCatLoc(catName: string, location: string): Promise<User[]> {
+        const users = getConnection().getRepository(User)
+            .createQueryBuilder('user');
+        if(catName){
+            users.innerJoin("user.experience", 'profesional_experience')
+                .innerJoin("profesional_experience.categories", 'profesional_category')
+                .where("profesional_category.name = :catName AND user.region = :location", { catName, location })
+        }else{
+            users.where("user.region = :location", { location })
+        }
+        return await users.getMany();
     }
 }

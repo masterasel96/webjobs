@@ -17,4 +17,8 @@ export default class ProfCatService {
         }
         return profCat;
     }
+
+    public static async getAllProfCat(): Promise<ProfCat[]> {
+        return await ProfCatDao.getAllProfCat();
+    }
 }
