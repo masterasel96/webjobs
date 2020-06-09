@@ -57,6 +57,9 @@ export default class User {
     @Column({ name: 'last_login', nullable: true })
     public lastLogin: Date;
 
+    @Column({ name: 'token', nullable: true })
+    public token?: string;
+
     @CreateDateColumn({ name: 'created_at', update: false })
     public createdDate?: Date;
 
@@ -101,6 +104,6 @@ export default class User {
 
     public static describe(): string[] {
         return ['codUser', 'userName', 'lastName', 'email', 'dni', 'telf', 'age', 'sex', 'password', 'postalCode', 
-            'city', 'region', 'address', 'bio', 'offer', 'photo', 'lastLogin']
+            'city', 'region', 'address', 'bio', 'offer', 'photo', 'lastLogin', 'token']
     }
 }

@@ -1,4 +1,4 @@
-import { getManager, getConnection } from "typeorm";
+import { getManager, getConnection, UpdateResult } from "typeorm";
 import User from '../model/user.model';
 import md5 from "md5";
 import { isNull } from "lodash";
@@ -19,6 +19,11 @@ export default class UserDao {
         return user;
     }
 
+    public static async getUserByToken(token: string): Promise<User | undefined> {
+        const userRepo = getConnection().getRepository(User);
+        return await userRepo.findOne(token);
+    }
+
     public static async removeUser(userToRemove: User): Promise<User | undefined> {
         const userRepo = getConnection().getRepository(User);
         return await userRepo.remove(userToRemove);
@@ -37,29 +42,34 @@ export default class UserDao {
         return userCount > 0 ? false : true;
     }
 
-    public static async checkLogin(email: string, pass: string): Promise<boolean> {
+    public static async checkLogin(email: string, pass: string): Promise<User[] | null> {
         const userCount = await getConnection().getRepository(User)
             .createQueryBuilder('user')
             .where("user.email = :email AND user.password = :pass", { email, pass: md5(pass) })
-            .getCount();
-        if(userCount > 0){
+            .getMany();
+        if(userCount.length > 0){
             await getConnection()
                 .createQueryBuilder()
                 .update(User)
                 .set({ lastLogin: new Date() })
                 .where("email = :email", { email })
                 .execute();
-            return true;
+            return userCount;
         }
-        return false;
+        return null;
     }
 
-    public static async checkLastLogin(codUser: number): Promise<boolean> {
-        const user = await getConnection().getRepository(User).findOne(codUser);
+    public static async checkLastLogin(token: string): Promise<boolean> {
+        const user = await getConnection().getRepository(User).findOne({
+            where: {
+                token
+            }
+        });
         if(user === undefined){
-            throw new Error(`Este usuario no existe...`);
+            //throw new Error(`Este usuario no se ha logeado...`);
+            return false;
         }
-        let newTime: Date | undefined = new Date();
+        /*let newTime: Date | undefined = new Date();
         if (process.env.LOGIN_TIME !== undefined 
                 && !isNull(user.lastLogin) && ((user.lastLogin.getTime() + (Number(process.env.LOGIN_TIME) * 1000)) > Date.now())){
                     newTime = undefined;
@@ -68,9 +78,10 @@ export default class UserDao {
             .createQueryBuilder()
             .update(User)
             .set({ lastLogin: newTime })
-            .where("cod_user = :codUser", { codUser })
+            .where("token = :token", { token })
             .execute();
-        return newTime === undefined ? false : true;
+        return newTime === undefined ? false : true;*/
+        return true;
     }
 
     public static async getUsersByCatLoc(catName: string, location: string): Promise<User[]> {

@@ -6,8 +6,8 @@ import { UserService } from 'src/app/services/user.service';
 import { ContractService } from 'src/app/services/contract.service';
 import { ExperienceService } from 'src/app/services/experience.service';
 import { ToastrService } from 'ngx-toastr';
-import { TranslationWidth } from '@angular/common';
 import { Title } from '@angular/platform-browser';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-index',
@@ -26,8 +26,21 @@ export class IndexComponent implements OnInit {
     private contractService: ContractService,
     private experienceService: ExperienceService,
     private toastr: ToastrService,
-    private titleService: Title
-  ) { }
+    private titleService: Title,
+    private router: Router
+  ) {
+    this.userService.checkUserSession().subscribe(
+      (res) => {
+        const response = res as any;
+        if (!response.data.keepLogin) {
+          this.router.navigate(['/login']);
+        }
+      },
+      (error) => {
+        this.router.navigate(['/login']);
+      }
+    );
+   }
 
   async ngOnInit() {
     this.titleService.setTitle('WebJobs | Inicio');

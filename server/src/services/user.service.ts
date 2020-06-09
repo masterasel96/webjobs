@@ -3,6 +3,7 @@ import UserDao from '../dao/user.dao';
 import { isEmpty, isArray } from 'lodash';
 import md5 from 'md5';
 import { IUserUpdateRequest } from '../interface/request.interface';
+import { UpdateResult } from 'typeorm';
 
 export default class UserService {
 
@@ -24,12 +25,12 @@ export default class UserService {
         return await UserDao.createUser(user);
     }
 
-    public static async checkLogin(email: string, password: string): Promise<boolean> {
+    public static async checkLogin(email: string, password: string): Promise<User[] | null> {
         return await UserDao.checkLogin(email, password);
     }
 
-    public static async checkLastLogin(codUser: number): Promise<boolean> {
-        return await UserDao.checkLastLogin(codUser);
+    public static async checkLastLogin(token: string): Promise<boolean> {
+        return await UserDao.checkLastLogin(token);
     }
 
     public static async getUserByCatLoc(catName: string, location: string): Promise<User[]> {
@@ -63,5 +64,9 @@ export default class UserService {
             throw new Error(`Error modificando el usuario...`);
         }
         return updateUser;
+    }
+
+    public static async getUserByToken(token: string): Promise<User | undefined>{
+        return await UserDao.getUserByToken(token);
     }
 }

@@ -1,4 +1,6 @@
 import { Component, OnInit } from '@angular/core';
+import { UserService } from 'src/app/services/user.service';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-navbar',
@@ -10,7 +12,10 @@ export class NavbarComponent {
   private controlPanelClass = 'nav-item';
   private notifyClass = 'nav-item';
 
-  constructor() { }
+  constructor(
+    private userService: UserService,
+    private router: Router
+  ) { }
 
   public setLocation(location: string) {
     switch (location) {
@@ -26,5 +31,10 @@ export class NavbarComponent {
       default:
         this.indexClass = 'nav-item active';
     }
+  }
+
+  public logOut() {
+    this.userService.deleteToken();
+    this.router.navigate(['/login']);
   }
 }

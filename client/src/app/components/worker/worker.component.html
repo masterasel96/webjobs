@@ -1,1 +1,215 @@
-<p>worker works!</p>
+<app-navbar></app-navbar>
+<div id="container" class="w-100">
+  <!-- Puntuacion del trabajador -->
+  <div id="points_back" class="p-3">
+    <div class="row text-center ml-0 mr-0">
+      <div class="col-12">
+        <h1 class="display-4">{{ workerInfo.profesion ? workerInfo.profesion : 'Sin experiencia' }}</h1>
+        <p class="lead" *ngIf="workerInfo.punctuation; else notPunctuation">
+          <img src="assets/icons/star_big.svg" alt="Star icon"> {{workerInfo.punctuation}} estrellas de puntuación
+        </p>
+        <ng-template #notPunctuation>
+          <p class="lead">
+            <img src="assets/icons/star_big.svg" alt="Star icon"> Aun sin puntuación
+          </p>
+        </ng-template>
+      </div>
+    </div>
+  </div>
+  <div id="info_worker_container">
+    <!-- Informacion del trabajador -->
+    <div id="worker">
+      <div class="row mb-4">
+        <a class="btn" [routerLink]="['/index']">Volver al inicio</a>
+        <a id="see_coments" href="#" data-toggle="modal" data-target="#comentariosTrabajadorModal">Ver comentarios<img
+            src="assets/icons/eye.svg" alt="Settings icon"></a>
+      </div>
+      <div class="row">
+        <div class="col-md-7 col-lg-9">
+          <!-- Experiencia laboral -->
+          <div class="row fields mb-3">
+            <div class="col-md-10">
+              <ul class="list-group list-group-flush">
+                <li class="list-group-item-active">
+                  <i class="fas fa-money-bill-alt"></i> Experiencia laboral
+                </li>
+                <li class="list-group-item" *ngIf="!workerInfo.experiences; else withExperience">
+                  <p>Aun sin experiencia, dale una oportunidad :)</p>
+                </li>
+                <ng-template #withExperience>
+                  <li class="list-group-item" *ngFor="let experience of workerInfo.experiences">
+                    {{experience.company}}
+                    <div class="float-right">
+                      <span class="mr-1">{{experience.position}}</span>
+                      <span *ngIf="experience.endDate; else nowWorking">
+                        ({{ experience.startDate | date:'LL/yyyy' }}-{{ experience.endDate | date:'LL/yyyy' }})
+                      </span>
+                      <ng-template #nowWorking>
+                        <span>
+                          ({{ experience.startDate | date:'LL/yyyy' }}-Actualmente trabajando)
+                        </span>
+                      </ng-template>
+                    </div>
+                  </li>
+                </ng-template>
+              </ul>
+            </div>
+          </div>
+          <!-- Biografia del trabajador -->
+          <div class="row mb-5">
+            <div class="col-md-12">
+              <p>
+                {{workerInfo.bio ? workerInfo.bio : 'Vaya, parece que no se ha atrevido a expresarse en una biografía :('}}
+              </p>
+            </div>
+          </div>
+        </div>
+        <div class="col-md-5 col-lg-3" id="worker_photo">
+          <div class="card mb-3">
+            <img class="card-img-top" src="{{workerInfo.photo ? workerInfo.photo : 'assets/img/no-photo.png'}}" alt="Worker photo">
+            <div class="card-body">
+              <h5 class="card-title">{{workerInfo.userName}} {{workerInfo.lastName}}</h5>
+              <h6 class="text-secondary">{{workerInfo.city}}, {{workerInfo.region}}</h6>
+            </div>
+          </div>
+          <button class="btn btn-block btn-lg" data-toggle="modal" data-target="#contactoModal">
+            Ponerse en contacto
+          </button>
+        </div>
+      </div>
+    </div>
+
+
+  </div>
+</div>
+
+<!-- Modal de contacto -->
+<div class="modal fade" id="contactoModal" role="dialog">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="contactModalLabel">Formulario de contacto</h5>
+        <button type="button" class="close" data-dismiss="modal">
+          <span>&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <form onsubmit="return false">
+          <div class="form-group">
+            <label for="message" class="col-form-label">Mensaje:</label>
+            <textarea name="message" id="message" class="form-control"></textarea>
+          </div>
+          <hr>
+          <input type="submit" value="Enviar" class="btn btn-block">
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Modal de comentarios -->
+<div class="modal fade" id="comentariosTrabajadorModal" role="dialog">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title">Comentarios</h5>
+        <button type="button" class="close" data-dismiss="modal">
+          <span>&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <div class="card mb-3">
+          <div class="card-header row">
+            <div class="col-9">
+              <h5>Antonio Gutierrez - 09/04/2019 al 13/05/2019 - Albañilería - Como trabajador</h5>
+            </div>
+            <div class="col-3">
+              <h3>4 <img src="assets/icons/star_big.svg" alt="Star icon"></h3>
+            </div>
+          </div>
+          <div class="card-body row">
+            <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et
+              dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip
+              ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore
+              eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia
+              deserunt mollit anim id est laborum.</p>
+          </div>
+        </div>
+
+        <div class="card mb-3">
+          <div class="card-header row">
+            <div class="col-9">
+              <h5>Pepe Sebastian - 10/12/2019 al 13/12/2019 - Albañilería - Como trabajador</h5>
+            </div>
+            <div class="col-3">
+              <h3>4 <img src="assets/icons/star_big.svg" alt="Star icon"></h3>
+            </div>
+          </div>
+          <div class="card-body row">
+            <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et
+              dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip
+              ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore
+              eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia
+              deserunt mollit anim id est laborum.</p>
+          </div>
+        </div>
+
+        <div class="card mb-3">
+          <div class="card-header row">
+            <div class="col-9">
+              <h5>Maria Fernandez - 23/03/2019 al 13/05/2019 - Pintura - Como contratante</h5>
+            </div>
+            <div class="col-3">
+              <h3>3 <img src="assets/icons/star_big.svg" alt="Star icon"></h3>
+            </div>
+          </div>
+          <div class="card-body row">
+            <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et
+              dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip
+              ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore
+              eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia
+              deserunt mollit anim id est laborum.</p>
+          </div>
+        </div>
+
+        <div class="card mb-3">
+          <div class="card-header row">
+            <div class="col-9">
+              <h5>Maria Fernandez - 23/03/2019 al 13/05/2019 - Pintura - Como contratante</h5>
+            </div>
+            <div class="col-3">
+              <h3>3 <img src="assets/icons/star_big.svg" alt="Star icon"></h3>
+            </div>
+          </div>
+          <div class="card-body row">
+            <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et
+              dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip
+              ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore
+              eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia
+              deserunt mollit anim id est laborum.</p>
+          </div>
+        </div>
+
+        <div class="card mb-3">
+          <div class="card-header row">
+            <div class="col-9">
+              <h5>Maria Fernandez - 23/03/2019 al 13/05/2019 - Pintura - Como contratante</h5>
+            </div>
+            <div class="col-3">
+              <h3>3 <img src="assets/icons/star_big.svg" alt="Star icon"></h3>
+            </div>
+          </div>
+          <div class="card-body row">
+            <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et
+              dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip
+              ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore
+              eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia
+              deserunt mollit anim id est laborum.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<app-load-screem></app-load-screem>

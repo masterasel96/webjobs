@@ -18,8 +18,9 @@ export default class UserRoute {
 
     public config(): void {
         this.router.post('/', this.getUsers);
+        this.router.post('/byToken', this.getUserByToken);
         this.router.post('/create', this.createUser.bind(this));
-        this.router.post('/update', this.updateUser.bind(this));
+        this.router.put('/update', this.updateUser.bind(this));
         this.router.post('/login', this.checkLogin);
         this.router.post('/checkLogin', this.checkLastLogin);
         this.router.post('/byCatLoc', this.getUsersByCatLoc);
@@ -35,6 +36,31 @@ export default class UserRoute {
             res.status(200).json({
                 code: 200,
                 data: { users },
+                status: true
+            });
+        } catch (error) {
+            const err: Error = error;
+            res.status(400).json({
+                code: 400,
+                data: { error: err.message },
+                status: false
+            });
+        }
+    }
+
+    private async getUserByToken(req: Request, res: Response) {
+        try {
+            if (!Guard.bauth(req, res)) {
+                return;
+            };
+            const token = req.body.token;
+            if (isEmpty(token)) {
+                throw new Error(`Datos insuficientes...`);
+            }
+            const user = await UserService.getUserByToken(token);
+            res.status(200).json({
+                code: 200,
+                data: { user },
                 status: true
             });
         } catch (error) {
@@ -82,7 +108,7 @@ export default class UserRoute {
                 return;
             };
             const updateReq = req.body as IUserUpdateRequest;
-            if (isEmpty(updateReq.codUser) || isEmpty(updateReq.newValues)) {
+            if (isNull(updateReq.codUser) || isEmpty(updateReq.newValues)) {
                 throw new Error(`Datos insuficientes...`);
             }
             this.validateUpdateUser(updateReq.newValues);
@@ -112,12 +138,13 @@ export default class UserRoute {
             if (isEmpty(email) || isEmpty(password)) {
                 throw new Error(`Datos insuficientes...`);
             }
-            if (!await UserService.checkLogin(email, password)) {
+            const login = await UserService.checkLogin(email, password);
+            if (!login) {
                 throw new Error(`Email o contraseña invalidos...`);
             }
             res.status(200).json({
                 code: 200,
-                data: { login: true },
+                data: { login },
                 status: true
             });
         } catch (error) {
@@ -135,11 +162,11 @@ export default class UserRoute {
             if(!Guard.bauth(req, res)){
                 return;
             };
-            const codUser: number = req.body.codUser;
-            if (isNull(codUser)) {
+            const token: string = req.body.token;
+            if (isEmpty(token)) {
                 throw new Error(`Datos insuficientes...`);
             }
-            const keepLogin = await UserService.checkLastLogin(codUser);
+            const keepLogin = await UserService.checkLastLogin(token);
             res.status(200).json({
                 code: 200,
                 data: { keepLogin },

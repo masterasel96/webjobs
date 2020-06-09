@@ -1,0 +1,66 @@
+#info_worker_container {
+  max-width: 1200px;
+  margin: 0px auto;
+  padding: 30px;
+}
+
+#worker ul {
+  list-style: none;
+  font-weight: bold;
+}
+
+#worker ul li:first-child {
+  font-family: 'Oswald', sans-serif;
+  margin-bottom: 10px;
+  font-size: 20px;
+}
+
+#points_back {
+  background: #507DBC;
+  color: #F1F1F1;
+}
+
+#points_back img {
+  width: 30px;
+  margin-top: -8px;
+  margin-right: 5px;
+}
+
+#see_coments {
+  color: #507DBC !important;
+  margin-top: 8px;
+  margin-left: 30px;
+}
+
+#see_coments img {
+  width: 18px;
+  margin-left: 10px;
+}
+
+#comentariosTrabajadorModal .modal-dialog {
+  max-width: 900px;
+}
+
+#comentariosTrabajadorModal .modal-body {
+  max-height: 600px;
+  overflow-y: scroll;
+}
+
+#comentariosTrabajadorModal img {
+  width: 35px;
+  margin-top: -15px;
+}
+
+#comentariosTrabajadorModal .row {
+  margin: 0px !important;
+}
+
+/* -- QUERIES --*/
+
+@media only screen and (min-width: 766px) {
+
+  /* -- NAVBAR --*/
+  #worker_photo {
+    margin-top: -65px;
+  }
+}

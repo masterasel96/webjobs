@@ -25,6 +25,7 @@ export interface IUserUpdate {
     offer?: string;
     photo?: string;
     lastLogin?: string;
+    token?: string;
 }
 
 export interface IContractUpdate {

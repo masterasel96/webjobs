@@ -2,6 +2,8 @@ import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { environment } from '../../environments/environment';
 import { ICheckLoginRequest, IRegisterRequest, ICatLocRequest } from '../interfaces/user.interface';
+import { CookieService } from 'ngx-cookie-service';
+import { Md5 } from 'ts-md5/dist/md5';
 
 @Injectable({
   providedIn: 'root'
@@ -16,11 +18,16 @@ export class UserService {
   };
 
   constructor(
-    private http: HttpClient
+    private http: HttpClient,
+    private cookies: CookieService
   ) {}
 
   public getUsers() {
     return this.http.post(`${this.API_URL}`, {}, this.httpOptions);
+  }
+
+  public getUser(codUser: string) {
+    return this.http.post(`${this.API_URL}`, { codUser }, this.httpOptions);
   }
 
   public checkLogin(data: ICheckLoginRequest) {
@@ -33,5 +40,32 @@ export class UserService {
 
   public getUsersByCatLoc(data: ICatLocRequest) {
     return this.http.post(`${this.API_URL}/byCatLoc`, data, this.httpOptions);
+  }
+
+  public setToken(codUser: string, name: string, lastName: string) {
+    const md5 = new Md5();
+    const token = md5.appendStr(`${name}:::${lastName}:::${(new Date()).toString()}`).end().toString();
+    this.cookies.set('token', token);
+    return this.http.put(`${this.API_URL}/update`, {
+      codUser,
+      newValues: {
+        token
+      }
+    }, this.httpOptions);
+  }
+
+  public getToken(): string {
+    return this.cookies.get('token');
+  }
+
+  public deleteToken(): void {
+    this.cookies.delete('token');
+  }
+
+  public checkUserSession() {
+    return this.http.post(`${this.API_URL}/checkLogin`, {
+      token: this.getToken()
+    }, this.httpOptions);
+
   }
 }

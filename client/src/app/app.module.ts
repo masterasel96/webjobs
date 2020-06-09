@@ -39,6 +39,7 @@ import { WorkerComponent } from './components/worker/worker.component';
     })
   ],
   providers: [UserService],
-  bootstrap: [AppComponent]
+  bootstrap: [AppComponent],
+  entryComponents: [],
 })
 export class AppModule { }
