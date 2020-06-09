@@ -25,6 +25,7 @@ export default class contractRoute {
                 return;
             };
             const contractData = req.body as IContractRequest;
+            console.log(contractData);
             if (isEmpty(contractData.codWorker) || isEmpty(contractData.codContractor)) {
                 throw new Error(`Datos insuficientes...`);
             }

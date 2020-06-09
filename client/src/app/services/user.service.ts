@@ -46,6 +46,7 @@ export class UserService {
     const md5 = new Md5();
     const token = md5.appendStr(`${name}:::${lastName}:::${(new Date()).toString()}`).end().toString();
     this.cookies.set('token', token);
+    this.cookies.set('codUser', codUser);
     return this.http.put(`${this.API_URL}/update`, {
       codUser,
       newValues: {
@@ -58,8 +59,13 @@ export class UserService {
     return this.cookies.get('token');
   }
 
+  public getCodUser(): string {
+    return this.cookies.get('codUser');
+  }
+
   public deleteToken(): void {
     this.cookies.delete('token');
+    this.cookies.delete('codUser');
   }
 
   public checkUserSession() {

@@ -18,6 +18,7 @@ export interface INotificationRequest {
 export interface IContractRequest {
     codContractor: number;
     codWorker: number;
+    msg?: string;
 }
 
 export interface IProfExpUpdateRequest {

@@ -84,7 +84,7 @@
 </div>
 
 <!-- Modal de contacto -->
-<div class="modal fade" id="contactoModal" role="dialog">
+<div class="modal fade" id="contactoModal" #contactModal role="dialog">
   <div class="modal-dialog">
     <div class="modal-content">
       <div class="modal-header">
@@ -97,10 +97,10 @@
         <form onsubmit="return false">
           <div class="form-group">
             <label for="message" class="col-form-label">Mensaje:</label>
-            <textarea name="message" id="message" class="form-control"></textarea>
+            <textarea name="message" id="message" class="form-control" [(ngModel)]="message"></textarea>
           </div>
           <hr>
-          <input type="submit" value="Enviar" class="btn btn-block">
+          <input type="submit" value="Enviar" (click)="sendPetition()" class="btn btn-block">
         </form>
       </div>
     </div>
@@ -118,95 +118,47 @@
         </button>
       </div>
       <div class="modal-body">
-        <div class="card mb-3">
-          <div class="card-header row">
-            <div class="col-9">
-              <h5>Antonio Gutierrez - 09/04/2019 al 13/05/2019 - Albañilería - Como trabajador</h5>
+        <p *ngIf="contractsInfo.length === 0; else areContracts">
+          Vaya, parece que aun no hay comentarios...
+        </p>
+        <ng-template #areContracts>
+          <div class="card mb-3" *ngFor="let contract of contractsInfo">
+            <div class="card-header row">
+              <div class="col-9">
+                <h5 *ngIf="contract.worker.codUser != codWorker; else isWorker">
+                  {{contract.worker.userName}} {{contract.worker.lastName}} -
+                  {{contract.startDate | date:'dd/LL/yyyy' }} al
+                  {{contract.endDate | date:'dd/LL/yyyy' }} -
+                  Como trabajador
+                </h5>
+                <ng-template #isWorker>
+                  <h5>
+                    {{contract.contractor.userName}} {{contract.contractor.lastName}} -
+                    {{contract.startDate | date:'dd/LL/yyyy' }} al
+                    {{contract.endDate | date:'dd/LL/yyyy' }} -
+                    Como contratante
+                  </h5>
+                </ng-template>
+              </div>
+              <div class="col-3">
+                <h3 *ngIf="contract.worker.codUser != codWorker; else isWorker2">{{contract.workerPunctuation}} <img
+                    src="assets/icons/star_big.svg"
+                    alt="Star icon"></h3>
+                <ng-template #isWorker2>
+                  <h3>{{contract.contractorPunctuation}} <img src="assets/icons/star_big.svg" alt="Star icon"></h3>
+                </ng-template>
+              </div>
             </div>
-            <div class="col-3">
-              <h3>4 <img src="assets/icons/star_big.svg" alt="Star icon"></h3>
-            </div>
-          </div>
-          <div class="card-body row">
-            <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et
-              dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip
-              ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore
-              eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia
-              deserunt mollit anim id est laborum.</p>
-          </div>
-        </div>
-
-        <div class="card mb-3">
-          <div class="card-header row">
-            <div class="col-9">
-              <h5>Pepe Sebastian - 10/12/2019 al 13/12/2019 - Albañilería - Como trabajador</h5>
-            </div>
-            <div class="col-3">
-              <h3>4 <img src="assets/icons/star_big.svg" alt="Star icon"></h3>
-            </div>
-          </div>
-          <div class="card-body row">
-            <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et
-              dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip
-              ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore
-              eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia
-              deserunt mollit anim id est laborum.</p>
-          </div>
-        </div>
-
-        <div class="card mb-3">
-          <div class="card-header row">
-            <div class="col-9">
-              <h5>Maria Fernandez - 23/03/2019 al 13/05/2019 - Pintura - Como contratante</h5>
-            </div>
-            <div class="col-3">
-              <h3>3 <img src="assets/icons/star_big.svg" alt="Star icon"></h3>
+            <div class="card-body row">
+              <p *ngIf="contract.worker.codUser != codWorker; else isWorker3">
+                {{contract.workerAssessment}}
+              </p>
+              <ng-template #isWorker3>
+                <p>{{contract.contractorAssessment}}</p>
+              </ng-template>
             </div>
           </div>
-          <div class="card-body row">
-            <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et
-              dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip
-              ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore
-              eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia
-              deserunt mollit anim id est laborum.</p>
-          </div>
-        </div>
-
-        <div class="card mb-3">
-          <div class="card-header row">
-            <div class="col-9">
-              <h5>Maria Fernandez - 23/03/2019 al 13/05/2019 - Pintura - Como contratante</h5>
-            </div>
-            <div class="col-3">
-              <h3>3 <img src="assets/icons/star_big.svg" alt="Star icon"></h3>
-            </div>
-          </div>
-          <div class="card-body row">
-            <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et
-              dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip
-              ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore
-              eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia
-              deserunt mollit anim id est laborum.</p>
-          </div>
-        </div>
-
-        <div class="card mb-3">
-          <div class="card-header row">
-            <div class="col-9">
-              <h5>Maria Fernandez - 23/03/2019 al 13/05/2019 - Pintura - Como contratante</h5>
-            </div>
-            <div class="col-3">
-              <h3>3 <img src="assets/icons/star_big.svg" alt="Star icon"></h3>
-            </div>
-          </div>
-          <div class="card-body row">
-            <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et
-              dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip
-              ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore
-              eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia
-              deserunt mollit anim id est laborum.</p>
-          </div>
-        </div>
+        </ng-template>
       </div>
     </div>
   </div>

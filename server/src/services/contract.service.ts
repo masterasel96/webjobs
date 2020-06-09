@@ -16,7 +16,7 @@ export default class ContractService {
         if (contractor === undefined || isArray(contractor) || worker === undefined || isArray(worker)) {
             throw new Error(`Error obteniendo el usuario...`);
         }
-        return await ContractDao.createContract(new Contract(worker, contractor));
+        return await ContractDao.createContract(new Contract(worker, contractor, contractData.msg));
     }
 
     public static async updateContract(contractData: IContractUpdateRequest ): Promise<Contract> {

@@ -4,7 +4,8 @@ import { LoadScreemComponent } from '../load-screem/load-screem.component';
 import { UserService } from 'src/app/services/user.service';
 import { ContractService } from 'src/app/services/contract.service';
 import { ExperienceService } from 'src/app/services/experience.service';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
+import { ToastrService } from 'ngx-toastr';
 
 @Component({
   selector: 'app-worker',
@@ -16,17 +17,34 @@ export class WorkerComponent implements OnInit {
   @ViewChild(LoadScreemComponent, { static: true }) loadScreem: LoadScreemComponent;
   private workerInfo: any = {};
   private codWorker: string;
+  private message: string;
+  private contractsInfo: any[] = [];
   constructor(
     private userService: UserService,
     private contractService: ContractService,
     private experienceService: ExperienceService,
-    private activatedRoute: ActivatedRoute
-  ) { }
+    private activatedRoute: ActivatedRoute,
+    private router: Router,
+    private toastr: ToastrService
+  ) {
+    this.userService.checkUserSession().subscribe(
+      (res) => {
+        const response = res as any;
+        if (!response.data.keepLogin) {
+          this.router.navigate(['/login']);
+        }
+      },
+      (error) => {
+        this.router.navigate(['/login']);
+      }
+    );
+  }
 
   ngOnInit() {
     this.activatedRoute.queryParams.subscribe(params => {
       this.codWorker = params.worker;
       this.getWorkerInfo();
+      
     });
   }
 
@@ -42,10 +60,14 @@ export class WorkerComponent implements OnInit {
             const response1 = res1 as any;
             response1.data.contracts.forEach(contract => {
               s += contract.worker.codUser === user.codUser ? Number(contract.contractorPunctuation) : Number(contract.workerPunctuation);
+              if (contract.status === 'FINISH') {
+                this.contractsInfo = response1.data.contracts;
+              }
             });
             if (response1.data.contracts.length > 0) {
               this.workerInfo.punctuation = s / response1.data.contracts.length;
             }
+            console.log(this.contractsInfo);
             this.experienceService.getExperiences(user.codUser.toString()).subscribe(
               (res2) => {
                 const response2 = res2 as any;
@@ -74,7 +96,19 @@ export class WorkerComponent implements OnInit {
   }
 
   public sendPetition(): void {
-
+    if (this.message.length < 15) {
+      this.toastr.error('15 caracteres minimos requeridos');
+      return;
+    }
+    this.contractService.createContract(this.codWorker, this.userService.getCodUser(), this.message).subscribe(
+      (res) => {
+        this.message = null;
+        this.toastr.success('Tu peticion se ha mandado correctamente');
+      },
+      (err) => {
+        this.toastr.error('Ha ocurrido un error mandando tu peticion');
+      }
+    );
   }
 
 }

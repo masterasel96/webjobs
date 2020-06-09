@@ -42,9 +42,10 @@ export default class Contract {
     @UpdateDateColumn({ name: 'updated_at' })
     public updateDate?: Date;
 
-    constructor(worker: User, contractor: User){
+    constructor(worker: User, contractor: User, contractorAssentment?: string){
         this.worker= worker,
-        this.contractor = contractor
+        this.contractor = contractor,
+        this.contractorAssessment = contractorAssentment
     }
 
     public static describe(): string[] {

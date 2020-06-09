@@ -21,4 +21,12 @@ export class ContractService {
       codUser
     }, this.httpOptions);
   }
+
+  public createContract(codWorker: string, codContractor: string, msg?: string) {
+    return this.http.post(`${this.API_URL}/create`, {
+      codContractor,
+      codWorker,
+      msg
+    }, this.httpOptions);
+  }
 }
