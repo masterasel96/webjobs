@@ -44,7 +44,6 @@ export class WorkerComponent implements OnInit {
     this.activatedRoute.queryParams.subscribe(params => {
       this.codWorker = params.worker;
       this.getWorkerInfo();
-      
     });
   }
 
@@ -67,7 +66,6 @@ export class WorkerComponent implements OnInit {
             if (response1.data.contracts.length > 0) {
               this.workerInfo.punctuation = s / response1.data.contracts.length;
             }
-            console.log(this.contractsInfo);
             this.experienceService.getExperiences(user.codUser.toString()).subscribe(
               (res2) => {
                 const response2 = res2 as any;
@@ -96,7 +94,7 @@ export class WorkerComponent implements OnInit {
   }
 
   public sendPetition(): void {
-    if (this.message.length < 15) {
+    if (!this.message || this.message.length < 15) {
       this.toastr.error('15 caracteres minimos requeridos');
       return;
     }
