@@ -1,0 +1,492 @@
+<app-navbar></app-navbar>
+<div id="container" class="w-100">
+  <div id="panel_control_container">
+    <div id="init" class="row mb-5">
+      <div class="col-sm-8 col-lg-5">
+        <h3>Bienvenido a tu panel de control {{userInfo.userName}}</h3>
+      </div>
+      <div class="col-sm-4 col-lg-2">
+        <h2>{{userInfo.punctuation ? userInfo.punctuation : '?'}} <img id="main_points_icon" src="assets/icons/star.svg"
+            alt="Star icon"></h2>
+      </div>
+      <div class="col-sm-6 col-lg-2 pt-2">
+        <a id="see_coments" href="#" data-toggle="modal" data-target="#comentariosModal">Ver comentarios<img
+            src="assets/icons/eye.svg" alt="Settings icon"></a>
+      </div>
+      <div class="col-sm-6 col-lg-3 pt-2">
+        <a id="more_settings" href="#" data-toggle="modal" data-target="#modDatosModal">Modificar otros datos<img
+            src="assets/icons/settings.svg" alt="Settings icon"></a>
+      </div>
+    </div>
+    <div id="photo_bio" class="row mb-5">
+      <div class="col-sm-4 col-md-3 mb-3">
+        <h4>Foto</h4>
+        <div id="photo" class="card">
+          <img class="card-img-top" src="{{userInfo.photo ? userInfo.photo : 'assets/img/no-photo.png'}}" alt="Foto del trabajador">
+        </div>
+        <label class="btn btn-block btn-lg" for="worker_img">Cambiar foto</label>
+        <input type="file" id="worker_img" name="worker_img" class="d-none" accept="image/png, image/jpeg">
+      </div>
+      <div class="col-sm-8 col-md-9">
+        <h4>Biografia</h4>
+        <form action="">
+          <div class="form-group" id="bio">
+            <textarea class="form-control" [(ngModel)]="bio" name="bio"></textarea>
+          </div>
+        </form>
+        <button class="btn btn-block btn-lg" (click)="updateUser('bio')">Editar Biografia</button>
+      </div>
+    </div>
+    <div id="announce" class="row mb-5">
+      <div class="col-12">
+        <label for="announce_check">Quiero anunciarme como trabajador</label>
+        <input type="checkbox" id="announce_check" [(ngModel)]="offer" name="offer" (change)="updateUser('offer')">
+        <label for="announce_check"></label>
+      </div>
+    </div>
+    <div id="laboral_exp" class="row mb-5">
+      <h4 class="mb-4">Experiencia laboral</h4>
+      <div class="table-responsive mb-3">
+        <table class="table">
+          <thead>
+            <tr>
+              <th scope="col">Categoria profesional</th>
+              <th scope="col">Empresa</th>
+              <th scope="col">Posición ocupada</th>
+              <th scope="col">Tiempo</th>
+              <th scope="col">Accion</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let experience of userInfo.experiences" id="experience_{{experience.codExperience}}">
+              <td>{{experience.category.name}}</td>
+              <td>{{experience.company}}</td>
+              <td>{{experience.position}}</td>
+              <td *ngIf="experience.endDate; else nowWorking">
+                {{ experience.startDate | date:'LL/yyyy' }}-{{ experience.endDate | date:'LL/yyyy' }}</td>
+              <ng-template #nowWorking>
+                <td>{{ experience.startDate | date:'LL/yyyy' }}-Actualmente trabajando</td>
+              </ng-template>
+              <td>
+                <button class="btn exp-btn"><img src="assets/icons/edit.svg" alt="Edit icon"
+                    
+                    (click)="editExperience(experience.codExperience)"></button>
+                <button class="btn exp-btn"><img src="assets/icons/delete.svg" alt="Delete icon"></button>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+      <button class="btn btn-lg">Añadir Experiencia</button>
+    </div>
+    <div id="pending_works" class="row mb-5">
+      <h4 class="col-12 mb-4">Trabajos pendientes</h4>
+      <div class="col-md-4 col-lg-3 work-notify" *ngFor="let contract of contractsInfo.pendings">
+        <div class="card" *ngIf="codUser == contract.contractor.codUser; else isWorker" id="contract_{{contract.codContract}}">
+          <div class="card-body">
+            <p class="card-text data-work">
+                {{ contract.createdDate | date:'dd/LL/yyyy' }} a las {{ contract.createdDate | date:'hh:mm' }}
+            </p>
+            <img src="assets/icons/send.svg" alt="Send icon">
+            <p class="card-text info-work">Enviado a: </p>
+            <h5 class="card-title">{{contract.worker.userName}} {{contract.worker.lastName}}</h5>
+            <p class="card-text">{{contract.contractorAssessment}}</p>
+            <p class="card-text text-secondary"> <span>{{contract.worker.telf}}</span> -
+              <span>{{contract.worker.email}}</span></p>
+            <button class="btn" (click)="cancelContract(contract.codContract)">Cancelar</button>
+          </div>
+        </div>
+        <ng-template #isWorker> 
+            <div class="card" id="contract_{{contract.codContract}}">
+                <div class="card-body">
+                    <p class="card-text data-work">
+                        {{ contract.createdDate | date:'dd/LL/yyyy' }} a las {{ contract.createdDate | date:'hh:mm' }}
+                    </p>
+                    <img src="assets/icons/received.svg" alt="Received icon">
+                    <p class="card-text info-work">Recibido de: </p>
+                    <h5 class="card-title">{{contract.contractor.userName}} {{contract.contractor.lastName}}</h5>
+                    <p class="card-text">{{contract.contractorAssessment}}</p>
+                    <p class="card-text text-secondary"> <span>{{contract.contractor.telf}}</span> -
+                      <span>{{contract.contractor.email}}</span></p>
+                    <button class="btn mr-1" (click)="acceptContract(contract.codContract)">Aceptar</button>
+                    <button class="btn" (click)="cancelContract(contract.codContract)">Rechazar</button>
+                </div>
+            </div>
+        </ng-template>
+      </div>
+    </div>
+    <div id="progress_works" class="row mb-5">
+      <h4 class="col-12 mb-4">Trabajos en progreso</h4>
+      <div class="col-md-4 col-lg-3 work-notify" *ngFor="let contract of contractsInfo.progress">
+        <div class="card" *ngIf="codUser == contract.contractor.codUser; else isWorker"
+          id="contract_{{contract.codContract}}">
+          <div class="card-body">
+            <p class="card-text data-work">
+                {{ contract.updateDate | date:'dd/LL/yyyy' }} a las {{ contract.updateDate | date:'hh:mm' }}
+            </p>
+            <img src="assets/icons/document.svg" alt="Contract icon">
+            <p class="card-text info-work">Contratado a: </p>
+            <h5 class="card-title">{{contract.worker.userName}} {{contract.worker.lastName}}</h5>
+            <p class="card-text text-secondary"> <span>{{contract.worker.telf}}</span> -
+              <span>{{contract.worker.email}}</span></p>
+            <button class="btn" (click)="finishContract(contract.codContract)">Finalizar</button>
+          </div>
+        </div>
+      
+      <ng-template #isWorker>
+        <div class="card" id="contract_{{contract.codContract}}">
+            <div class="card-body">
+            <p class="card-text data-work">
+                {{ contract.updateDate | date:'dd/LL/yyyy' }} a las {{ contract.updateDate | date:'hh:mm' }}
+            </p>
+            <img src="assets/icons/hammer.svg" alt="Hammer icon">
+            <p class="card-text info-work">Trabajando para: </p>
+            <h5 class="card-title">{{contract.contractor.userName}} {{contract.contractor.lastName}}</h5>
+            <p class="card-text text-secondary"><span>{{contract.contractor.telf}}</span> -
+                <span>{{contract.contractor.email}}</span></p>
+            <button class="btn" (click)="finishContract(contract.codContract)">Finalizar</button>
+            </div>
+        </div>
+      </ng-template>
+    </div>
+    </div>
+    <div id="finish_works" class="row mb-5">
+      <h4 class="col-12 mb-4">Trabajos finalizados</h4>
+      <div class="col-md-4 col-lg-3 work-notify" *ngFor="let contract of contractsInfo.finish"
+        id="contract_{{contract.codContract}}">
+        <div class="card" *ngIf="codUser == contract.contractor.codUser; else isWorker">
+          <div class="card-body">
+            <p class="card-text data-work">
+                {{ contract.updateDate | date:'dd/LL/yyyy' }} a las {{ contract.updateDate | date:'hh:mm' }}
+            </p>
+            <img src="assets/icons/document.svg" alt="Contract icon">
+            <p class="card-text info-work">Contraté a: </p>
+            <h5 class="card-title">{{contract.worker.userName}} {{contract.worker.lastName}}</h5>
+            <p class="card-text">Desde el {{ contract.createData | date:'dd/LL/yyyy' }} hasta el
+              {{ contract.updateData | date:'dd/LL/yyyy' }}</p>
+            <p class="card-text text-secondary"> <span>{{contract.worker.telf}}</span> -
+              <span>{{contract.worker.email}}</span></p>
+            <a class="more-work-info" href="#" data-toggle="modal" (click)="seeComentsContract(contract.codContract)"
+              data-target="#comentarioContratoModal">
+              Ver comentarios y puntuación
+            </a>
+          </div>
+        </div>
+        <ng-template #isWorker>
+            <div class="card" id="contract_{{contract.codContract}}">
+              <div class="card-body">
+                <p class="card-text data-work">
+                    {{ contract.updateDate | date:'dd/LL/yyyy' }} a las {{ contract.updateDate | date:'hh:mm' }}
+                </p>
+                <img src="assets/icons/hammer.svg" alt="Hammer icon">
+                <p class="card-text info-work">Trabajé para: </p>
+                <h5 class="card-title">{{contract.contractor.userName}} {{contract.contractor.lastName}}</h5>
+                <p class="card-text">Desde el {{ contract.createData | date:'dd/LL/yyyy' }} hasta el
+                  {{ contract.updateData | date:'dd/LL/yyyy' }}</p>
+                <p class="card-text text-secondary"><span>{{contract.contractor.telf}}</span> -
+                  <span>{{contract.contractor.email}}</span></p>
+                <a class="more-work-info" href="#" data-toggle="modal" data-target="#comentarioContratoModal"
+                  (click)="seeComentsContract(contract.codContract)">
+                  Ver comentarios y puntuación
+                </a>
+              </div>
+            </div>
+        </ng-template>
+      </div>
+    </div>
+</div>
+
+<!-- Modal de comentarios -->
+<div class="modal fade" id="comentariosModal" role="dialog">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title">Comentarios</h5>
+        <button type="button" class="close" data-dismiss="modal">
+          <span>&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <div class="card mb-3">
+          <div class="card-header row">
+            <div class="col-9">
+              <h5>Antonio Gutierrez - 09/04/2019 al 13/05/2019 - Albañilería - Como trabajador</h5>
+            </div>
+            <div class="col-3">
+              <h3>4 <img src="assets/icons/star_big.svg" alt="Star icon"></h3>
+            </div>
+          </div>
+          <div class="card-body row">
+            <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et
+              dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip
+              ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore
+              eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia
+              deserunt mollit anim id est laborum.</p>
+          </div>
+        </div>
+
+        <div class="card mb-3">
+          <div class="card-header row">
+            <div class="col-9">
+              <h5>Pepe Sebastian - 10/12/2019 al 13/12/2019 - Albañilería - Como trabajador</h5>
+            </div>
+            <div class="col-3">
+              <h3>4 <img src="assets/icons/star_big.svg" alt="Star icon"></h3>
+            </div>
+          </div>
+          <div class="card-body row">
+            <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et
+              dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip
+              ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore
+              eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia
+              deserunt mollit anim id est laborum.</p>
+          </div>
+        </div>
+
+        <div class="card mb-3">
+          <div class="card-header row">
+            <div class="col-9">
+              <h5>Maria Fernandez - 23/03/2019 al 13/05/2019 - Pintura - Como contratante</h5>
+            </div>
+            <div class="col-3">
+              <h3>3 <img src="assets/icons/star_big.svg" alt="Star icon"></h3>
+            </div>
+          </div>
+          <div class="card-body row">
+            <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et
+              dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip
+              ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore
+              eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia
+              deserunt mollit anim id est laborum.</p>
+          </div>
+        </div>
+
+        <div class="card mb-3">
+          <div class="card-header row">
+            <div class="col-9">
+              <h5>Maria Fernandez - 23/03/2019 al 13/05/2019 - Pintura - Como contratante</h5>
+            </div>
+            <div class="col-3">
+              <h3>3 <img src="assets/icons/star_big.svg" alt="Star icon"></h3>
+            </div>
+          </div>
+          <div class="card-body row">
+            <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et
+              dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip
+              ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore
+              eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia
+              deserunt mollit anim id est laborum.</p>
+          </div>
+        </div>
+
+        <div class="card mb-3">
+          <div class="card-header row">
+            <div class="col-9">
+              <h5>Maria Fernandez - 23/03/2019 al 13/05/2019 - Pintura - Como contratante</h5>
+            </div>
+            <div class="col-3">
+              <h3>3 <img src="assets/icons/star_big.svg" alt="Star icon"></h3>
+            </div>
+          </div>
+          <div class="card-body row">
+            <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et
+              dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip
+              ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore
+              eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia
+              deserunt mollit anim id est laborum.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Modal de comentarios de un contrato -->
+<div class="modal fade" id="comentarioContratoModal" role="dialog">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title">Comentario y puntuacion</h5>
+        <button type="button" class="close" data-dismiss="modal">
+          <span>&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <h4 class="mb-4">23/03/2019 al 13/05/2019 - Pintura</h4>
+        <div class="card mb-3">
+          <div class="card-header row">
+            <div class="col-9">
+              <h5>Maria Fernandez - Como contratante</h5>
+            </div>
+            <div class="col-3">
+              <h3>3 <img src="assets/icons/star_big.svg" alt="Star icon"></h3>
+            </div>
+          </div>
+          <div class="card-body row">
+            <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et
+              dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip
+              ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore
+              eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia
+              deserunt mollit anim id est laborum.</p>
+          </div>
+        </div>
+        <div class="card mb-3">
+          <div class="card-header row">
+            <div class="col-9">
+              <h5>Yo - Como trabajador</h5>
+            </div>
+            <div class="col-3">
+              <h3>4 <img src="assets/icons/star_big.svg" alt="Star icon"></h3>
+            </div>
+          </div>
+          <div class="card-body row">
+            <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et
+              dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip
+              ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore
+              eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia
+              deserunt mollit anim id est laborum.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Modal de modificacion de datos -->
+<div class="modal fade" id="modDatosModal" role="dialog">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title">Modificación de datos</h5>
+        <button type="button" class="close" data-dismiss="modal">
+          <span>&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <form action="./control_panel.html">
+          <div class="row">
+            <div class="form-group col-md-6">
+              <label for="nombre">Nombre</label>
+              <input type="text" name="nombre" id="nombre" class="form-control" [(ngModel)]="userName">
+            </div>
+            <div class="form-group col-md-6">
+              <label for="apellidos">Apellidos</label>
+              <input type="text" name="apellidos" id="apellidos" class="form-control" [(ngModel)]="lastName">
+            </div>
+          </div>
+          <div class="row">
+            <div class="form-group col-md-6">
+              <label for="email">Email</label>
+              <input type="email" name="email" id="email" class="form-control" [(ngModel)]="email">
+            </div>
+            <div class="form-group col-md-6">
+              <label for="dni">DNI</label>
+              <input type="text" name="dni" id="dni" class="form-control" [(ngModel)]="dni">
+            </div>
+          </div>
+          <div class="row">
+            <div class="form-group col-md-6">
+              <label for="telf">Telefono de contacto</label>
+              <input type="text" name="telf" id="telf" class="form-control" [(ngModel)]="telf">
+            </div>
+            <div class="form-group col-md-6">
+              <label for="sexo">Sexo</label>
+              <select name="sexo" id="sexo" class="form-control" [(ngModel)]="sex">
+                <option value="MALE">Hombre</option>
+                <option value="FEMALE">Mujer</option>
+              </select>
+            </div>
+          </div>
+          <div class="row">
+            <div class="form-group col-md-6">
+              <label for="postal_code">Codigo Postal</label>
+              <input type="number" id="postal_code" [(ngModel)]="postalCode" name="postal_code" class="form-control"
+                required>
+            </div>
+            <div class="form-group col-md-6">
+              <label for="age">Edad</label>
+              <input type="number" id="age" [(ngModel)]="age" name="age" class="form-control" required>
+            </div>
+          </div>
+          <div class="row">
+            <div class="form-group col-md-6">
+              <label for="provincia">Provincia</label>
+              <select id="region" [(ngModel)]="region" name="region" class="form-control">
+                <option value='Alava'>Álava</option>
+                <option value='Albacete'>Albacete</option>
+                <option value='Alicante'>Alicante/Alacant</option>
+                <option value='Almeria'>Almería</option>
+                <option value='Asturias'>Asturias</option>
+                <option value='Avila'>Ávila</option>
+                <option value='Badajoz'>Badajoz</option>
+                <option value='Barcelona'>Barcelona</option>
+                <option value='Burgos'>Burgos</option>
+                <option value='Caceres'>Cáceres</option>
+                <option value='Cadiz'>Cádiz</option>
+                <option value='Cantabria'>Cantabria</option>
+                <option value='Castellon'>Castellón/Castelló</option>
+                <option value='Ceuta'>Ceuta</option>
+                <option value='Ciudad Real'>Ciudad Real</option>
+                <option value='Cordoba'>Córdoba</option>
+                <option value='Cuenca'>Cuenca</option>
+                <option value='Girona'>Girona</option>
+                <option value='Las Palmas'>Las Palmas</option>
+                <option value='Granada'>Granada</option>
+                <option value='Guadalajara'>Guadalajara</option>
+                <option value='Guipuzcoa'>Guipúzcoa</option>
+                <option value='Huelva'>Huelva</option>
+                <option value='Huesca'>Huesca</option>
+                <option value='Illes Balears'>Illes Balears</option>
+                <option value='Jaen'>Jaén</option>
+                <option value='Acoruña'>A Coruña</option>
+                <option value='La Rioja'>La Rioja</option>
+                <option value='Leon'>León</option>
+                <option value='Lleida'>Lleida</option>
+                <option value='Lugo'>Lugo</option>
+                <option value='Madrid'>Madrid</option>
+                <option value='Malaga'>Málaga</option>
+                <option value='Melilla'>Melilla</option>
+                <option value='Murcia'>Murcia</option>
+                <option value='Navarra'>Navarra</option>
+                <option value='Ourense'>Ourense</option>
+                <option value='Palencia'>Palencia</option>
+                <option value='Pontevedra'>Pontevedra</option>
+                <option value='Salamanca'>Salamanca</option>
+                <option value='Segovia'>Segovia</option>
+                <option value='Sevilla'>Sevilla</option>
+                <option value='Soria'>Soria</option>
+                <option value='Tarragona'>Tarragona</option>
+                <option value='Santa Cruz De Tenerife'>Santa Cruz de Tenerife</option>
+                <option value='Teruel'>Teruel</option>
+                <option value='Toledo'>Toledo</option>
+                <option value='Valencia'>Valencia/Valéncia</option>
+                <option value='Valladolid'>Valladolid</option>
+                <option value='Vizcaya'>Vizcaya</option>
+                <option value='Zamora'>Zamora</option>
+                <option value='Zaragoza'>Zaragoza</option>
+              </select>
+            </div>
+            <div class="form-group col-md-6">
+              <label for="ciudad">Ciudad</label>
+              <input type="text" name="ciudad" id="ciudad" class="form-control" [(ngModel)]="city" name="city">
+            </div>
+          </div>
+          <div class="row">
+            <div class="form-group col-md-6">
+              <label for="direccion">Direccion</label>
+              <input type="text" name="direccion" id="direccion" class="form-control" name="address"
+                [(ngModel)]="address">
+            </div>
+            <div class="form-group col-md-6">
+              <label for="password">Contraseña</label>
+              <input type="password" name="password" id="password" name="password" class="form-control" [(ngModel)]="password">
+            </div>
+          </div>
+          <input type="submit" value="Modificar datos" class="btn btn-block" (click)="updateUser()">
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
+
+<app-load-screem></app-load-screem>

@@ -8,6 +8,7 @@ import { ExperienceService } from 'src/app/services/experience.service';
 import { ToastrService } from 'ngx-toastr';
 import { Title } from '@angular/platform-browser';
 import { Router } from '@angular/router';
+import { IResponse } from 'src/app/interfaces/core.interface';
 
 @Component({
   selector: 'app-index',
@@ -31,7 +32,7 @@ export class IndexComponent implements OnInit {
   ) {
     this.userService.checkUserSession().subscribe(
       (res) => {
-        const response = res as any;
+        const response = res as IResponse;
         if (!response.data.keepLogin) {
           this.router.navigate(['/login']);
         }
@@ -52,7 +53,7 @@ export class IndexComponent implements OnInit {
   private setCategorys(): void {
     this.profCatService.getCategorys().subscribe(
       (res) => {
-        const response = res as any;
+        const response = res as IResponse;
         response.data.profesionalCategory.forEach(cat => {
           this.profCat.push(cat.name);
         });
@@ -66,7 +67,7 @@ export class IndexComponent implements OnInit {
   private getInitialWorkers() {
     this.userService.getUser(this.userService.getCodUser()).subscribe(
       (res) => {
-        const response = res as any;
+        const response = res as IResponse;
         this.userService.getUsersByCatLoc({
           category: null,
           location: response.data.users.region,
@@ -99,7 +100,7 @@ export class IndexComponent implements OnInit {
       noUser: this.userService.getCodUser()
     }).subscribe(
       (res) => {
-        const response = res as any;
+        const response = res as IResponse;
         this.processUsersInfo(response);
       },
       (err) => {

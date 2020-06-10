@@ -14,6 +14,7 @@ import { IndexComponent } from './components/index/index.component';
 import { FormsModule } from '@angular/forms';
 import { TimeAgoPipe } from 'time-ago-pipe';
 import { WorkerComponent } from './components/worker/worker.component';
+import { ControlPanelComponent } from './components/control-panel/control-panel.component';
 
 @NgModule({
   declarations: [
@@ -24,7 +25,8 @@ import { WorkerComponent } from './components/worker/worker.component';
     NavbarComponent,
     IndexComponent,
     TimeAgoPipe,
-    WorkerComponent
+    WorkerComponent,
+    ControlPanelComponent
   ],
   imports: [
     BrowserModule,

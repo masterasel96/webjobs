@@ -19,12 +19,12 @@
             </li>
             <li [class]="controlPanelClass">
               <img src="assets/icons/control_panel.svg" alt="Control panel icon">
-              <a class="nav-link" href="./control_panel.html"> Panel de control </a>
+              <a class="nav-link" [routerLink]="['/control_panel']"> Panel de control </a>
             </li>
             <li [class]="notifyClass">
               <img src="assets/icons/notify.svg" alt="Notify icon">
               <img src="assets/icons/signs.svg" id="new_notify_icon" alt="New notify icon">
-              <a class="nav-link" href="./notifys.html"> Notificaciones </a>
+              <a class="nav-link" [routerLink]="['/notifys']"> Notificaciones </a>
             </li>
             <li class="nav-item">
               <img src="assets/icons/logout.svg" alt="Logout icon">

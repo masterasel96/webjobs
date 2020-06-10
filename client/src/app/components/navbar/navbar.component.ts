@@ -23,7 +23,7 @@ export class NavbarComponent {
         this.indexClass = 'nav-item active';
         break;
       case 'controlPanel':
-        this.indexClass = 'nav-item active';
+        this.controlPanelClass = 'nav-item active';
         break;
       case 'notify':
         this.notifyClass = 'nav-item active';

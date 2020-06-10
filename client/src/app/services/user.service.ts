@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { environment } from '../../environments/environment';
-import { ICheckLoginRequest, IRegisterRequest, ICatLocRequest } from '../interfaces/user.interface';
+import { ICheckLoginRequest, IRegisterRequest, ICatLocRequest, IUpdateRequest } from '../interfaces/user.interface';
 import { CookieService } from 'ngx-cookie-service';
 import { Md5 } from 'ts-md5/dist/md5';
 
@@ -72,6 +72,9 @@ export class UserService {
     return this.http.post(`${this.API_URL}/checkLogin`, {
       token: this.getToken()
     }, this.httpOptions);
+  }
 
+  public updateUser(user: IUpdateRequest) {
+    return this.http.put(`${this.API_URL}/update`, user, this.httpOptions);
   }
 }

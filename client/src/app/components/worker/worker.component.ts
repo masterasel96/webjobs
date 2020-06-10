@@ -6,6 +6,7 @@ import { ContractService } from 'src/app/services/contract.service';
 import { ExperienceService } from 'src/app/services/experience.service';
 import { ActivatedRoute, Router } from '@angular/router';
 import { ToastrService } from 'ngx-toastr';
+import { IResponse } from 'src/app/interfaces/core.interface';
 
 @Component({
   selector: 'app-worker',
@@ -29,7 +30,7 @@ export class WorkerComponent implements OnInit {
   ) {
     this.userService.checkUserSession().subscribe(
       (res) => {
-        const response = res as any;
+        const response = res as IResponse;
         if (!response.data.keepLogin) {
           this.router.navigate(['/login']);
         }
@@ -50,7 +51,7 @@ export class WorkerComponent implements OnInit {
   private getWorkerInfo(): void {
     this.userService.getUser(this.codWorker).subscribe(
       (res) => {
-        const response = res as any;
+        const response = res as IResponse;
         const user = response.data.users;
         this.workerInfo = user;
         let s = 0;
