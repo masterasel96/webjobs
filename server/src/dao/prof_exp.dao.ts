@@ -9,6 +9,7 @@ export default class ProfesionalExperienceDao {
     }
 
     public static async createProfExp(profExp: ProfesionalExperience): Promise<ProfesionalExperience> {
+        console.log(profExp);
         const newProfExp = getManager().create(ProfesionalExperience, profExp);
         await getManager().save(newProfExp);
         return newProfExp;

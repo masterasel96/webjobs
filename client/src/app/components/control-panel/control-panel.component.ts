@@ -11,6 +11,7 @@ import { SexType, IUpdateRequest } from 'src/app/interfaces/user.interface';
 import { IResponse } from 'src/app/interfaces/core.interface';
 import { AngularFireStorage } from 'angularfire2/storage';
 import * as $ from 'jquery';
+import { CategoryService } from 'src/app/services/category.service';
 
 @Component({
   selector: 'app-control-panel',
@@ -20,12 +21,21 @@ import * as $ from 'jquery';
 export class ControlPanelComponent implements OnInit {
   @ViewChild(NavbarComponent, { static: true }) navBar: NavbarComponent;
   @ViewChild(LoadScreemComponent, { static: true }) loadScreem: LoadScreemComponent;
+  // GENERIC DATA
   private userInfo: any = {};
+  private profCat: any = {};
   private contractsInfo: any = {
     pendings: [],
     progress: [],
     finish: []
   };
+  // EXPERIENCES DATA
+  private category: string;
+  private company: string;
+  private position: string;
+  private startDate: string;
+  private endDate: string;
+  // UPDATE USER DATA
   private userName: string;
   private lastName: string;
   private email: string;
@@ -50,7 +60,8 @@ export class ControlPanelComponent implements OnInit {
     private router: Router,
     private toastr: ToastrService,
     private titleService: Title,
-    private storage: AngularFireStorage
+    private storage: AngularFireStorage,
+    private profCatService: CategoryService
   ) {
     this.userService.checkUserSession().subscribe(
       (res) => {
@@ -70,13 +81,20 @@ export class ControlPanelComponent implements OnInit {
     this.titleService.setTitle('WebJobs | Panel de control');
     this.navBar.setLocation('controlPanel');
     this.getUserInfo();
-    setTimeout(() => { $('#bio textarea').height($('#photo').height() - 11); }, 1000);
+    this.setCategorys();
+    setTimeout(() => { $('#bio textarea').height($('#photo').height() - 11); }, 1500);
     $(window).on('resize', () => {
       $('#bio textarea').height($('#photo').height() - 11);
     });
   }
 
   private getUserInfo(): void {
+    this.userInfo = {};
+    this.contractsInfo = {
+      pendings: [],
+      progress: [],
+      finish: []
+    };
     this.userService.getUser(this.userService.getCodUser()).subscribe(
       (res) => {
         const response = res as IResponse;
@@ -123,11 +141,6 @@ export class ControlPanelComponent implements OnInit {
       });
   }
 
-  private editExperience(codExperience: any){
-    codExperience = `experience_${codExperience}`;
-    console.log(codExperience);
-  }
-
   private setUpdateAttributes(data: any) {
     this.userName = data.userName;
     this.lastName = data.lastName;
@@ -145,6 +158,7 @@ export class ControlPanelComponent implements OnInit {
     this.bio = data.bio;
     this.photo = data.photo;
     this.userInfo.photo = data.photo;
+    $('#bio textarea').height($('#photo').height() - 11);
   }
 
   private orderContracts(contracts: any[]) {
@@ -245,5 +259,57 @@ export class ControlPanelComponent implements OnInit {
     } catch (error) {
       console.log(error);
     }
+  }
+
+  private setCategorys(): void {
+    this.profCatService.getCategorys().subscribe(
+      (res) => {
+        const response = res as IResponse;
+        this.profCat = response.data.profesionalCategory;
+      },
+      (err) => {
+        console.log(err);
+      }
+    );
+  }
+
+  private addExperience(): void {
+    this.experienceService.setExperience({
+      codUser: Number(this.codUser),
+      codCategory: Number(this.category),
+      company: this.company,
+      position: this.position,
+      startDate: this.startDate,
+      endDate: this.endDate
+    }).subscribe(
+      (res) => {
+        const response = res as IResponse;
+        this.category = null;
+        this.company = null;
+        this.position = null;
+        this.startDate = null;
+        this.endDate = null;
+        this.getUserInfo();
+        this.toastr.success('Experiencia creada correctamente');
+      },
+      (err) => {
+        const errorData = err.error as IResponse;
+        this.toastr.error(errorData.data.error);
+      }
+    );
+  }
+
+  private deleteExperience(codExperience: string) {
+    this.experienceService.deleteExperience(codExperience).subscribe(
+      (res) => {
+        const response = res as IResponse;
+        this.getUserInfo();
+        this.toastr.success('Experiencia borrada correctamente');
+      },
+      (err) => {
+        const errorData = err.error as IResponse;
+        this.toastr.error(errorData.data.error);
+      }
+    );
   }
 }

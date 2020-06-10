@@ -24,8 +24,8 @@ export default class ProfesionalExperience {
     @Column({ name: "start_date" })
     public startDate: Date;
 
-    @Column({ name: "end_date" })
-    public endDate: Date;
+    @Column({ name: "end_date", nullable: true })
+    public endDate?: Date;
 
     @CreateDateColumn({ name: 'created_at', update: false })
     public createdDate?: Date;
@@ -33,7 +33,7 @@ export default class ProfesionalExperience {
     @UpdateDateColumn({ name: 'updated_at' })
     public updateDate?: Date;
 
-    constructor(user: User, category: ProfesionalCategory, position: string, company: string, startDate: Date, endDate: Date) {
+    constructor(user: User, category: ProfesionalCategory, position: string, company: string, startDate: Date, endDate?: Date) {
         this.user = user,
         this.category = category,
         this.position = position,

@@ -19,7 +19,7 @@ export default class ProfExpService {
             throw new Error(`Error obteniendo los datos del usuario o la categoria...`);
         }
         return await ProfExpDao.createProfExp(new ProfExp(user, profCat, profExp.position, profExp.company, 
-            new Date(profExp.startDate), new Date(profExp.endDate)));
+            new Date(profExp.startDate), profExp.endDate ? new Date(profExp.endDate) : undefined));
     }
 
     public static async removeProfExp(codProfExp: number): Promise<ProfExp> {

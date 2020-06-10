@@ -19,4 +19,19 @@ export class ExperienceService {
   public getExperiences(codUser: string) {
     return this.http.post(`${this.API_URL}`, { codUser }, this.httpOptions);
   }
+
+  public setExperience(data: {
+    codUser: number;
+    codCategory: number,
+    position: string,
+    company: string,
+    startDate: string,
+    endDate: string
+  }) {
+    return this.http.post(`${this.API_URL}/create`, data , this.httpOptions);
+  }
+
+  public deleteExperience(codProfExp: string) {
+    return this.http.post(`${this.API_URL}/remove`, {codProfExp}, this.httpOptions);
+  }
 }

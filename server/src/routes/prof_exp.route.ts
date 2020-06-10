@@ -25,6 +25,7 @@ export default class ProfExpRoute {
                 return;
             };
             const profExpRequest = req.body as unknown as IProfExpRequest;
+            console.log(profExpRequest);
             if (!this.validateProfExp(profExpRequest)) {
                 throw new Error(`Datos incorrectos o insuficientes...`);
             }
@@ -50,7 +51,7 @@ export default class ProfExpRoute {
                 return;
             };
             const codProfExp = req.body.codProfExp;
-            if (isEmpty(codProfExp)) {
+            if (isNull(codProfExp)) {
                 throw new Error(`Datos incorrectos o insuficientes...`);
             }
             const profExpRemove = await ProfExpService.removeProfExp(codProfExp);
@@ -123,7 +124,7 @@ export default class ProfExpRoute {
     }
 
     private validateProfExp(profExp: IProfExpRequest): boolean {
-        return !(isNull(profExp.codUser) || isNull(profExp.codCategory) || isNull(profExp.endDate)
+        return !(isNull(profExp.codUser) || isNull(profExp.codCategory)
             || isNull(profExp.startDate) || isEmpty(profExp.position) || isEmpty(profExp.company));
     }
 
