@@ -9,6 +9,8 @@ import { ToastrService } from 'ngx-toastr';
 import { Title } from '@angular/platform-browser';
 import { SexType, IUpdateRequest } from 'src/app/interfaces/user.interface';
 import { IResponse } from 'src/app/interfaces/core.interface';
+import { AngularFireStorage } from 'angularfire2/storage';
+import * as $ from 'jquery';
 
 @Component({
   selector: 'app-control-panel',
@@ -39,6 +41,7 @@ export class ControlPanelComponent implements OnInit {
   private offer: boolean;
   private bio: string;
   private codUser: string;
+  private photo: string;
   constructor(
     private userService: UserService,
     private contractService: ContractService,
@@ -46,7 +49,8 @@ export class ControlPanelComponent implements OnInit {
     private activatedRoute: ActivatedRoute,
     private router: Router,
     private toastr: ToastrService,
-    private titleService: Title
+    private titleService: Title,
+    private storage: AngularFireStorage
   ) {
     this.userService.checkUserSession().subscribe(
       (res) => {
@@ -59,13 +63,17 @@ export class ControlPanelComponent implements OnInit {
         this.router.navigate(['/login']);
       }
     );
-    this.codUser = this.userService.getCodUser()
+    this.codUser = this.userService.getCodUser();
   }
 
   ngOnInit() {
     this.titleService.setTitle('WebJobs | Panel de control');
     this.navBar.setLocation('controlPanel');
     this.getUserInfo();
+    setTimeout(() => { $('#bio textarea').height($('#photo').height() - 11); }, 1000);
+    $(window).on('resize', () => {
+      $('#bio textarea').height($('#photo').height() - 11);
+    });
   }
 
   private getUserInfo(): void {
@@ -135,6 +143,8 @@ export class ControlPanelComponent implements OnInit {
     this.offer = data.offer;
     this.age = data.age;
     this.bio = data.bio;
+    this.photo = data.photo;
+    this.userInfo.photo = data.photo;
   }
 
   private orderContracts(contracts: any[]) {
@@ -172,6 +182,14 @@ export class ControlPanelComponent implements OnInit {
           }
         };
         break;
+      case 'photo':
+        args = {
+          codUser: this.codUser,
+          newValues: {
+            photo: this.photo
+          }
+        };
+        break;
       default:
         args = {
           codUser: this.codUser,
@@ -203,5 +221,29 @@ export class ControlPanelComponent implements OnInit {
         this.toastr.error(errorData.data.error);
       }
     );
+  }
+
+  private changePhoto(event: MSInputMethodContext) {
+    const target: HTMLInputElement = event.target as HTMLInputElement;
+    const files: FileList = target.files;
+    const file: File = files[0];
+    const metaData = {
+      contentType: file.type
+    };
+    const path = `photos/${Date.now()}_user`;
+    try {
+      const ref = this.storage.ref(path);
+      this.storage.upload(path, file).snapshotChanges().subscribe(
+        async (res) => {
+          this.photo = await ref.getDownloadURL().toPromise();
+          this.updateUser('photo');
+        },
+        (error) => {
+          console.log(error);
+        }
+      );
+    } catch (error) {
+      console.log(error);
+    }
   }
 }

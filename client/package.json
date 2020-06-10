@@ -21,6 +21,8 @@
     "@angular/platform-browser": "~8.2.14",
     "@angular/platform-browser-dynamic": "~8.2.14",
     "@angular/router": "~8.2.14",
+    "angularfire2": "^5.4.2",
+    "firebase": "^7.15.0",
     "jquery": "^3.5.1",
     "ngx-cookie-service": "^3.0.4",
     "ngx-toastr": "^10.0.4",

@@ -25,7 +25,8 @@
           <img class="card-img-top" src="{{userInfo.photo ? userInfo.photo : 'assets/img/no-photo.png'}}" alt="Foto del trabajador">
         </div>
         <label class="btn btn-block btn-lg" for="worker_img">Cambiar foto</label>
-        <input type="file" id="worker_img" name="worker_img" class="d-none" accept="image/png, image/jpeg">
+        <input type="file" id="worker_img" name="worker_img" class="d-none" accept="image/png, image/jpeg"
+        (change)="changePhoto($event)">
       </div>
       <div class="col-sm-8 col-md-9">
         <h4>Biografia</h4>

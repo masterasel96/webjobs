@@ -15,6 +15,9 @@ import { FormsModule } from '@angular/forms';
 import { TimeAgoPipe } from 'time-ago-pipe';
 import { WorkerComponent } from './components/worker/worker.component';
 import { ControlPanelComponent } from './components/control-panel/control-panel.component';
+import { environment } from 'src/environments/environment';
+import { AngularFireModule } from 'angularfire2';
+import { AngularFireStorageModule } from 'angularfire2/storage';
 
 @NgModule({
   declarations: [
@@ -38,7 +41,9 @@ import { ControlPanelComponent } from './components/control-panel/control-panel.
       timeOut: 3500,
       positionClass: 'toast-top-right',
       preventDuplicates: false
-    })
+    }),
+    AngularFireModule.initializeApp(environment.firebaseConfig),
+    AngularFireStorageModule
   ],
   providers: [UserService],
   bootstrap: [AppComponent],
