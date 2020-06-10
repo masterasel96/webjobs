@@ -69,33 +69,40 @@ export default class UserDao {
             //throw new Error(`Este usuario no se ha logeado...`);
             return false;
         }
-        /*let newTime: Date | undefined = new Date();
-        if (process.env.LOGIN_TIME !== undefined 
+        let newTime: Date | undefined = new Date();
+        /*if (process.env.LOGIN_TIME !== undefined
                 && !isNull(user.lastLogin) && ((user.lastLogin.getTime() + (Number(process.env.LOGIN_TIME) * 1000)) > Date.now())){
                     newTime = undefined;
-        }
+        }*/
         await getConnection()
             .createQueryBuilder()
             .update(User)
             .set({ lastLogin: newTime })
             .where("token = :token", { token })
             .execute();
-        return newTime === undefined ? false : true;*/
         return true;
     }
 
-    public static async getUsersByCatLoc(catName: string, location: string): Promise<User[]> {
+    public static async getUsersByCatLoc(catName: string, location: string, noUser: string): Promise<User[]> {
         const users = getConnection().getRepository(User)
             .createQueryBuilder('user');
+        let where = "";
+        let whereKeys = {};
         if(catName){
-            users.innerJoin("user.experience", 'profesional_experience')
-                .innerJoin("profesional_experience.category", 'profesional_category')
-                .where("profesional_category.name = :catName AND user.city = :location", { catName, location })
+            if (catName !== 'all'){
+                users.innerJoin("user.experience", 'profesional_experience')
+                    .innerJoin("profesional_experience.category", 'profesional_category');
+                where = "profesional_category.name = :catName AND user.city = :location AND user.codUser != :noUser AND user.offer = true";
+                whereKeys = { catName, location, noUser };
+            }else{
+                where = "user.city = :location AND user.codUser != :noUser AND user.offer = true";
+                whereKeys = { location, noUser };
+            }
         }else{
-            users.where("user.region = :location", { location })
-                .limit(4)
-                .orderBy("user.updateDate", "DESC")
+            where = "user.region = :location AND user.codUser != :noUser AND user.offer = true";
+            whereKeys = { location, noUser };
         }
+        users.where(where, whereKeys);
         return await users.getMany();
     }
 }

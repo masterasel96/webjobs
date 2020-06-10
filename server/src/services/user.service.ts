@@ -33,8 +33,8 @@ export default class UserService {
         return await UserDao.checkLastLogin(token);
     }
 
-    public static async getUserByCatLoc(catName: string, location: string): Promise<User[]> {
-        const users = await UserDao.getUsersByCatLoc(catName, location);
+    public static async getUserByCatLoc(catName: string, location: string, noUser?: string): Promise<User[]> {
+        const users = await UserDao.getUsersByCatLoc(catName, location, noUser);
         if(users === undefined){
             throw new Error(`Error obteniendo usuarios por categoria y localizacion...`);
         }

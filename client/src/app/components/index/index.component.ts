@@ -64,17 +64,26 @@ export class IndexComponent implements OnInit {
   }
 
   private getInitialWorkers() {
-    this.userService.getUsersByCatLoc({
-      category: null,
-      location: 'malaga'
-    }).subscribe(
+    this.userService.getUser(this.userService.getCodUser()).subscribe(
       (res) => {
         const response = res as any;
-        this.processUsersInfo(response);
+        this.userService.getUsersByCatLoc({
+          category: null,
+          location: response.data.users.region,
+          noUser: this.userService.getCodUser()
+        }).subscribe(
+          (res1) => {
+            const response1 = res1 as any;
+            this.processUsersInfo(response1);
+          },
+          (err1) => {
+            console.log(err1);
+          });
       },
       (err) => {
         console.log(err);
-      });
+      }
+    );
   }
 
   private searchWorkers(city: string, profesion: string): void {
@@ -86,7 +95,8 @@ export class IndexComponent implements OnInit {
     this.workers = [];
     this.userService.getUsersByCatLoc({
       category: profesion,
-      location: city
+      location: city,
+      noUser: this.userService.getCodUser()
     }).subscribe(
       (res) => {
         const response = res as any;

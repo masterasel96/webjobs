@@ -16,6 +16,7 @@
             <label for="profesion">¿Que tipo de profesional?</label>
             <select id="profesion" name="profesion" class="form-control" #profesion>
               <option selected="true" disabled="disabled">Profesion...</option>
+              <option value="all">Todo</option>
               <option *ngFor="let cat of profCat" value="{{cat}}">{{cat}}</option>
             </select>
           </div>
@@ -42,7 +43,7 @@
             </div>
             <div class="card-body">
               <div class="worker-heading text-center">
-                <h4>{{worker.userName}} {{worker.lastName}}</h4>
+                <h5>{{worker.userName}} {{worker.lastName}}</h5>
                 <hr>
                 <p><img src="assets/icons/location.svg" alt="Location icon"> {{worker.city}}, {{worker.region}}</p>
                 <hr>

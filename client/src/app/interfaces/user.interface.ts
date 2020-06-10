@@ -27,4 +27,5 @@ export interface IRegisterRequest {
 export interface ICatLocRequest {
     category: string | null;
     location: string;
+    noUser?: string;
 }
