@@ -17,10 +17,71 @@
               class="name">{{notify.indirectUserName}}</a> {{notify.message}} </p>
         </div>
         <div class="col-12 col-md-3">
-          <a [routerLink]="['/control_panel']" class="btn">Ver</a>
+          <a (click)="seeContract(notify.codNotify, notify.codContract)" class="btn">Ver</a>
+          <button *ngIf="notify.type == 'FINISH_WORK'" class="btn mr-1" data-toggle="modal"
+            data-target="#pointsModal" (click)="setContract(notify.codContract)">Dejar valoración</button>
         </div>
       </div>
     </div>
   </div>
 </div>
+ <!-- Modal de valoracion -->
+ <div class="modal fade" id="pointsModal" role="dialog">
+   <div class="modal-dialog">
+     <div class="modal-content">
+       <div class="modal-header">
+         <h5 class="modal-title" id="contactModalLabel">Formulario de valoración</h5>
+         <button type="button" class="close" data-dismiss="modal">
+           <span>&times;</span>
+         </button>
+       </div>
+       <div class="modal-body">
+         <form onsubmit="return false">
+           <label class="col-form-label mb-1">Puntuación:</label>
+           <div class="form-group text-center" id='points'>
+             <input type="radio" name="star_points" id="one_star" class="d-none" value="1" [(ngModel)]="stars">
+             <label class="stars" for="one_star"><img src="assets/icons/star.svg" alt="One star"></label>
+
+             <input type="radio" name="star_points" id="two_star" class="d-none" value="2" [(ngModel)]="stars">
+             <label class="stars" for="two_star">
+               <img src="assets/icons/star.svg" alt="One star">
+               <img src="assets/icons/star.svg" alt="One star">
+             </label>
+
+             <input type="radio" name="star_points" id="three_star" class="d-none" value="3" [(ngModel)]="stars">
+             <label class="stars" for="three_star">
+               <img src="assets/icons/star.svg" alt="One star">
+               <img src="assets/icons/star.svg" alt="One star">
+               <img src="assets/icons/star.svg" alt="One star">
+             </label>
+
+             <input type="radio" name="star_points" id="four_star" class="d-none" value="4" [(ngModel)]="stars">
+             <label class="stars" for="four_star">
+               <img src="assets/icons/star.svg" alt="One star">
+               <img src="assets/icons/star.svg" alt="One star">
+               <img src="assets/icons/star.svg" alt="One star">
+               <img src="assets/icons/star.svg" alt="One star">
+             </label>
+
+             <input type="radio" name="star_points" id="five_star" class="d-none" value="5" [(ngModel)]="stars">
+             <label class="stars" for="five_star">
+               <img src="assets/icons/star.svg" alt="One star">
+               <img src="assets/icons/star.svg" alt="One star">
+               <img src="assets/icons/star.svg" alt="One star">
+               <img src="assets/icons/star.svg" alt="One star">
+               <img src="assets/icons/star.svg" alt="One star">
+             </label>
+
+           </div>
+           <div class="form-group">
+             <label for="message" class="col-form-label">Comentario:</label>
+             <textarea name="message" id="message" class="form-control" [(ngModel)]="coment"></textarea>
+           </div>
+           <hr>
+           <input type="submit" value="Enviar" class="btn btn-block" (click)="setComent()">
+         </form>
+       </div>
+     </div>
+   </div>
+ </div>
 <app-load-screem></app-load-screem>

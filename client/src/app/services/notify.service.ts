@@ -19,4 +19,8 @@ export class NotifyService {
   public getNotifys(codUser: string) {
     return this.http.post(`${this.API_URL}`, { codUser }, this.httpOptions);
   }
+
+  public seeNotify(codNotification: string) {
+    return this.http.post(`${this.API_URL}/see`, { codNotification }, this.httpOptions);
+  }
 }

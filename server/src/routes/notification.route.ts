@@ -1,6 +1,6 @@
 import { Router, Request, Response } from 'express';
 import { INotificationRequest } from '../interface/request.interface';
-import { isEmpty } from 'lodash';
+import { isEmpty, isNull } from 'lodash';
 import NotificationService from '../services/notification.service';
 import Notification from '../model/notification.model';
 import Guard from '../core/guard.core';
@@ -104,7 +104,7 @@ export default class NotificationRoute {
                 return;
             };
             const codNotification = req.body.codNotification;
-            if (isEmpty(codNotification)) {
+            if (isNull(codNotification)) {
                 throw new Error(`Datos insuficientes...`);
             }
             const see: boolean = await NotificationService.seeNotification(codNotification);
