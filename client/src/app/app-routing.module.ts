@@ -5,6 +5,7 @@ import { RegisterFormComponent } from './components/register-form/register-form.
 import { IndexComponent } from './components/index/index.component';
 import { WorkerComponent } from './components/worker/worker.component';
 import { ControlPanelComponent } from './components/control-panel/control-panel.component';
+import { NotifysComponent } from './components/notifys/notifys.component';
 
 
 const routes: Routes = [
@@ -13,7 +14,8 @@ const routes: Routes = [
   { path: 'register', component: RegisterFormComponent },
   { path: 'index', component: IndexComponent },
   { path: 'worker', component: WorkerComponent },
-  { path: 'control_panel', component: ControlPanelComponent}
+  { path: 'control_panel', component: ControlPanelComponent},
+  { path: 'notifys', component: NotifysComponent }
 ];
 
 @NgModule({

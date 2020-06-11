@@ -1,0 +1,66 @@
+#notifys_container {
+  max-width: 1200px;
+  margin: 0px auto;
+  padding: 30px;
+}
+
+.btn {
+  float: right;
+}
+
+.name {
+  font-style: italic;
+  font-weight: bold;
+  color: #507DBC;
+}
+
+.new_notify {
+  width: 30px;
+  float: right;
+}
+
+.row {
+  margin: 0px !important;
+}
+
+.card {
+  margin-bottom: 30px;
+}
+
+#more_notifys button {
+  background: transparent !important;
+}
+
+#more_notifys button img {
+  width: 50px;
+}
+
+.card-header {
+  background: #F1F1F1;
+}
+
+.stars {
+  padding: 1px 7px;
+  border-radius: 30px;
+  background: #F1F1F1;
+}
+
+.stars:hover {
+  cursor: pointer;
+}
+
+.stars img {
+  width: 18px;
+  margin-top: -4px;
+}
+
+/* -- QUERIES --*/
+
+@media only screen and (max-width: 766px) {
+
+  .btn {
+    float: none;
+    margin-top: 20px;
+  }
+
+}

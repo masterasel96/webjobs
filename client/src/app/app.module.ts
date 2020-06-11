@@ -18,6 +18,7 @@ import { ControlPanelComponent } from './components/control-panel/control-panel.
 import { environment } from 'src/environments/environment';
 import { AngularFireModule } from 'angularfire2';
 import { AngularFireStorageModule } from 'angularfire2/storage';
+import { NotifysComponent } from './components/notifys/notifys.component';
 
 @NgModule({
   declarations: [
@@ -29,7 +30,8 @@ import { AngularFireStorageModule } from 'angularfire2/storage';
     IndexComponent,
     TimeAgoPipe,
     WorkerComponent,
-    ControlPanelComponent
+    ControlPanelComponent,
+    NotifysComponent
   ],
   imports: [
     BrowserModule,

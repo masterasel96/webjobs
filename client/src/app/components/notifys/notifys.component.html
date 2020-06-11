@@ -1,0 +1,26 @@
+<app-navbar></app-navbar>
+<div id="container" class="w-100">
+  <!-- Notificaciones -->
+  <div id="notifys_container">
+    <div class="card" *ngFor="let notify of notifys">
+      <div class="card-header row">
+        <div class="col-9">
+          <h5>{{ notify.date | date:'dd/LL/yyyy' }} a las {{ notify.date | date:'hh:mm' }}</h5>
+        </div>
+        <div class="col-3">
+          <img *ngIf="!notify.see" class=" new_notify" src="assets/icons/new.svg" alt="New notify icon">
+        </div>
+      </div>
+      <div class="card-body row">
+        <div class="col-12 col-md-9">
+          <p class="card-text"><a [routerLink]="['/worker']" [queryParams]="{worker: notify.indirectUserCode}"
+              class="name">{{notify.indirectUserName}}</a> {{notify.message}} </p>
+        </div>
+        <div class="col-12 col-md-3">
+          <a [routerLink]="['/control_panel']" class="btn">Ver</a>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<app-load-screem></app-load-screem>

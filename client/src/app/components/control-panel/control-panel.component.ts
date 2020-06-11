@@ -29,6 +29,7 @@ export class ControlPanelComponent implements OnInit {
     progress: [],
     finish: []
   };
+  private codUser: string;
   private contractSee: any = {};
   // EXPERIENCES DATA
   private category: string;
@@ -51,7 +52,6 @@ export class ControlPanelComponent implements OnInit {
   private address: string;
   private offer: boolean;
   private bio: string;
-  private codUser: string;
   private photo: string;
   constructor(
     private userService: UserService,
@@ -383,7 +383,6 @@ export class ControlPanelComponent implements OnInit {
       (res) => {
         const response = res as IResponse;
         this.contractSee = response.data.contracts;
-        console.log(this.contractSee);
       },
       (err) => {
         const errorData = err.error as IResponse;
