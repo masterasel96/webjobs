@@ -30,6 +30,17 @@ export class LoginFormComponent implements OnInit {
     this.titleService.setTitle('WebJobs | Login');
     if (this.msg) {
       this.toastr.success(this.msg);
+      this.userService.checkUserSession().subscribe(
+        (res) => {
+          const response = res as IResponse;
+          if (response.data.keepLogin) {
+            this.router.navigate(['/index']);
+          }
+        },
+        (error) => {
+          console.log(error);
+        }
+      );
     }
   }
 

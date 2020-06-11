@@ -8,19 +8,19 @@ class ORM {
     public getConfig(): ConnectionOptions {
         return {
             type: "postgres",
-            database: process.env.POSTGRES_DB,
+            database: 'webjobs',
             entities: [
                 __dirname + "/../model/**/*.model{.ts,.js}",
             ],
             subscribers: [
                 __dirname + "/../dao/subscriber/**/*.subscriber{.ts,.js}",
             ],
-            host: process.env.POSTGRES_HOST,
-            password: process.env.POSTGRES_PASSWORD,
-            port: Number(process.env.POSTGRES_PORT),
-            schema: process.env.POSTGRES_SCHEMA,
+            host: 'localhost',
+            password: 'cp',
+            port: 5432,
+            schema: 'public',
             synchronize: true,
-            username: process.env.POSTGRES_USER
+            username: 'cp'
         };
     }
 

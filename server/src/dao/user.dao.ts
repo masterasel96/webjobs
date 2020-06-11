@@ -83,7 +83,7 @@ export default class UserDao {
         return true;
     }
 
-    public static async getUsersByCatLoc(catName: string, location: string, noUser: string): Promise<User[]> {
+    public static async getUsersByCatLoc(catName: string, location: string, noUser?: string): Promise<User[]> {
         const users = getConnection().getRepository(User)
             .createQueryBuilder('user');
         let where = "";

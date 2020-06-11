@@ -121,7 +121,7 @@ export class IndexComponent implements OnInit {
               total ++;
             }
           });
-          user.punctuation = s / total;
+          user.punctuation = parseInt((s/total).toString());
           this.experienceService.getExperiences(user.codUser.toString()).subscribe(
             (res2) => {
               const response2 = res2 as any;

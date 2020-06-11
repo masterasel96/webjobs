@@ -69,7 +69,7 @@ export class WorkerComponent implements OnInit {
               }
             });
             if (response1.data.contracts.length > 0) {
-              this.workerInfo.punctuation = s / total;
+              this.workerInfo.punctuation = parseInt((s / total).toString());
             }
             this.experienceService.getExperiences(user.codUser.toString()).subscribe(
               (res2) => {

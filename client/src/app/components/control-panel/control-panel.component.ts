@@ -105,14 +105,18 @@ export class ControlPanelComponent implements OnInit {
         this.userInfo = user;
         this.setUpdateAttributes(this.userInfo);
         let s = 0;
+        let total = 0;
         this.contractService.getContractsByUser(user.codUser.toString()).subscribe(
           (res1) => {
             const response1 = res1 as any;
             response1.data.contracts.forEach(contract => {
-              s += contract.worker.codUser === user.codUser ? Number(contract.contractorPunctuation) : Number(contract.workerPunctuation);
+              if (contract.status === 'FINISH') {
+                s += contract.worker.codUser === user.codUser ? Number(contract.contractorPunctuation) : Number(contract.workerPunctuation);
+                total ++;
+              }
             });
             if (response1.data.contracts.length > 0) {
-              this.userInfo.punctuation = s / response1.data.contracts.length;
+              this.userInfo.punctuation = parseInt((s / total).toString());
             }
             this.orderContracts(response1.data.contracts);
             this.experienceService.getExperiences(user.codUser.toString()).subscribe(

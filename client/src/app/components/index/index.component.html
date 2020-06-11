@@ -34,7 +34,7 @@
           <div class="card worker-preview">
             <img class="card-img-top worker-photo" src="{{worker.photo}}" alt="Worker image" *ngIf="worker.photo; else notPhoto">
             <ng-template #notPhoto>
-              <img class="card-img-top" src="assets/img/no-photo.jpg" alt="Worker image">
+              <img class="card-img-top worker-photo" src="assets/img/no-photo.jpg" alt="Worker image">
             </ng-template>
             <div class="card-img-overlay">
               <h2>
