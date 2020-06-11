@@ -7,6 +7,7 @@ import { ExperienceService } from 'src/app/services/experience.service';
 import { ActivatedRoute, Router } from '@angular/router';
 import { ToastrService } from 'ngx-toastr';
 import { IResponse } from 'src/app/interfaces/core.interface';
+import { NotifyService } from 'src/app/services/notify.service';
 
 @Component({
   selector: 'app-worker',
@@ -26,7 +27,8 @@ export class WorkerComponent implements OnInit {
     private experienceService: ExperienceService,
     private activatedRoute: ActivatedRoute,
     private router: Router,
-    private toastr: ToastrService
+    private toastr: ToastrService,
+    private notifyService: NotifyService
   ) {
     this.userService.checkUserSession().subscribe(
       (res) => {
@@ -101,11 +103,24 @@ export class WorkerComponent implements OnInit {
     }
     this.contractService.createContract(this.codWorker, this.userService.getCodUser(), this.message).subscribe(
       (res) => {
-        this.message = null;
-        this.toastr.success('Tu peticion se ha mandado correctamente');
+        const response = res as any;
+        this.notifyService.setNotify({
+          codUser: this.codWorker,
+          codIndirectUser: this.userService.getCodUser(),
+          message: `PENDING_WORK:::${response.data.newContract.codContract}`
+        }).subscribe(
+          (res1) => {
+            this.message = null;
+            this.toastr.success('Tu peticion se ha mandado correctamente');
+          },
+          (err1) => {
+            console.log(err1);
+            this.toastr.error('Ha ocurrido un error mandando tu peticion');
+          }
+        );
       },
       (err) => {
-        this.toastr.error('Ha ocurrido un error mandando tu peticion');
+        console.log(err);
       }
     );
   }

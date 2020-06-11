@@ -185,7 +185,7 @@ export class NotifysComponent implements OnInit {
             case '4':
               $('label[for=four_star]').click();
               break;
-            default:
+            case '5':
               $('label[for=five_star]').click();
           }
         }

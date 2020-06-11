@@ -12,6 +12,7 @@ import { IResponse } from 'src/app/interfaces/core.interface';
 import { AngularFireStorage } from 'angularfire2/storage';
 import * as $ from 'jquery';
 import { CategoryService } from 'src/app/services/category.service';
+import { NotifyService } from 'src/app/services/notify.service';
 
 @Component({
   selector: 'app-control-panel',
@@ -62,7 +63,8 @@ export class ControlPanelComponent implements OnInit {
     private toastr: ToastrService,
     private titleService: Title,
     private storage: AngularFireStorage,
-    private profCatService: CategoryService
+    private profCatService: CategoryService,
+    private notifyService: NotifyService
   ) {
     this.userService.checkUserSession().subscribe(
       (res) => {
@@ -323,8 +325,23 @@ export class ControlPanelComponent implements OnInit {
     ).subscribe(
       (res) => {
         const response = res as IResponse;
-        this.getUserInfo();
-        this.toastr.success('Peticion cancelada correctamente');
+        const codUserToSend: string = response.data.updateContract.contractor.codUser === this.codUser ?
+          response.data.updateContract.worker.codUser :
+          response.data.updateContract.contractor.codUser;
+        this.notifyService.setNotify({
+          codUser: codUserToSend.toString(),
+          codIndirectUser: this.userService.getCodUser(),
+          message: `CANCEL_WORK:::${codContract}`
+        }).subscribe(
+          (res1) => {
+            this.toastr.success('Peticion cancelada correctamente');
+            this.getUserInfo();
+          },
+          (err1) => {
+            console.log(err1);
+            this.toastr.error('Ha ocurrido un error cancelando tu peticion');
+          }
+        );
       },
       (err) => {
         const errorData = err.error as IResponse;
@@ -345,8 +362,23 @@ export class ControlPanelComponent implements OnInit {
     ).subscribe(
       (res) => {
         const response = res as IResponse;
-        this.getUserInfo();
-        this.toastr.success('Peticion aceptada correctamente');
+        const codUserToSend: string = response.data.updateContract.contractor.codUser === this.codUser ?
+          response.data.updateContract.worker.codUser :
+          response.data.updateContract.contractor.codUser;
+        this.notifyService.setNotify({
+          codUser: codUserToSend.toString(),
+          codIndirectUser: this.userService.getCodUser(),
+          message: `ACCEPT_WORK:::${codContract}`
+        }).subscribe(
+          (res1) => {
+            this.toastr.success('Peticion aceptada correctamente');
+            this.getUserInfo();
+          },
+          (err1) => {
+            console.log(err1);
+            this.toastr.error('Ha ocurrido un error aceptando tu peticion');
+          }
+        );
       },
       (err) => {
         const errorData = err.error as IResponse;
@@ -367,8 +399,37 @@ export class ControlPanelComponent implements OnInit {
     ).subscribe(
       (res) => {
         const response = res as IResponse;
-        this.getUserInfo();
-        this.toastr.success('Peticion cancelada correctamente');
+        const codUserToSend: string = response.data.updateContract.contractor.codUser === this.codUser ?
+          response.data.updateContract.worker.codUser :
+          response.data.updateContract.contractor.codUser;
+        this.notifyService.setNotify({
+          codUser: codUserToSend.toString(),
+          codIndirectUser: this.userService.getCodUser(),
+          message: `FINISH_WORK:::${codContract}`
+        }).subscribe(
+          (res1) => {
+            this.toastr.success('Contrato finalizado corrrectamente');
+            this.getUserInfo();
+          },
+          (err1) => {
+            console.log(err1);
+            this.toastr.error('Ha ocurrido un error aceptando tu peticion');
+          }
+        );
+        this.notifyService.setNotify({
+          codUser: this.userService.getCodUser(),
+          codIndirectUser: codUserToSend.toString(),
+          message: `FINISH_WORK:::${codContract}`
+        }).subscribe(
+          (res1) => {
+            this.toastr.success('Ya puedes dejar tu puntuacion, te habra llegado una notificacion :)');
+            this.getUserInfo();
+          },
+          (err1) => {
+            console.log(err1);
+            this.toastr.error('Ha ocurrido un error aceptando tu peticion');
+          }
+        );
       },
       (err) => {
         const errorData = err.error as IResponse;

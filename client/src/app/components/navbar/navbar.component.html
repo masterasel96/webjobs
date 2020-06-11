@@ -23,7 +23,7 @@
             </li>
             <li [class]="notifyClass">
               <img src="assets/icons/notify.svg" alt="Notify icon">
-              <img src="assets/icons/signs.svg" id="new_notify_icon" alt="New notify icon">
+              <img *ngIf="news" src=" assets/icons/signs.svg" id="new_notify_icon" alt="New notify icon">
               <a class="nav-link" [routerLink]="['/notifys']"> Notificaciones </a>
             </li>
             <li class="nav-item">

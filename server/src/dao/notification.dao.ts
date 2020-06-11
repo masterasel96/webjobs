@@ -36,7 +36,7 @@ export default class NotificationDao {
         if (user === undefined || isArray(user)) {
             throw new Error(`Este usuario no existe...`);
         }
-        return await notificationRepo.find({ where: [{ user }], relations: ['user', 'indirectUser'] });
+        return await notificationRepo.find({ where: [{ user }], relations: ['user', 'indirectUser'], order: { createdDate: 'DESC'} });
     }
 
     public static async checkNotifications(codUser: number): Promise<boolean> {

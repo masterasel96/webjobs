@@ -23,4 +23,16 @@ export class NotifyService {
   public seeNotify(codNotification: string) {
     return this.http.post(`${this.API_URL}/see`, { codNotification }, this.httpOptions);
   }
+
+  public setNotify(data: {
+    codUser: string,
+    codIndirectUser: string,
+    message: string
+  }) {
+    return this.http.post(`${this.API_URL}/create`, data, this.httpOptions);
+  }
+
+  public checkForNotifys(codUser: string) {
+    return this.http.post(`${this.API_URL}/checkNew`, { codUser }, this.httpOptions);
+  }
 }
