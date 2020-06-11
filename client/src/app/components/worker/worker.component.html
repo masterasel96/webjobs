@@ -66,7 +66,7 @@
         </div>
         <div class="col-md-5 col-lg-3" id="worker_photo">
           <div class="card mb-3">
-            <img class="card-img-top" src="{{workerInfo.photo ? workerInfo.photo : 'assets/img/no-photo.png'}}" alt="Worker photo">
+            <img class="card-img-top" src="{{workerInfo.photo ? workerInfo.photo : 'assets/img/no-photo.jpg'}}" alt="Worker photo">
             <div class="card-body">
               <h5 class="card-title">{{workerInfo.userName}} {{workerInfo.lastName}}</h5>
               <h6 class="text-secondary">{{workerInfo.city}}, {{workerInfo.region}}</h6>
@@ -141,20 +141,24 @@
                 </ng-template>
               </div>
               <div class="col-3">
-                <h3 *ngIf="contract.worker.codUser != codWorker; else isWorker2">{{contract.workerPunctuation}} <img
+                <h3 *ngIf="contract.worker.codUser != codWorker; else isWorker2">
+                  {{contract.workerPunctuation ? contract.workerPunctuation : '?'}} <img
                     src="assets/icons/star_big.svg"
                     alt="Star icon"></h3>
                 <ng-template #isWorker2>
-                  <h3>{{contract.contractorPunctuation}} <img src="assets/icons/star_big.svg" alt="Star icon"></h3>
+                  <h3>{{contract.contractorPunctuation ? contract.contractorPunctuation : '?'}} <img
+                      src="assets/icons/star_big.svg" alt="Star icon"></h3>
                 </ng-template>
               </div>
             </div>
             <div class="card-body row">
               <p *ngIf="contract.worker.codUser != codWorker; else isWorker3">
-                {{contract.workerAssessment}}
+                {{contract.workerAssessment ? contract.workerAssessment : 'Parece que no han dejado aun ningun comentario...'}}
               </p>
               <ng-template #isWorker3>
-                <p>{{contract.contractorAssessment}}</p>
+                <p>
+                  {{contract.contractorAssessment ? contract.contractorAssessment : 'Parece que no han dejado aun ningun comentario...'}}
+                </p>
               </ng-template>
             </div>
           </div>

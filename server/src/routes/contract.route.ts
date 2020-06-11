@@ -1,5 +1,5 @@
 import { Router, Request, Response } from 'express';
-import { isEmpty } from 'lodash';
+import { isEmpty, isNull } from 'lodash';
 import ContractService from '../services/contract.service';
 import { IContractRequest, IContractUpdateRequest } from '../interface/request.interface';
 import { IContractUpdate } from '../interface/update.interface';
@@ -14,9 +14,10 @@ export default class contractRoute {
     }
 
     public config(): void {
+        this.router.post('/', this.getContract);
         this.router.post('/getByUser', this.getContractsByUser);
         this.router.post('/create', this.createContract);
-        this.router.post('/update', this.updateContract.bind(this));
+        this.router.put('/update', this.updateContract.bind(this));
     }
 
     private async createContract(req: Request, res: Response) {
@@ -70,13 +71,39 @@ export default class contractRoute {
         }
     }
 
+    private async getContract(req: Request, res: Response) {
+        try {
+            if (!Guard.bauth(req, res)) {
+                return;
+            };
+            const codContract = req.body.codContract;
+            if (isNull(codContract)) {
+                throw new Error(`Datos insuficientes...`);
+            }
+            const contracts = await ContractService.getContract(codContract);
+            res.status(200).json({
+                code: 200,
+                data: { contracts },
+                status: true
+            });
+        } catch (error) {
+            const err: Error = error;
+            res.status(400).json({
+                code: 400,
+                data: { error: err.message },
+                status: false
+            });
+        }
+    }
+
     private async updateContract(req: Request, res: Response) {
         try {
             if(!Guard.bauth(req, res)){
                 return;
             };
             const newValues = req.body as IContractUpdateRequest;
-            if (isEmpty(newValues.codContract) || isEmpty(newValues.newValues)) {
+            
+            if (isNull(newValues.codContract) || isEmpty(newValues.newValues)) {
                 throw new Error(`Datos insuficientes...`);
             }
             this.validateUpdateContract(newValues.newValues);

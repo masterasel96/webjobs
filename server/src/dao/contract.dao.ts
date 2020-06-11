@@ -16,7 +16,9 @@ export default class ContractDao {
 
     public static async getContract(codContract: number): Promise<Contract | undefined> {
         const contractRepo = getConnection().getRepository(Contract);
-        const contract = await contractRepo.findOne(codContract);
+        const contract = await contractRepo.findOne(codContract, {
+            relations: ['contractor', 'worker']
+        });
         return contract;
     }
 

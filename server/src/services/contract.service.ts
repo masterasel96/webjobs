@@ -52,4 +52,8 @@ export default class ContractService {
         return await ContractDao.getContractsByUser(codUser);
     }
 
+    public static async getContract(codContract: number): Promise<Contract | undefined> {
+        return await ContractDao.getContract(codContract);
+    }
+
 }

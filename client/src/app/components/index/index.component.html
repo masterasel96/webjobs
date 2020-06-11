@@ -32,9 +32,9 @@
       <div class="row">
         <div class="col-md-4 col-lg-3 mb-4" *ngFor="let worker of workers">
           <div class="card worker-preview">
-            <img class="card-img-top" src="{{worker.photo}}" alt="Worker image" *ngIf="worker.photo; else notPhoto">
+            <img class="card-img-top worker-photo" src="{{worker.photo}}" alt="Worker image" *ngIf="worker.photo; else notPhoto">
             <ng-template #notPhoto>
-              <img class="card-img-top" src="assets/img/no-photo.png" alt="Worker image">
+              <img class="card-img-top" src="assets/img/no-photo.jpg" alt="Worker image">
             </ng-template>
             <div class="card-img-overlay">
               <h2>

@@ -39,3 +39,9 @@ div.worker-heading img {
 #more_workers button img {
   width: 50px;
 }
+
+.worker-photo{
+  max-height: 353px !important;
+}
+
+    

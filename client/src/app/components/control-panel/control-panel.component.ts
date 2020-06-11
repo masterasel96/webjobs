@@ -29,6 +29,7 @@ export class ControlPanelComponent implements OnInit {
     progress: [],
     finish: []
   };
+  private contractSee: any = {};
   // EXPERIENCES DATA
   private category: string;
   private company: string;
@@ -123,8 +124,6 @@ export class ControlPanelComponent implements OnInit {
                   this.userInfo.experiences = response2.data.profExp;
                   this.userInfo.profesion = response2.data.profExp[0].category.name;
                 }
-                console.log(this.userInfo);
-                console.log(this.contractsInfo);
               },
               (err2) => {
                 console.log(err2);
@@ -305,6 +304,86 @@ export class ControlPanelComponent implements OnInit {
         const response = res as IResponse;
         this.getUserInfo();
         this.toastr.success('Experiencia borrada correctamente');
+      },
+      (err) => {
+        const errorData = err.error as IResponse;
+        this.toastr.error(errorData.data.error);
+      }
+    );
+  }
+
+  private cancelContract(codContract: string) {
+    this.contractService.updateContract(
+      {
+        codContract,
+        newValues: {
+          status: 'CANCELLED'
+        }
+      }
+    ).subscribe(
+      (res) => {
+        const response = res as IResponse;
+        this.getUserInfo();
+        this.toastr.success('Peticion cancelada correctamente');
+      },
+      (err) => {
+        const errorData = err.error as IResponse;
+        this.toastr.error(errorData.data.error);
+      }
+    );
+  }
+
+  private acceptContract(codContract: string) {
+    this.contractService.updateContract(
+      {
+        codContract,
+        newValues: {
+          status: 'IN_PROGRESS',
+          startDate: new Date().toLocaleDateString()
+        }
+      }
+    ).subscribe(
+      (res) => {
+        const response = res as IResponse;
+        this.getUserInfo();
+        this.toastr.success('Peticion aceptada correctamente');
+      },
+      (err) => {
+        const errorData = err.error as IResponse;
+        this.toastr.error(errorData.data.error);
+      }
+    );
+  }
+
+  private finishContract(codContract: string) {
+    this.contractService.updateContract(
+      {
+        codContract,
+        newValues: {
+          status: 'FINISH',
+          endDate: new Date().toLocaleDateString()
+        }
+      }
+    ).subscribe(
+      (res) => {
+        const response = res as IResponse;
+        this.getUserInfo();
+        this.toastr.success('Peticion cancelada correctamente');
+      },
+      (err) => {
+        const errorData = err.error as IResponse;
+        this.toastr.error(errorData.data.error);
+      }
+    );
+  }
+
+  private seeComentsContract(codContract: string) {
+    this.contractSee = null;
+    this.contractService.getContract(codContract).subscribe(
+      (res) => {
+        const response = res as IResponse;
+        this.contractSee = response.data.contracts;
+        console.log(this.contractSee);
       },
       (err) => {
         const errorData = err.error as IResponse;

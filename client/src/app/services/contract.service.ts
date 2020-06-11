@@ -22,11 +22,24 @@ export class ContractService {
     }, this.httpOptions);
   }
 
+  public getContract(codContract: string) {
+    return this.http.post(`${this.API_URL}`, {
+      codContract
+    }, this.httpOptions);
+  }
+
   public createContract(codWorker: string, codContractor: string, msg?: string) {
     return this.http.post(`${this.API_URL}/create`, {
       codContractor,
       codWorker,
       msg
     }, this.httpOptions);
+  }
+
+  public updateContract(data: {
+    codContract: string,
+    newValues: any;
+  }) {
+    return this.http.put(`${this.API_URL}/update`, data, this.httpOptions);
   }
 }

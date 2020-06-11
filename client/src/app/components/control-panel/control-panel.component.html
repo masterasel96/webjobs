@@ -22,7 +22,7 @@
       <div class="col-sm-4 col-md-3 mb-3">
         <h4>Foto</h4>
         <div id="photo" class="card">
-          <img class="card-img-top" src="{{userInfo.photo ? userInfo.photo : 'assets/img/no-photo.png'}}" alt="Foto del trabajador">
+          <img class="card-img-top" src="{{userInfo.photo ? userInfo.photo : 'assets/img/no-photo.jpg'}}" alt="Foto del trabajador">
         </div>
         <label class="btn btn-block btn-lg" for="worker_img">Cambiar foto</label>
         <input type="file" id="worker_img" name="worker_img" class="d-none" accept="image/png, image/jpeg"
@@ -163,8 +163,8 @@
             <img src="assets/icons/document.svg" alt="Contract icon">
             <p class="card-text info-work">Contraté a: </p>
             <h5 class="card-title">{{contract.worker.userName}} {{contract.worker.lastName}}</h5>
-            <p class="card-text">Desde el {{ contract.createData | date:'dd/LL/yyyy' }} hasta el
-              {{ contract.updateData | date:'dd/LL/yyyy' }}</p>
+            <p class="card-text">Desde el {{ contract.startDate | date:'LL/dd/yyyy' }} hasta el
+              {{ contract.endDate | date:'LL/dd/yyyy' }}</p>
             <p class="card-text text-secondary"> <span>{{contract.worker.telf}}</span> -
               <span>{{contract.worker.email}}</span></p>
             <a class="more-work-info" href="#" data-toggle="modal" (click)="seeComentsContract(contract.codContract)"
@@ -182,8 +182,8 @@
                 <img src="assets/icons/hammer.svg" alt="Hammer icon">
                 <p class="card-text info-work">Trabajé para: </p>
                 <h5 class="card-title">{{contract.contractor.userName}} {{contract.contractor.lastName}}</h5>
-                <p class="card-text">Desde el {{ contract.createData | date:'dd/LL/yyyy' }} hasta el
-                  {{ contract.updateData | date:'dd/LL/yyyy' }}</p>
+                <p class="card-text">Desde el {{ contract.startDate | date:'LL/dd/yyyy' }} hasta el
+                  {{ contract.endDate | date:'LL/dd/yyyy' }}</p>
                 <p class="card-text text-secondary"><span>{{contract.contractor.telf}}</span> -
                   <span>{{contract.contractor.email}}</span></p>
                 <a class="more-work-info" href="#" data-toggle="modal" data-target="#comentarioContratoModal"
@@ -208,95 +208,50 @@
         </button>
       </div>
       <div class="modal-body">
-        <div class="card mb-3">
-          <div class="card-header row">
-            <div class="col-9">
-              <h5>Antonio Gutierrez - 09/04/2019 al 13/05/2019 - Albañilería - Como trabajador</h5>
+        <p *ngIf="contractsInfo.finish.length == 0; else areContracts">
+          Vaya, parece que aun no hay comentarios...
+        </p>
+        <ng-template #areContracts>
+          <div class="card mb-3" *ngFor="let contract of contractsInfo.finish">
+            <div class="card-header row">
+              <div class="col-9">
+                <h5 *ngIf="contract.worker.codUser != codUser; else isWorker">
+                  {{contract.worker.userName}} {{contract.worker.lastName}} -
+                  {{contract.startDate | date:'dd/LL/yyyy' }} al
+                  {{contract.endDate | date:'dd/LL/yyyy' }} -
+                  Como trabajador
+                </h5>
+                <ng-template #isWorker>
+                  <h5>
+                    {{contract.contractor.userName}} {{contract.contractor.lastName}} -
+                    {{contract.startDate | date:'dd/LL/yyyy' }} al
+                    {{contract.endDate | date:'dd/LL/yyyy' }} -
+                    Como contratante
+                  </h5>
+                </ng-template>
+              </div>
+              <div class="col-3">
+                <h3 *ngIf="contract.worker.codUser != codUser; else isWorker2">
+                  {{contract.workerPunctuation ? contract.workerPunctuation : '?'}} <img src="assets/icons/star_big.svg"
+                    alt="Star icon"></h3>
+                <ng-template #isWorker2>
+                  <h3>{{contract.contractorPunctuation ? contract.contractorPunctuation : '?'}} <img
+                      src="assets/icons/star_big.svg" alt="Star icon"></h3>
+                </ng-template>
+              </div>
             </div>
-            <div class="col-3">
-              <h3>4 <img src="assets/icons/star_big.svg" alt="Star icon"></h3>
-            </div>
-          </div>
-          <div class="card-body row">
-            <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et
-              dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip
-              ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore
-              eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia
-              deserunt mollit anim id est laborum.</p>
-          </div>
-        </div>
-
-        <div class="card mb-3">
-          <div class="card-header row">
-            <div class="col-9">
-              <h5>Pepe Sebastian - 10/12/2019 al 13/12/2019 - Albañilería - Como trabajador</h5>
-            </div>
-            <div class="col-3">
-              <h3>4 <img src="assets/icons/star_big.svg" alt="Star icon"></h3>
-            </div>
-          </div>
-          <div class="card-body row">
-            <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et
-              dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip
-              ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore
-              eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia
-              deserunt mollit anim id est laborum.</p>
-          </div>
-        </div>
-
-        <div class="card mb-3">
-          <div class="card-header row">
-            <div class="col-9">
-              <h5>Maria Fernandez - 23/03/2019 al 13/05/2019 - Pintura - Como contratante</h5>
-            </div>
-            <div class="col-3">
-              <h3>3 <img src="assets/icons/star_big.svg" alt="Star icon"></h3>
+            <div class="card-body row">
+              <p *ngIf="contract.worker.codUser != codUser; else isWorker3">
+                {{contract.workerAssessment ? contract.workerAssessment : 'Parece que no han dejado aun ningun comentario...'}}
+              </p>
+              <ng-template #isWorker3>
+                <p>
+                  {{contract.contractorAssessment ? contract.contractorAssessment : 'Parece que no han dejado aun ningun comentario...'}}
+                </p>
+              </ng-template>
             </div>
           </div>
-          <div class="card-body row">
-            <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et
-              dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip
-              ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore
-              eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia
-              deserunt mollit anim id est laborum.</p>
-          </div>
-        </div>
-
-        <div class="card mb-3">
-          <div class="card-header row">
-            <div class="col-9">
-              <h5>Maria Fernandez - 23/03/2019 al 13/05/2019 - Pintura - Como contratante</h5>
-            </div>
-            <div class="col-3">
-              <h3>3 <img src="assets/icons/star_big.svg" alt="Star icon"></h3>
-            </div>
-          </div>
-          <div class="card-body row">
-            <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et
-              dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip
-              ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore
-              eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia
-              deserunt mollit anim id est laborum.</p>
-          </div>
-        </div>
-
-        <div class="card mb-3">
-          <div class="card-header row">
-            <div class="col-9">
-              <h5>Maria Fernandez - 23/03/2019 al 13/05/2019 - Pintura - Como contratante</h5>
-            </div>
-            <div class="col-3">
-              <h3>3 <img src="assets/icons/star_big.svg" alt="Star icon"></h3>
-            </div>
-          </div>
-          <div class="card-body row">
-            <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et
-              dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip
-              ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore
-              eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia
-              deserunt mollit anim id est laborum.</p>
-          </div>
-        </div>
+        </ng-template>
       </div>
     </div>
   </div>
@@ -305,7 +260,7 @@
 <!-- Modal de comentarios de un contrato -->
 <div class="modal fade" id="comentarioContratoModal" role="dialog">
   <div class="modal-dialog">
-    <div class="modal-content">
+    <div class="modal-content" *ngIf="contractSee && contractSee.contractor">
       <div class="modal-header">
         <h5 class="modal-title">Comentario y puntuacion</h5>
         <button type="button" class="close" data-dismiss="modal">
@@ -313,39 +268,36 @@
         </button>
       </div>
       <div class="modal-body">
-        <h4 class="mb-4">23/03/2019 al 13/05/2019 - Pintura</h4>
+        <h4 class="mb-4">Desde el {{ contractSee.startDate | date:'LL/dd/yyyy' }} hasta el
+          {{ contractSee.endDate | date:'LL/dd/yyyy' }}</h4>
         <div class="card mb-3">
           <div class="card-header row">
             <div class="col-9">
-              <h5>Maria Fernandez - Como contratante</h5>
+              <h5>{{contractSee.contractor.userName}} {{contractSee.contractor.lastName}} - Como contratante</h5>
             </div>
             <div class="col-3">
-              <h3>3 <img src="assets/icons/star_big.svg" alt="Star icon"></h3>
+              <h3>{{contractSee.contractorPunctuation ? contractSee.contractorPunctuation : '?'}} <img
+                  src="assets/icons/star_big.svg" alt="Star icon"></h3>
             </div>
           </div>
           <div class="card-body row">
-            <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et
-              dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip
-              ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore
-              eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia
-              deserunt mollit anim id est laborum.</p>
+            <p>{{contractSee.contractorAssessment ? contractSee.contractorAssessment : 'Parece que aun no hay comentarios...'}}</p>
           </div>
         </div>
         <div class="card mb-3">
           <div class="card-header row">
             <div class="col-9">
-              <h5>Yo - Como trabajador</h5>
+              <h5>{{contractSee.worker.userName}} {{contractSee.worker.lastName}} - Como trabajador</h5>
             </div>
             <div class="col-3">
-              <h3>4 <img src="assets/icons/star_big.svg" alt="Star icon"></h3>
+              <h3>{{contractSee.workerPunctuation ? contractSee.workerPunctuation : '?'}} <img
+                  src="assets/icons/star_big.svg" alt="Star icon"></h3>
             </div>
           </div>
           <div class="card-body row">
-            <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et
-              dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip
-              ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore
-              eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia
-              deserunt mollit anim id est laborum.</p>
+            <p>
+              {{contractSee.workerAssessment ? contractSee.workerAssessment : 'Parece que aun no hay comentarios...'}}
+            </p>
           </div>
         </div>
       </div>
