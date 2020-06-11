@@ -409,7 +409,6 @@ export class ControlPanelComponent implements OnInit {
         }).subscribe(
           (res1) => {
             this.toastr.success('Contrato finalizado corrrectamente');
-            this.getUserInfo();
           },
           (err1) => {
             console.log(err1);
@@ -423,6 +422,7 @@ export class ControlPanelComponent implements OnInit {
         }).subscribe(
           (res1) => {
             this.toastr.success('Ya puedes dejar tu puntuacion, te habra llegado una notificacion :)');
+            this.navBar.checkForNotifys();
             this.getUserInfo();
           },
           (err1) => {

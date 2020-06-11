@@ -111,13 +111,17 @@ export class IndexComponent implements OnInit {
   private processUsersInfo(response: any): void {
     response.data.users.forEach(user => {
       let s = 0;
+      let total = 0;
       this.contractService.getContractsByUser(user.codUser.toString()).subscribe(
         (res1) => {
           const response1 = res1 as any;
           response1.data.contracts.forEach(contract => {
-            s += contract.worker.codUser === user.codUser ? Number(contract.contractorPunctuation) : Number(contract.workerPunctuation);
+            if (contract.status === 'FINISH') {
+              s += contract.worker.codUser === user.codUser ? Number(contract.contractorPunctuation) : Number(contract.workerPunctuation);
+              total ++;
+            }
           });
-          user.punctuation = s / response1.data.contracts.length;
+          user.punctuation = s / total;
           this.experienceService.getExperiences(user.codUser.toString()).subscribe(
             (res2) => {
               const response2 = res2 as any;

@@ -319,7 +319,7 @@
         <form onsubmit="return false">
           <div class="form-group">
             <label for="category">Categoria</label>
-            <select id="category" name="category" class="form-control" [(ngModel)]="category">
+            <select id="category" [(ngModel)]="category" name="category" class="form-control">
               <option *ngFor="let cat of profCat" value="{{cat.codCategory}}">{{cat.name}}</option>
             </select>
           </div>

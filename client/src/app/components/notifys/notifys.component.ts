@@ -122,7 +122,7 @@ export class NotifysComponent implements OnInit {
     this.contractService.getContract(this.contract).subscribe(
       (res) => {
         const response = res as IResponse;
-        const isContractor: boolean = response.data.contracts.contractor.codUser === this.codUser ? true : false;
+        const isContractor: boolean = response.data.contracts.contractor.codUser.toString() === this.codUser.toString() ? true : false;
         let newValues: any;
         if (isContractor) {
           newValues = {
@@ -164,7 +164,7 @@ export class NotifysComponent implements OnInit {
       (res) => {
         const response = res as IResponse;
         if (response.data.contracts.codContract !== undefined) {
-          const isContractor: boolean = response.data.contracts.contractor.codUser === this.codUser ? true : false;
+          const isContractor: boolean = response.data.contracts.contractor.codUser.toString() === this.codUser.toString() ? true : false;
           if (isContractor) {
             this.coment = response.data.contracts.contractorAssessment;
             this.stars = response.data.contracts.contractorPunctuation;

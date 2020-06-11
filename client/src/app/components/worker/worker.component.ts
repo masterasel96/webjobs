@@ -57,17 +57,19 @@ export class WorkerComponent implements OnInit {
         const user = response.data.users;
         this.workerInfo = user;
         let s = 0;
+        let total = 0;
         this.contractService.getContractsByUser(user.codUser.toString()).subscribe(
           (res1) => {
             const response1 = res1 as any;
             response1.data.contracts.forEach(contract => {
-              s += contract.worker.codUser === user.codUser ? Number(contract.contractorPunctuation) : Number(contract.workerPunctuation);
               if (contract.status === 'FINISH') {
-                this.contractsInfo = response1.data.contracts;
+                s += contract.worker.codUser === user.codUser ? Number(contract.contractorPunctuation) : Number(contract.workerPunctuation);
+                total++;
+                this.contractsInfo.push(contract);
               }
             });
             if (response1.data.contracts.length > 0) {
-              this.workerInfo.punctuation = s / response1.data.contracts.length;
+              this.workerInfo.punctuation = s / total;
             }
             this.experienceService.getExperiences(user.codUser.toString()).subscribe(
               (res2) => {

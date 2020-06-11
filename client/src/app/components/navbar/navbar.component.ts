@@ -46,7 +46,7 @@ export class NavbarComponent implements OnInit {
     this.router.navigate(['/login']);
   }
 
-  private checkForNotifys() {
+  public checkForNotifys() {
     this.notifyService.checkForNotifys(this.userService.getCodUser()).subscribe(
       (res) => {
         const response = res as IResponse;
