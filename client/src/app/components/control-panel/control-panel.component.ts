@@ -13,6 +13,7 @@ import { AngularFireStorage } from 'angularfire2/storage';
 import * as $ from 'jquery';
 import { CategoryService } from 'src/app/services/category.service';
 import { NotifyService } from 'src/app/services/notify.service';
+import { sanitizeIdentifier } from '@angular/compiler';
 
 @Component({
   selector: 'app-control-panel',
@@ -249,21 +250,21 @@ export class ControlPanelComponent implements OnInit {
     const metaData = {
       contentType: file.type
     };
+    if (file.size > 190000) {
+      this.toastr.error('El archivo es demasiado grande');
+      return;
+    }
     const path = `photos/${Date.now()}_user`;
-    try {
-      const ref = this.storage.ref(path);
-      this.storage.upload(path, file).snapshotChanges().subscribe(
+    const ref = this.storage.ref(path);
+    this.storage.upload(path, file).snapshotChanges().subscribe(
         async (res) => {
           this.photo = await ref.getDownloadURL().toPromise();
           this.updateUser('photo');
         },
-        (error) => {
+        async (error) => {
           console.log(error);
         }
       );
-    } catch (error) {
-      console.log(error);
-    }
   }
 
   private setCategorys(): void {
@@ -360,7 +361,7 @@ export class ControlPanelComponent implements OnInit {
         codContract,
         newValues: {
           status: 'IN_PROGRESS',
-          startDate: new Date().toLocaleDateString()
+          startDate: new Date().toUTCString()
         }
       }
     ).subscribe(
@@ -397,13 +398,14 @@ export class ControlPanelComponent implements OnInit {
         codContract,
         newValues: {
           status: 'FINISH',
-          endDate: new Date().toLocaleDateString()
+          endDate: new Date().toUTCString()
         }
       }
     ).subscribe(
       (res) => {
         const response = res as IResponse;
-        const codUserToSend: string = response.data.updateContract.contractor.codUser === this.codUser ?
+        const codUserToSend: string = response.data.updateContract.contractor.codUser.toString() ===
+          this.userService.getCodUser().toString() ?
           response.data.updateContract.worker.codUser :
           response.data.updateContract.contractor.codUser;
         this.notifyService.setNotify({
