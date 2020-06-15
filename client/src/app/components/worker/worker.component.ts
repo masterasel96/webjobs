@@ -76,8 +76,8 @@ export class WorkerComponent implements OnInit {
                 const response2 = res2 as any;
                 if (response2.data.profExp.length > 0) {
                   response2.data.profExp.sort((a: { startDate: number; }, b: { startDate: number; }) => {
-                    if (a.startDate > b.startDate) { return 1; }
-                    if (b.startDate > a.startDate) { return -1; }
+                    if (a.startDate < b.startDate) { return 1; }
+                    if (b.startDate < a.startDate) { return -1; }
                   });
                   this.workerInfo.experiences = response2.data.profExp;
                   this.workerInfo.profesion = response2.data.profExp[0].category.name;
