@@ -16,11 +16,11 @@ class ORM {
                 __dirname + "/../dao/subscriber/**/*.subscriber{.ts,.js}",
             ],
             host: 'localhost',
-            password: 'cp',
+            password: 'dev_webjobs_pass',
             port: 5432,
-            schema: 'public',
+            schema: 'wj',
             synchronize: true,
-            username: 'cp'
+            username: 'dev_webjobs_user'
         };
     }
 

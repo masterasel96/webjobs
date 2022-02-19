@@ -4,12 +4,12 @@ export const environment = {
   pass: 'devwebjobs9977',
   user: 'devwebjobs',
   firebaseConfig: {
-    apiKey: 'AIzaSyDRN3HOHgKeAq19L5I6uA40aDlDqUgFLss',
-    authDomain: 'webjobs-5f938.firebaseapp.com',
-    databaseURL: 'https://webjobs-5f938.firebaseio.com',
-    projectId: 'webjobs-5f938',
-    storageBucket: 'webjobs-5f938.appspot.com',
-    messagingSenderId: '17218087289',
-    appId: '1:17218087289:web:8198fb3bc70d8c29aea7a8'
+    apiKey: "AIzaSyBNMiuBHp3TPGtCz4USJY4kmzhZnTZNy70",
+    authDomain: "webjobs-ddd11.firebaseapp.com",
+    projectId: "webjobs-ddd11",
+    storageBucket: "webjobs-ddd11.appspot.com",
+    messagingSenderId: "532722481183",
+    appId: "1:532722481183:web:c4f208018e4d2157f6bd2a",
+    measurementId: "G-EX7HB6D23R"
   }
 };

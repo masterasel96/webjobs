@@ -256,7 +256,7 @@ export class ControlPanelComponent implements OnInit {
     }
     const path = `photos/${Date.now()}_user`;
     const ref = this.storage.ref(path);
-    this.storage.upload(path, file).snapshotChanges().subscribe(
+    this.storage.upload(path, file, metaData).snapshotChanges().subscribe(
         async (res) => {
           this.photo = await ref.getDownloadURL().toPromise();
           this.updateUser('photo');
